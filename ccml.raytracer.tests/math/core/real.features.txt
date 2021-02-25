@@ -1,0 +1,9 @@
+﻿Scenario: 2 reals with less than 0.00001 of difference are equals
+   Given a ← 4
+   Given b ← 4.000001
+    Then a == b
+
+Scenario: 2 reals with more (or equals) than 0.00001 of difference are differents
+   Given a ← 4
+   Given b ← 4.00002
+    Then a != b
