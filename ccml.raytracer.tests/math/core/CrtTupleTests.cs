@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ccml.raytracer.math.core;
+using ccml.raytracer.engine.core;
 using NUnit.Framework;
 
 namespace ccml.raytracer.tests.math.core
@@ -22,9 +22,9 @@ namespace ccml.raytracer.tests.math.core
         public void TuplesAreEqualsTest()
         {
             // Given a ← tuple(4.3, -4.2, 3.1, 1.0)
-            var a = CrtTupleFactory.Tuple(4.3, -4.2, 3.1, 1.0);
+            var a = CrtFactory.Tuple(4.3, -4.2, 3.1, 1.0);
             // And b ← tuple(4.3, -4.2, 3.1, 1.0)
-            var b = CrtTupleFactory.Tuple(4.3, -4.2, 3.1, 1.0);
+            var b = CrtFactory.Tuple(4.3, -4.2, 3.1, 1.0);
             // Then a == b is true
             Assert.IsTrue(a == b);
             // And a != b is false
@@ -36,9 +36,9 @@ namespace ccml.raytracer.tests.math.core
         public void TuplesAreNotEqualsTest()
         {
             // Given a ← tuple(4.3, 2.4, 3.1, 1.0)
-            var a = CrtTupleFactory.Tuple(4.3, 2.4, 3.1, 1.0);
+            var a = CrtFactory.Tuple(4.3, 2.4, 3.1, 1.0);
             // And b ← tuple(4.3, -4.2, 3.1, 1.0)
-            var b = CrtTupleFactory.Tuple(4.3, -4.2, 3.1, 1.0);
+            var b = CrtFactory.Tuple(4.3, -4.2, 3.1, 1.0);
             // Then a != b is true
             Assert.IsTrue(a != b);
             // And a == b is false
@@ -54,11 +54,11 @@ namespace ccml.raytracer.tests.math.core
         public void AddingTwoTuplesTest()
         {
             // Given a1 ← tuple(3, -2, 5, 1)
-            var a1 = CrtTupleFactory.Tuple(3, -2, 5, 1);
+            var a1 = CrtFactory.Tuple(3, -2, 5, 1);
             // And a2 ← tuple(-2, 3, 1, 0)
-            var a2 = CrtTupleFactory.Tuple(-2, 3, 1, 0);
+            var a2 = CrtFactory.Tuple(-2, 3, 1, 0);
             // Then a1 +a2 = tuple(1, 1, 6, 1)
-            Assert.IsTrue((a1 + a2) == CrtTupleFactory.Tuple(1, 1, 6, 1));
+            Assert.IsTrue((a1 + a2) == CrtFactory.Tuple(1, 1, 6, 1));
         }
 
         //Scenario: Adding a point and a vector gives a point
@@ -66,13 +66,13 @@ namespace ccml.raytracer.tests.math.core
         public void AddingAPointAndAVectorGivesAPointTest()
         {
             // Given a1 ← tuple(3, -2, 5, 1)
-            var a1 = CrtTupleFactory.Tuple(3, -2, 5, 1);
+            var a1 = CrtFactory.Tuple(3, -2, 5, 1);
             // And a2 ← tuple(-2, 3, 1, 0)
-            var a2 = CrtTupleFactory.Tuple(-2, 3, 1, 0);
+            var a2 = CrtFactory.Tuple(-2, 3, 1, 0);
             // When b = a1 + a2
             var b = a1 + a2;
             // Then b = tuple(1, 1, 6, 1)
-            Assert.IsTrue(b == CrtTupleFactory.Tuple(1, 1, 6, 1));
+            Assert.IsTrue(b == CrtFactory.Tuple(1, 1, 6, 1));
             // And b is a Point
             Assert.IsInstanceOf<CrtPoint>(b);
 
@@ -83,13 +83,13 @@ namespace ccml.raytracer.tests.math.core
         public void AddingTwoVectorsGivesAVectorTest()
         {
             //Given a1 ← tuple(3, -2, 5, 0)
-            var a1 = CrtTupleFactory.Tuple(3, -2, 5, 0);
+            var a1 = CrtFactory.Tuple(3, -2, 5, 0);
             //And a2 ← tuple(-2, 3, 1, 0)
-            var a2 = CrtTupleFactory.Tuple(-2, 3, 1, 0);
+            var a2 = CrtFactory.Tuple(-2, 3, 1, 0);
             //And b = a1 + a2
             var b = a1 + a2;
             //Then b = tuple(1, 1, 6, 0)
-            Assert.IsTrue(b == CrtTupleFactory.Tuple(1, 1, 6, 0));
+            Assert.IsTrue(b == CrtFactory.Tuple(1, 1, 6, 0));
             //And b is a Vector
             Assert.IsInstanceOf<CrtVector>(b);
         }
@@ -99,9 +99,9 @@ namespace ccml.raytracer.tests.math.core
         public void AddingTwoPointsThrowAnExceptionTest()
         {
             //Given a1 ← tuple(3, -2, 5, 1)
-            var a1 = CrtTupleFactory.Tuple(3, -2, 5, 1);
+            var a1 = CrtFactory.Tuple(3, -2, 5, 1);
             //And a2 ← tuple(-2, 3, 1, 1)
-            var a2 = CrtTupleFactory.Tuple(-2, 3, 1, 1);
+            var a2 = CrtFactory.Tuple(-2, 3, 1, 1);
             //Then a1 + a2 throw an ArgumentException("Can't add 2 points")
             Assert.Throws<ArgumentException>(() =>
             {
@@ -118,11 +118,11 @@ namespace ccml.raytracer.tests.math.core
         public void SubtractingTwoPointsTest()
         {
             // Given p1 ← point(3, 2, 1)
-            var p1 = CrtTupleFactory.Point(3, 2, 1);
+            var p1 = CrtFactory.Point(3, 2, 1);
             // And p2 ← point(5, 6, 7)
-            var p2 = CrtTupleFactory.Point(5, 6, 7);
+            var p2 = CrtFactory.Point(5, 6, 7);
             // Then p1 - p2 = vector(-2, -4, -6)
-            Assert.IsTrue((p1 - p2) == CrtTupleFactory.Vector(-2, -4, -6));
+            Assert.IsTrue((p1 - p2) == CrtFactory.Vector(-2, -4, -6));
 
         }
 
@@ -131,11 +131,11 @@ namespace ccml.raytracer.tests.math.core
         public void SubtractingAVectorFromAPointTest()
         {
             // Given p ← point(3, 2, 1)
-            var p = CrtTupleFactory.Point(3, 2, 1);
+            var p = CrtFactory.Point(3, 2, 1);
             // And v ← vector(5, 6, 7)
-            var v = CrtTupleFactory.Vector(5, 6, 7);
+            var v = CrtFactory.Vector(5, 6, 7);
             //Then p - v = point(-2, -4, -6)
-            Assert.IsTrue((p - v) == CrtTupleFactory.Point(-2, -4, -6));
+            Assert.IsTrue((p - v) == CrtFactory.Point(-2, -4, -6));
         }
 
         //Scenario: Subtracting two vectors
@@ -143,11 +143,11 @@ namespace ccml.raytracer.tests.math.core
         public void SubtractingTwoVectorsTest()
         {
             // Given v1 ← vector(3, 2, 1)
-            var v1 = CrtTupleFactory.Vector(3, 2, 1);
+            var v1 = CrtFactory.Vector(3, 2, 1);
             // And v2 ← vector(5, 6, 7)
-            var v2 = CrtTupleFactory.Vector(5, 6, 7);
+            var v2 = CrtFactory.Vector(5, 6, 7);
             // Then v1 - v2 = vector(-2, -4, -6)
-            Assert.IsTrue((v1 - v2) == CrtTupleFactory.Vector(-2, -4, -6));
+            Assert.IsTrue((v1 - v2) == CrtFactory.Vector(-2, -4, -6));
         }
 
         //  Scenario: Subtracting a vector from a point
@@ -155,9 +155,9 @@ namespace ccml.raytracer.tests.math.core
         public void SubtractingAPontFromAVectorTest()
         {
             //Given v ← vector(3, 2, 1)
-            var v = CrtTupleFactory.Vector(3, 2, 1);
+            var v = CrtFactory.Vector(3, 2, 1);
             //And p ← point(5, 6, 7)
-            var p = CrtTupleFactory.Point(5, 6, 7);
+            var p = CrtFactory.Point(5, 6, 7);
             //Then a1 - a2 throw an ArgumentException("Can't subtract a point from a vector")
             Assert.Throws<ArgumentException>(() =>
             {
@@ -174,9 +174,9 @@ namespace ccml.raytracer.tests.math.core
         public void NegatingTupleTest()
         {
             // Given a ← tuple(1, -2, 3, -4)
-            var a = CrtTupleFactory.Tuple(1, -2, 3, -4);
+            var a = CrtFactory.Tuple(1, -2, 3, -4);
             //Then -a = tuple(-1, 2, -3, 4)
-            Assert.IsTrue(-a == CrtTupleFactory.Tuple(-1, 2, -3, 4));
+            Assert.IsTrue(-a == CrtFactory.Tuple(-1, 2, -3, 4));
         }
 
         #endregion
@@ -189,9 +189,9 @@ namespace ccml.raytracer.tests.math.core
         public void MultiplyingATupleByAScalarTest()
         {
             // Given a ← tuple(1, -2, 3, -4)
-            var a = CrtTupleFactory.Tuple(1, -2, 3, -4);
+            var a = CrtFactory.Tuple(1, -2, 3, -4);
             // Then a * 3.5 = tuple(3.5, -7, 10.5, -14)
-            Assert.IsTrue(a * 3.5 == CrtTupleFactory.Tuple(3.5, -7, 10.5, -14));
+            Assert.IsTrue(a * 3.5 == CrtFactory.Tuple(3.5, -7, 10.5, -14));
         }
 
         //Scenario: Multiplying a scalar by a tuple
@@ -199,9 +199,9 @@ namespace ccml.raytracer.tests.math.core
         public void MultiplyingAScalarByATupleTest()
         {
             // Given a ← tuple(1, -2, 3, -4)
-            var a = CrtTupleFactory.Tuple(1, -2, 3, -4);
+            var a = CrtFactory.Tuple(1, -2, 3, -4);
             // Then 3.5 * a = tuple(3.5, -7, 10.5, -14)
-            Assert.IsTrue(3.5 * a == CrtTupleFactory.Tuple(3.5, -7, 10.5, -14));
+            Assert.IsTrue(3.5 * a == CrtFactory.Tuple(3.5, -7, 10.5, -14));
         }
 
         #endregion
@@ -213,9 +213,9 @@ namespace ccml.raytracer.tests.math.core
         public void DividingATupleByAScalarTest()
         {
             // Given a ← tuple(1, -2, 3, -4)
-            var a = CrtTupleFactory.Tuple(1, -2, 3, -4);
+            var a = CrtFactory.Tuple(1, -2, 3, -4);
             // Then a / 2 = tuple(0.5, -1, 1.5, -2)
-            Assert.IsTrue(a / 2 == CrtTupleFactory.Tuple(0.5, -1, 1.5, -2));
+            Assert.IsTrue(a / 2 == CrtFactory.Tuple(0.5, -1, 1.5, -2));
         }
 
         #endregion

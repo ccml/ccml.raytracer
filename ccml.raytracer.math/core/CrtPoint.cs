@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ccml.raytracer.math.core
+﻿namespace ccml.raytracer.engine.core
 {
     /// <summary>
     /// A point in a 3D space.
@@ -16,5 +10,21 @@ namespace ccml.raytracer.math.core
         public CrtPoint(double x, double y, double z) : base(x, y, z, 1.0)
         {
         }
+
+        public static CrtPoint operator +(CrtPoint p, CrtVector v)
+        {
+            return (((CrtTuple)p) + ((CrtTuple)v)) as CrtPoint;
+        }
+        
+        public static CrtVector operator -(CrtPoint p1, CrtPoint p2)
+        {
+            return (((CrtTuple)p1) - ((CrtTuple)p2)) as CrtVector;
+        }
+
+        public static CrtPoint operator -(CrtPoint p, CrtVector v)
+        {
+            return (((CrtTuple)p) - ((CrtTuple)v)) as CrtPoint;
+        }
+
     }
 }

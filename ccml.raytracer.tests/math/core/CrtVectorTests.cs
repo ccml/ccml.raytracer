@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ccml.raytracer.math.core;
+using ccml.raytracer.engine.core;
 using NUnit.Framework;
 
 namespace ccml.raytracer.tests.math.core
@@ -22,7 +22,7 @@ namespace ccml.raytracer.tests.math.core
         public void ComputingTheMagnitude01Test()
         {
             // Given v ← vector(0, 1, 0)
-            var v = CrtTupleFactory.Vector(0, 1, 0);
+            var v = CrtFactory.Vector(0, 1, 0);
             // Then magnitude(v) = 1
             Assert.AreEqual(1.0, !v);
         }
@@ -32,7 +32,7 @@ namespace ccml.raytracer.tests.math.core
         public void ComputingTheMagnitude02Test()
         {
             // Given v ← vector(0, 0, 1)
-            var v = CrtTupleFactory.Vector(0, 0, 1);
+            var v = CrtFactory.Vector(0, 0, 1);
             // Then magnitude(v) = 1
             Assert.AreEqual(1.0, !v);
         }
@@ -42,7 +42,7 @@ namespace ccml.raytracer.tests.math.core
         public void ComputingTheMagnitude03Test()
         {
             // Given v ← vector(1, 2, 3)
-            var v = CrtTupleFactory.Vector(1, 2, 3);
+            var v = CrtFactory.Vector(1, 2, 3);
             // Then magnitude(v) = √14
             Assert.AreEqual(Math.Sqrt(14), !v);
         }
@@ -52,7 +52,7 @@ namespace ccml.raytracer.tests.math.core
         public void ComputingTheMagnitude04Test()
         {
             // Given v ← vector(-1, -2, -3)
-            var v = CrtTupleFactory.Vector(-1, -2, -3);
+            var v = CrtFactory.Vector(-1, -2, -3);
             // Then magnitude(v) = √14
             Assert.AreEqual(Math.Sqrt(14), !v);
         }
@@ -66,9 +66,9 @@ namespace ccml.raytracer.tests.math.core
         public void NormalizingVector01Test()
         {
             // Given v ← vector(4, 0, 0)
-            var v = CrtTupleFactory.Vector(4, 0, 0);
+            var v = CrtFactory.Vector(4, 0, 0);
             // Then normalize(v) = vector(1, 0, 0)
-            Assert.IsTrue(~v == CrtTupleFactory.Vector(1, 0, 0));
+            Assert.IsTrue(~v == CrtFactory.Vector(1, 0, 0));
         }
 
         // Scenario: Normalizing vector(1, 2, 3)
@@ -76,10 +76,10 @@ namespace ccml.raytracer.tests.math.core
         public void NormalizingVector02Test()
         {
             // Given v ← vector(1, 2, 3)
-            var v = CrtTupleFactory.Vector(1, 2, 3);
+            var v = CrtFactory.Vector(1, 2, 3);
             //                                 # vector(1/√14,   2/√14,   3/√14)
             // Then normalize(v) = approximately vector(0.26726, 0.53452, 0.80178)
-            Assert.IsTrue(~v == CrtTupleFactory.Vector(1.0 / Math.Sqrt(14), 2.0 / Math.Sqrt(14), 3.0 / Math.Sqrt(14)));
+            Assert.IsTrue(~v == CrtFactory.Vector(1.0 / Math.Sqrt(14), 2.0 / Math.Sqrt(14), 3.0 / Math.Sqrt(14)));
         }
 
         // Scenario: The magnitude of a normalized vector
@@ -87,7 +87,7 @@ namespace ccml.raytracer.tests.math.core
         public void NormalizingVector03Test()
         {
             // Given v ← vector(1, 2, 3)
-            var v = CrtTupleFactory.Vector(1, 2, 3);
+            var v = CrtFactory.Vector(1, 2, 3);
             // When norm ← normalize(v)
             var vn = ~v;
             // Then magnitude(norm) = 1
@@ -103,9 +103,9 @@ namespace ccml.raytracer.tests.math.core
         public void DotProductOfTwoVectorsTest()
         {
             // Given a ← vector(1, 2, 3)
-            var a = CrtTupleFactory.Vector(1, 2, 3);
+            var a = CrtFactory.Vector(1, 2, 3);
             // And b ← vector(2, 3, 4)
-            var b = CrtTupleFactory.Vector(2, 3, 4);
+            var b = CrtFactory.Vector(2, 3, 4);
             // Then dot(a, b) = 20
             Assert.AreEqual(20, a * b);
         }
@@ -120,13 +120,13 @@ namespace ccml.raytracer.tests.math.core
         public void CrossProductOfTwoVectorsTest()
         {
             //Given a ← vector(1, 2, 3)
-            var a = CrtTupleFactory.Vector(1, 2, 3);
+            var a = CrtFactory.Vector(1, 2, 3);
             //And b ← vector(2, 3, 4)
-            var b = CrtTupleFactory.Vector(2, 3, 4);
+            var b = CrtFactory.Vector(2, 3, 4);
             //Then cross(a, b) = vector(-1, 2, -1)
-            Assert.IsTrue((a ^ b) == CrtTupleFactory.Vector(-1, 2, -1));
+            Assert.IsTrue((a ^ b) == CrtFactory.Vector(-1, 2, -1));
             //And cross(b, a) = vector(1, -2, 1)
-            Assert.IsTrue((b ^ a) == CrtTupleFactory.Vector(1, -2, 1));
+            Assert.IsTrue((b ^ a) == CrtFactory.Vector(1, -2, 1));
         }
 
         #endregion

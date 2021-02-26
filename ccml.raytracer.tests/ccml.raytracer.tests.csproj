@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ccml.raytracer.math\ccml.raytracer.math.csproj" />
+    <ProjectReference Include="..\ccml.raytracer.math\ccml.raytracer.engine.csproj" />
   </ItemGroup>
 
 </Project>

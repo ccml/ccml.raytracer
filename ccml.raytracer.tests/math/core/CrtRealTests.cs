@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ccml.raytracer.math.core;
+using ccml.raytracer.engine.core;
 
 namespace ccml.raytracer.tests.math.core
 {

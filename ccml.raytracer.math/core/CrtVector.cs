@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace ccml.raytracer.math.core
+namespace ccml.raytracer.engine.core
 {
     /// <summary>
     /// A vector in a 3D space.
@@ -15,6 +11,31 @@ namespace ccml.raytracer.math.core
     {
         public CrtVector(double x, double y, double z) : base(x, y, z, 0.0)
         {
+        }
+
+        public static CrtPoint operator +(CrtVector v, CrtPoint p)
+        {
+            return (((CrtTuple)v) + ((CrtTuple)p)) as CrtPoint;
+        }
+
+        public static CrtVector operator +(CrtVector v1, CrtVector v2)
+        {
+            return (((CrtTuple)v1) + ((CrtTuple)v2)) as CrtVector;
+        }
+
+        public static CrtVector operator -(CrtVector v1, CrtVector v2)
+        {
+            return (((CrtTuple)v1) - ((CrtTuple)v2)) as CrtVector;
+        }
+
+        public static CrtVector operator *(CrtVector v, double scalar)
+        {
+            return (((CrtTuple)v) * scalar) as CrtVector;
+        }
+
+        public static CrtVector operator *(double scalar, CrtVector v)
+        {
+            return (scalar * ((CrtTuple)v)) as CrtVector;
         }
 
         /// <summary>
@@ -66,7 +87,7 @@ namespace ccml.raytracer.math.core
         {
             if (v1 is null) throw new ArgumentException();
             if (v2 is null) throw new ArgumentException();
-            return CrtTupleFactory.Vector(
+            return CrtFactory.Vector(
                 v1.Y * v2.Z - v1.Z * v2.Y,
                 v1.Z * v2.X - v1.X * v2.Z,
                 v1.X * v2.Y - v1.Y * v2.X

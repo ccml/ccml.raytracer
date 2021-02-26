@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace ccml.raytracer.math.core
+namespace ccml.raytracer.engine.core
 {
     /// <summary>
     /// A tuple allow to store a point or a vector.
@@ -31,7 +27,7 @@ namespace ccml.raytracer.math.core
             if (tuple1 is null) throw new ArgumentException();
             if (tuple2 is null) throw new ArgumentException();
             if (CrtReal.AreEquals(tuple1.W, 1) && CrtReal.AreEquals(tuple2.W, 1)) throw new ArgumentException("Can't add 2 points");
-            return CrtTupleFactory.Tuple(
+            return CrtFactory.Tuple(
                 tuple1.X + tuple2.X,
                 tuple1.Y + tuple2.Y,
                 tuple1.Z + tuple2.Z,
@@ -44,7 +40,7 @@ namespace ccml.raytracer.math.core
             if (tuple1 is null) throw new ArgumentException();
             if (tuple2 is null) throw new ArgumentException();
             if (CrtReal.AreEquals(tuple1.W, 0) && CrtReal.AreEquals(tuple2.W, 1)) throw new ArgumentException("Can't subtract a point from a vector");
-            return CrtTupleFactory.Tuple(
+            return CrtFactory.Tuple(
                 tuple1.X - tuple2.X,
                 tuple1.Y - tuple2.Y,
                 tuple1.Z - tuple2.Z,
@@ -55,13 +51,13 @@ namespace ccml.raytracer.math.core
         public static CrtTuple operator -(CrtTuple tuple)
         {
             if (tuple is null) throw new ArgumentException();
-            return CrtTupleFactory.Tuple(-tuple.X, -tuple.Y, -tuple.Z, -tuple.W);
+            return CrtFactory.Tuple(-tuple.X, -tuple.Y, -tuple.Z, -tuple.W);
         }
 
         public static CrtTuple operator *(CrtTuple tuple, double scalar)
         {
             if (tuple is null) throw new ArgumentException();
-            return CrtTupleFactory.Tuple(
+            return CrtFactory.Tuple(
                 tuple.X * scalar,
                 tuple.Y * scalar,
                 tuple.Z * scalar,
@@ -72,7 +68,7 @@ namespace ccml.raytracer.math.core
         public static CrtTuple operator *(double scalar, CrtTuple tuple)
         {
             if (tuple is null) throw new ArgumentException();
-            return CrtTupleFactory.Tuple(
+            return CrtFactory.Tuple(
                 tuple.X * scalar,
                 tuple.Y * scalar,
                 tuple.Z * scalar,
@@ -84,7 +80,7 @@ namespace ccml.raytracer.math.core
         {
             if (tuple is null) throw new ArgumentException();
             if(CrtReal.AreEquals(scalar, 0)) throw new DivideByZeroException();
-            return CrtTupleFactory.Tuple(
+            return CrtFactory.Tuple(
                 tuple.X / scalar,
                 tuple.Y / scalar,
                 tuple.Z / scalar,

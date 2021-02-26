@@ -1,14 +1,14 @@
-﻿using ccml.raytracer.math.core;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ccml.raytracer.engine.core;
 
 namespace ccml.raytracer.tests.math.core
 {
-    public class CrtTupleFactoryTests
+    public class CrtFactoryTests
     {
         [SetUp]
         public void Setup()
@@ -20,7 +20,7 @@ namespace ccml.raytracer.tests.math.core
         public void Tuple_W_1_Is_Point_Test()
         {
             // Given a ← tuple(4.3, -4.2, 3.1, 1.0)
-            var a = CrtTupleFactory.Tuple(4.3, -4.2, 3.1, 1.0);
+            var a = CrtFactory.Tuple(4.3, -4.2, 3.1, 1.0);
             //  Then a.x = 4.3
             Assert.AreEqual(a.X, 4.3);
             //   And a.y = -4.2
@@ -40,7 +40,7 @@ namespace ccml.raytracer.tests.math.core
         public void Tuple_W_0_Is_Vector_Test()
         {
             // Given a ← tuple(4.3, -4.2, 3.1, 0.0)
-            var a = CrtTupleFactory.Tuple(4.3, -4.2, 3.1, 0.0);
+            var a = CrtFactory.Tuple(4.3, -4.2, 3.1, 0.0);
             //  Then a.x = 4.3
             Assert.AreEqual(a.X, 4.3);
             //   And a.y = -4.2
@@ -61,7 +61,7 @@ namespace ccml.raytracer.tests.math.core
         public void Point_Create_Tuple_W_1_Test()
         {
             // Given p ← point(4, -4, 3)
-            var p = CrtTupleFactory.Point(4, -4, 3);
+            var p = CrtFactory.Point(4, -4, 3);
             // Then p = tuple(4, -4, 3, 1)
             Assert.AreEqual(p.X, 4);
             Assert.AreEqual(p.Y, -4);
@@ -74,7 +74,7 @@ namespace ccml.raytracer.tests.math.core
         public void Point_Create_Tuple_W_0_Test()
         {
             // Given v ← vector(4, -4, 3)
-            var p = CrtTupleFactory.Vector(4, -4, 3);
+            var p = CrtFactory.Vector(4, -4, 3);
             // Then v = tuple(4, -4, 3, 0)
             Assert.AreEqual(p.X, 4);
             Assert.AreEqual(p.Y, -4);
