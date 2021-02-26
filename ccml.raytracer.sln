@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30711.63
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ccml.raytracer.engine", "ccml.raytracer.math\ccml.raytracer.engine.csproj", "{2B273135-8B44-4762-9115-BEAF3E7C302E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ccml.raytracer.engine", "ccml.raytracer.engine\ccml.raytracer.engine.csproj", "{2B273135-8B44-4762-9115-BEAF3E7C302E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ccml.raytracer.tests", "ccml.raytracer.tests\ccml.raytracer.tests.csproj", "{DC084F5F-2D85-435D-9BE5-5D19033EB50A}"
 EndProject
