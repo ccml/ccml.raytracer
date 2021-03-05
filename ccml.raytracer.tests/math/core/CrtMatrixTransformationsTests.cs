@@ -121,9 +121,9 @@ namespace ccml.raytracer.tests.math.core
             // Given p ← point(0, 1, 0)
             var p = CrtFactory.Point(0, 1, 0);
             // And half_quarter ← rotation_x(π / 4)
-            var halfQuarter = CrtFactory.XRotation(Math.PI / 4);
+            var halfQuarter = CrtFactory.XRotationMatrix(Math.PI / 4);
             // And full_quarter ← rotation_x(π / 2)
-            var fullQuarter = CrtFactory.XRotation(Math.PI / 2);
+            var fullQuarter = CrtFactory.XRotationMatrix(Math.PI / 2);
             // Then half_quarter * p = point(0, √2/2, √2/2)
             Assert.IsTrue(halfQuarter * p == CrtFactory.Point(0, Math.Sqrt(2.0)/2.0, Math.Sqrt(2.0)/2.0));
             // And full_quarter * p = point(0, 0, 1)
@@ -137,9 +137,9 @@ namespace ccml.raytracer.tests.math.core
             // Given p ← point(0, 0, 1)
             var p = CrtFactory.Point(0, 0, 1);
             // And half_quarter ← rotation_y(π / 4)
-            var halfQuarter = CrtFactory.YRotation(Math.PI / 4);
+            var halfQuarter = CrtFactory.YRotationMatrix(Math.PI / 4);
             // And full_quarter ← rotation_y(π / 2)
-            var fullQuarter = CrtFactory.YRotation(Math.PI / 2);
+            var fullQuarter = CrtFactory.YRotationMatrix(Math.PI / 2);
             // Then half_quarter * p = point(√2/2, 0, √2/2)
             Assert.IsTrue(halfQuarter * p == CrtFactory.Point(Math.Sqrt(2.0) / 2.0, 0, Math.Sqrt(2.0) / 2.0));
             // And full_quarter * p = point(1, 0, 0)
@@ -153,9 +153,9 @@ namespace ccml.raytracer.tests.math.core
             // Given p ← point(0, 1, 0)
             var p = CrtFactory.Point(0, 1, 0);
             // And half_quarter ← rotation_y(π / 4)
-            var halfQuarter = CrtFactory.ZRotation(Math.PI / 4);
+            var halfQuarter = CrtFactory.ZRotationMatrix(Math.PI / 4);
             // And full_quarter ← rotation_y(π / 2)
-            var fullQuarter = CrtFactory.ZRotation(Math.PI / 2);
+            var fullQuarter = CrtFactory.ZRotationMatrix(Math.PI / 2);
             // Then half_quarter * p = point(-√2/2, √2/2, 0)
             Assert.IsTrue(halfQuarter * p == CrtFactory.Point(-Math.Sqrt(2.0) / 2.0, Math.Sqrt(2.0) / 2.0, 0));
             // And full_quarter * p = point(-1, 0, 0)
@@ -171,7 +171,7 @@ namespace ccml.raytracer.tests.math.core
         public void AShearingTransformationMovesXInProportionToY()
         {
             // Given transform ← shearing(1, 0, 0, 0, 0, 0)
-            var transform = CrtFactory.Shearing(1, 0, 0, 0, 0, 0);
+            var transform = CrtFactory.ShearingMatrix(1, 0, 0, 0, 0, 0);
             // And p ← point(2, 3, 4)
             var p = CrtFactory.Point(2, 3, 4);
             // Then transform * p = point(5, 3, 4)
@@ -183,7 +183,7 @@ namespace ccml.raytracer.tests.math.core
         public void AShearingTransformationMovesXInProportionToZ()
         {
             // Given transform ← shearing(0, 1, 0, 0, 0, 0)
-            var transform = CrtFactory.Shearing(0, 1, 0, 0, 0, 0);
+            var transform = CrtFactory.ShearingMatrix(0, 1, 0, 0, 0, 0);
             // And p ← point(2, 3, 4)
             var p = CrtFactory.Point(2, 3, 4);
             // Then transform * p = point(6, 3, 4)
@@ -195,7 +195,7 @@ namespace ccml.raytracer.tests.math.core
         public void AShearingTransformationMovesYInProportionToX()
         {
             // Given transform ← shearing(0, 0, 1, 0, 0, 0)
-            var transform = CrtFactory.Shearing(0, 0, 1, 0, 0, 0);
+            var transform = CrtFactory.ShearingMatrix(0, 0, 1, 0, 0, 0);
             // And p ← point(2, 3, 4)
             var p = CrtFactory.Point(2, 3, 4);
             // Then transform * p = point(2, 5, 4)
@@ -207,7 +207,7 @@ namespace ccml.raytracer.tests.math.core
         public void AShearingTransformationMovesYInProportionToZ()
         {
             // Given transform ← shearing(0, 0, 0, 1, 0, 0)
-            var transform = CrtFactory.Shearing(0, 0, 0, 1, 0, 0);
+            var transform = CrtFactory.ShearingMatrix(0, 0, 0, 1, 0, 0);
             // And p ← point(2, 3, 4)
             var p = CrtFactory.Point(2, 3, 4);
             // Then transform * p = point(2, 7, 4)
@@ -219,7 +219,7 @@ namespace ccml.raytracer.tests.math.core
         public void AShearingTransformationMovesZInProportionToX()
         {
             // Given transform ← shearing(0, 0, 0, 0, 1, 0)
-            var transform = CrtFactory.Shearing(0, 0, 0, 0, 1, 0);
+            var transform = CrtFactory.ShearingMatrix(0, 0, 0, 0, 1, 0);
             // And p ← point(2, 3, 4)
             var p = CrtFactory.Point(2, 3, 4);
             // Then transform * p = point(2, 3, 6)
@@ -231,11 +231,62 @@ namespace ccml.raytracer.tests.math.core
         public void AShearingTransformationMovesZInProportionToY()
         {
             // Given transform ← shearing(0, 0, 0, 0, 0, 1)
-            var transform = CrtFactory.Shearing(0, 0, 0, 0, 0, 1);
+            var transform = CrtFactory.ShearingMatrix(0, 0, 0, 0, 0, 1);
             // And p ← point(2, 3, 4)
             var p = CrtFactory.Point(2, 3, 4);
             // Then transform * p = point(2, 3, 7)
             Assert.IsTrue(transform * p == CrtFactory.Point(2, 3, 7));
+        }
+
+        #endregion
+
+        #region Chaining transformation
+
+        // Scenario: Individual transformations are applied in sequence
+        [Test]
+        public void IndividualTransformationsAreAppliedInSequence()
+        {
+            // Given p ← point(1, 0, 1)
+            var p = CrtFactory.Point(1, 0, 1);
+            // And A ← rotation_x(π / 2)
+            var a = CrtFactory.XRotationMatrix(Math.PI / 2);
+            // And B ← scaling(5, 5, 5)
+            var b = CrtFactory.ScalingMatrix(5, 5, 5);
+            // And C ← translation(10, 5, 7)
+            var c = CrtFactory.TranslationMatrix(10, 5, 7);
+            // apply rotation first
+            // When p2 ← A* p
+            var p2 = a * p;
+            // Then p2 = point(1, -1, 0)
+            Assert.IsTrue(p2 == CrtFactory.Point(1, -1, 0));
+            //# then apply scaling
+            // When p3 ← B* p2
+            var p3 = b * p2;
+            // Then p3 = point(5, -5, 0)
+            Assert.IsTrue(p3 == CrtFactory.Point(5, -5, 0));
+            //# then apply translation
+            // When p4 ← C* p3
+            var p4 = c * p3;
+            // Then p4 = point(15, 0, 7)
+            Assert.IsTrue(p4 == CrtFactory.Point(15, 0, 7));
+        }
+
+        // Scenario: Chained transformations must be applied in reverse order
+        [Test]
+        public void ChainedTransformationsMustBeAppliedInReverseOrder()
+        {
+            // Given p ← point(1, 0, 1)
+            var p = CrtFactory.Point(1, 0, 1);
+            // And A ← rotation_x(π / 2)
+            var a = CrtFactory.XRotationMatrix(Math.PI / 2);
+            // And B ← scaling(5, 5, 5)
+            var b = CrtFactory.ScalingMatrix(5, 5, 5);
+            // And C ← translation(10, 5, 7)
+            var c = CrtFactory.TranslationMatrix(10, 5, 7);
+            // When T ← C* B * A
+            var t = c * b * a;
+            // Then T* p = point(15, 0, 7)
+            Assert.IsTrue(t * p == CrtFactory.Point(15, 0, 7));
         }
 
         #endregion

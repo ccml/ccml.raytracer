@@ -120,6 +120,16 @@ namespace ccml.raytracer.engine.core
             return CrtFactory.Tuple(resultComponents[0], resultComponents[1], resultComponents[2], resultComponents[3]);
         }
 
+        public static CrtPoint operator *(CrtMatrix m, CrtPoint p)
+        {
+            return (m * ((CrtTuple)p)) as CrtPoint;
+        }
+
+        public static CrtVector operator *(CrtMatrix m, CrtVector v)
+        {
+            return (m * ((CrtTuple)v)) as CrtVector;
+        }
+
         public CrtMatrix Transpose()
         {
             var result = new CrtMatrix(NbrCols, NbrRows);

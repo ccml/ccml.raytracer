@@ -125,7 +125,7 @@ namespace ccml.raytracer.engine.core
         /// </summary>
         /// <param name="angle">the rotation angle</param>
         /// <returns>The matrix</returns>
-        public static CrtMatrix XRotation(double angle)
+        public static CrtMatrix XRotationMatrix(double angle)
         {
             var result = new CrtMatrix(4, 4);
             var cosa = Math.Cos(angle);
@@ -142,7 +142,7 @@ namespace ccml.raytracer.engine.core
         /// </summary>
         /// <param name="angle">the rotation angle</param>
         /// <returns>The matrix</returns>
-        public static CrtMatrix YRotation(double angle)
+        public static CrtMatrix YRotationMatrix(double angle)
         {
             var result = new CrtMatrix(4, 4);
             var cosa = Math.Cos(angle);
@@ -159,7 +159,7 @@ namespace ccml.raytracer.engine.core
         /// </summary>
         /// <param name="angle">the rotation angle</param>
         /// <returns>The matrix</returns>
-        public static CrtMatrix ZRotation(double angle)
+        public static CrtMatrix ZRotationMatrix(double angle)
         {
             var result = new CrtMatrix(4, 4);
             var cosa = Math.Cos(angle);
@@ -181,7 +181,7 @@ namespace ccml.raytracer.engine.core
         /// <param name="szx">scale factor on Z axis in proportion to X axis</param>
         /// <param name="szy">scale factor on Z axis in proportion to Y axis</param>
         /// <returns>The matrix</returns>
-        public static CrtMatrix Shearing(double sxy, double sxz, double syx, double syz, double szx, double szy)
+        public static CrtMatrix ShearingMatrix(double sxy, double sxz, double syx, double syz, double szx, double szy)
         {
             var result = new CrtMatrix(4, 4);
             result[0, 1] = sxy;
