@@ -44,22 +44,10 @@ namespace ccml.raytracer.engine.core.Shapes
             {
                 var t1 = (-b - Math.Sqrt(discriminant)) / (2 * a);
                 var t2 = (-b + Math.Sqrt(discriminant)) / (2 * a);
-                if (CrtReal.CompareTo(t1, t2) < 0)
-                {
-                    return new List<CrtIntersection>()
-                    {
-                        CrtFactory.Intersection(t1, this),
-                        CrtFactory.Intersection(t2, this)
-                    };
-                }
-                else
-                {
-                    return new List<CrtIntersection>()
-                    {
-                        CrtFactory.Intersection(t2, this),
-                        CrtFactory.Intersection(t1, this)
-                    };
-                }
+                return CrtFactory.Intersections(
+                    CrtFactory.Intersection(t1, this),
+                    CrtFactory.Intersection(t2, this)
+                );
             }
         }
     }
