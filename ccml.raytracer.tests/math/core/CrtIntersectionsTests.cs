@@ -124,5 +124,41 @@ namespace ccml.raytracer.tests.math.core
             Assert.AreSame(i, i4);
         }
 
+        // Scenario: Intersecting a scaled sphere with a ray
+        [Test]
+        public void IntersectingAScaledSphereWithARay()
+        {
+            // Given r ← ray(point(0, 0, -5), vector(0, 0, 1))
+            var r = CrtFactory.Ray(CrtFactory.Point(0, 0, -5), CrtFactory.Vector(0, 0, 1));
+            // And s ← sphere()
+            var s = CrtFactory.Sphere();
+            // When set_transform(s, scaling(2, 2, 2))
+            s.SetTransformMatrix(CrtFactory.ScalingMatrix(2,2,2));
+            // And xs ← intersect(s, r)
+            var xs = s.Intersect(r);
+            // Then xs.count = 2
+            Assert.AreEqual(2, xs.Count);
+            // And xs[0].t = 3
+            Assert.IsTrue(CrtReal.AreEquals(xs[0].T, 3));
+            // And xs[1].t = 7
+            Assert.IsTrue(CrtReal.AreEquals(xs[1].T, 7));
+        }
+
+        // Scenario: Intersecting a translated sphere with a ray
+        [Test]
+        public void IntersectingATranslatedSphereWithARay()
+        {
+            // Given r ← ray(point(0, 0, -5), vector(0, 0, 1))
+            var r = CrtFactory.Ray(CrtFactory.Point(0, 0, -5), CrtFactory.Vector(0, 0, 1));
+            // And s ← sphere()
+            var s = CrtFactory.Sphere();
+            // When set_transform(s, translation(5, 0, 0))
+            s.SetTransformMatrix(CrtFactory.TranslationMatrix(5,0,0));
+            // And xs ← intersect(s, r)
+            var xs = s.Intersect(r);
+            // Then xs.count = 0
+            Assert.AreEqual(0, xs.Count);
+        }
+
     }
 }

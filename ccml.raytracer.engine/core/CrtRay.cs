@@ -35,5 +35,15 @@ namespace ccml.raytracer.engine.core
         {
             return Origin + (Direction * t);
         }
+
+        /// <summary>
+        /// Return the rays resulting of the applying of a transformation matrix on the current ray
+        /// </summary>
+        /// <param name="transformationMatrix">the transformation matrix</param>
+        /// <returns>the resulting ray</returns>
+        public CrtRay Transform(CrtMatrix transformationMatrix)
+        {
+            return CrtFactory.Ray(transformationMatrix * Origin, transformationMatrix * Direction);
+        }
     }
 }

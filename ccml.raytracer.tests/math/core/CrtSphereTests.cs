@@ -88,37 +88,29 @@ namespace ccml.raytracer.tests.math.core
             Assert.IsTrue(CrtReal.AreEquals(xs[1].T, -4.0));
         }
 
-        // Scenario: An intersection encapsulates t and object
+
+        // Scenario: A sphere's default transformation
         [Test]
-        public void AnIntersectionEncapsulatesTAndObject()
+        public void ASphereDefaultTransformation()
         {
             // Given s ← sphere()
             var s = CrtFactory.Sphere();
-            // When i ← intersection(3.5, s)
-            var i = CrtFactory.Intersection(3.5, s);
-            // Then i.t = 3.5
-            Assert.IsTrue(CrtReal.AreEquals(i.T, 3.5));
-            // And i.object = s
-            Assert.AreSame(i.TheObject, s);
+            // Then s.transform = identity_matrix
+            Assert.IsTrue(s.TransformMatrix == CrtFactory.IdentityMatrix(4,4));
         }
 
-        // Scenario: Intersect sets the object on the intersection
+        // Scenario: Changing a sphere's transformation
         [Test]
-        public void IntersectSetsTheObjectOnTheIntersection()
+        public void ChangingASphereTransformation()
         {
-            // Given r ← ray(point(0, 0, -5), vector(0, 0, 1))
-            var r = CrtFactory.Ray(CrtFactory.Point(0, 0, -5), CrtFactory.Vector(0, 0, 1));
-            // And s ← sphere()
+            // Given s ← sphere()
             var s = CrtFactory.Sphere();
-            // When xs ← intersect(s, r)
-            var xs = s.Intersect(r);
-            // Then xs.count = 2
-            Assert.AreEqual(2, xs.Count);
-            // And xs[0].object = s
-            Assert.AreSame(xs[0].TheObject, s);
-            // And xs[1].object = s
-            Assert.AreSame(xs[1].TheObject, s);
+            // And t ← translation(2, 3, 4)
+            var t = CrtFactory.TranslationMatrix(2, 3, 4);
+            // When set_transform(s, t)
+            s.SetTransformMatrix(t);
+            // Then s.transform = t
+            Assert.AreSame(s.TransformMatrix, t);
         }
-
     }
 }
