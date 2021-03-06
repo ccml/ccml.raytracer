@@ -9,7 +9,7 @@ namespace ccml.raytracer.engine.core
     /// </summary>
     public class CrtVector : CrtTuple
     {
-        public CrtVector(double x, double y, double z) : base(x, y, z, 0.0)
+        internal CrtVector(double x, double y, double z) : base(x, y, z, 0.0)
         {
         }
 

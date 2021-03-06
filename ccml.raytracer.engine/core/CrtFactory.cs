@@ -1,4 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Xml.Linq;
+using ccml.raytracer.engine.core.Engine;
+using ccml.raytracer.engine.core.Shapes;
 
 namespace ccml.raytracer.engine.core
 {
@@ -192,5 +197,40 @@ namespace ccml.raytracer.engine.core
             result[2, 1] = szy;
             return result;
         }
+
+        /// <summary>
+        /// Create a ray
+        /// </summary>
+        /// <param name="origin">Origin of the ray</param>
+        /// <param name="direction">Direction of the ray</param>
+        /// <returns>The ray</returns>
+        public static CrtRay Ray(CrtPoint origin, CrtVector direction) => new CrtRay(origin, direction);
+
+        /// <summary>
+        /// Create an intersection describing where an object has been hit
+        /// </summary>
+        /// <param name="t">the number of unit of time needed by the ray to hit the object</param>
+        /// <param name="theObject">the object that has been hit</param>
+        /// <returns>the intersection</returns>
+        public static CrtIntersection Intersection(double t, CrtShape theObject) => new CrtIntersection(t, theObject);
+
+        /// <summary>
+        /// Create a list of hit
+        /// </summary>
+        /// <param name="xs">the hits</param>
+        /// <returns>the list</returns>
+        public static IList<CrtIntersection> Intersections(params CrtIntersection[] xs) => xs.OrderBy(i => i.T).ToList();
+
+        /// <summary>
+        /// Create the ray tracer engine
+        /// </summary>
+        /// <returns>the ray tracer engine</returns>
+        public static CrtEngine Engine() => new CrtEngine();
+
+        /// <summary>
+        /// Create a unit sphere
+        /// </summary>
+        /// <returns>The sphere</returns>
+        public static CrtSphere Sphere() => new CrtSphere();
     }
 }

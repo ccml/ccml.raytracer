@@ -7,7 +7,7 @@
     /// </summary>
     public class CrtPoint : CrtTuple
     {
-        public CrtPoint(double x, double y, double z) : base(x, y, z, 1.0)
+        internal CrtPoint(double x, double y, double z) : base(x, y, z, 1.0)
         {
         }
 

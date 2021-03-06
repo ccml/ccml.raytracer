@@ -8,6 +8,11 @@ namespace ccml.raytracer.engine.core
         public double Green { get; set; }
         public double Blue { get; set; }
 
+        internal CrtColor()
+        {
+            
+        }
+
         /// <summary>
         /// Adding two colors
         /// </summary>

@@ -10,24 +10,6 @@ namespace ccml.raytracer.engine.core
 {
     public class CrtMatrix
     {
-        protected bool Equals(CrtMatrix other)
-        {
-            return Equals(_matrix, other._matrix) && NbrRows == other.NbrRows && NbrCols == other.NbrCols;
-        }
-
-        public override bool Equals(object obj)
-        {
-            if (ReferenceEquals(null, obj)) return false;
-            if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != this.GetType()) return false;
-            return Equals((CrtMatrix) obj);
-        }
-
-        public override int GetHashCode()
-        {
-            return HashCode.Combine(_matrix, NbrRows, NbrCols);
-        }
-
         private readonly int _nbrRows;
         public int NbrRows => _nbrRows;
 
@@ -212,5 +194,26 @@ namespace ccml.raytracer.engine.core
             }
             return result;
         }
+
+        // -------------------------------------------------
+
+        protected bool Equals(CrtMatrix other)
+        {
+            return Equals(_matrix, other._matrix) && NbrRows == other.NbrRows && NbrCols == other.NbrCols;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((CrtMatrix)obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(_matrix, NbrRows, NbrCols);
+        }
+
     }
 }

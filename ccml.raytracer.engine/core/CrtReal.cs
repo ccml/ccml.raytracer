@@ -22,5 +22,11 @@ namespace ccml.raytracer.engine.core
         {
             return Math.Abs(f2 - f1) < EPSILON;
         }
+
+        public static int CompareTo(double f1, double f2)
+        {
+            if (AreEquals(f1, f2)) return 0;
+            return f1.CompareTo(f2);
+        }
     }
 }

@@ -14,7 +14,7 @@ namespace ccml.raytracer.engine.core
         public double Z { get; set; }
         public double W { get; set; }
 
-        public CrtTuple(double x, double y, double z, double w)
+        internal CrtTuple(double x, double y, double z, double w)
         {
             X = x;
             Y = y;

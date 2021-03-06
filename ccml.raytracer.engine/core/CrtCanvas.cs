@@ -10,7 +10,7 @@ namespace ccml.raytracer.engine.core
         public int Width { get; set; }
         public int Height { get; set; }
 
-        public CrtCanvas(int width, int height)
+        internal CrtCanvas(int width, int height)
         {
             Width = width;
             Height = height;
