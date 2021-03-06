@@ -18,13 +18,19 @@ namespace ccml.raytracer.engine.core.Shapes
             {
                 _transformMatrix = value;
                 InverseTransformMatrix = _transformMatrix.Inverse();
+                TransposedInverseTransformMatrix = InverseTransformMatrix.Transpose();
             }
         }
 
         /// <summary>
-        /// The transforamtion matrix to the shape world
+        /// The transformation matrix to the shape world
         /// </summary>
         public CrtMatrix InverseTransformMatrix { get; private set; }
+
+        /// <summary>
+        /// The transformation matrix to the overall world
+        /// </summary>
+        public CrtMatrix TransposedInverseTransformMatrix { get; private set; }
 
         internal CrtShape()
         {

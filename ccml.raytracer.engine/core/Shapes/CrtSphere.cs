@@ -56,5 +56,19 @@ namespace ccml.raytracer.engine.core.Shapes
                 );
             }
         }
+
+        /// <summary>
+        /// Return the normal on the sphere at a point
+        /// </summary>
+        /// <param name="point">A point on the sphere</param>
+        /// <returns>the normal</returns>
+        public CrtVector NormalAt(CrtPoint point)
+        {
+            var shapePoint = InverseTransformMatrix * point;
+            var shapeNormal = shapePoint - Center;
+            var worldNormal = TransposedInverseTransformMatrix * ((CrtTuple)shapeNormal);
+            worldNormal.W = 0.0;
+            return ~CrtFactory.Vector(worldNormal.X, worldNormal.Y, worldNormal.Z);
+        }
     }
 }
