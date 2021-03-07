@@ -38,6 +38,12 @@ namespace ccml.raytracer.engine.core
             return (scalar * ((CrtTuple)v)) as CrtVector;
         }
 
+        public static CrtVector operator -(CrtVector v)
+        {
+            if (v is null) throw new ArgumentException();
+            return -((CrtTuple)v) as CrtVector;
+        }
+
         /// <summary>
         /// Normalize vector operator
         /// </summary>
@@ -94,5 +100,14 @@ namespace ccml.raytracer.engine.core
             );
         }
 
+        /// <summary>
+        /// return the vector resulting of the reflection of the current vector around the normal vector
+        /// </summary>
+        /// <param name="normal">the normal</param>
+        /// <returns>the reflected vector</returns>
+        public CrtVector ReflectBy(CrtVector normal)
+        {
+            return this - normal * 2 * (this * normal);
+        }
     }
 }

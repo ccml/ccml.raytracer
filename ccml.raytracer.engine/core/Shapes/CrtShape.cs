@@ -52,5 +52,12 @@ namespace ccml.raytracer.engine.core.Shapes
         {
             TransformMatrix = transformMatrix;
         }
+
+        /// <summary>
+        /// Return the normal on the shape at a point
+        /// </summary>
+        /// <param name="point">A point on the shape</param>
+        /// <returns>the normal</returns>
+        public abstract CrtVector NormalAt(CrtPoint point);
     }
 }

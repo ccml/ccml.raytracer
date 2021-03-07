@@ -3,16 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ccml.raytracer.engine.core.Materials;
 
 namespace ccml.raytracer.engine.core.Shapes
 {
     public class CrtSphere : CrtShape
     {
         public CrtPoint Center { get; private set; }
-
+        public CrtMaterial Material { get; set; }
+        
         internal CrtSphere() : base()
         {
-            Center = new CrtPoint(0, 0, 0);
+            Center = CrtFactory.Point(0, 0, 0);
+            Material = CrtFactory.UniformColorMaterial();
         }
 
         public override IList<CrtIntersection> Intersect(CrtRay r)
@@ -57,12 +60,7 @@ namespace ccml.raytracer.engine.core.Shapes
             }
         }
 
-        /// <summary>
-        /// Return the normal on the sphere at a point
-        /// </summary>
-        /// <param name="point">A point on the sphere</param>
-        /// <returns>the normal</returns>
-        public CrtVector NormalAt(CrtPoint point)
+        public override CrtVector NormalAt(CrtPoint point)
         {
             var shapePoint = InverseTransformMatrix * point;
             var shapeNormal = shapePoint - Center;

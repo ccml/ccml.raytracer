@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
 using ccml.raytracer.engine.core.Engine;
+using ccml.raytracer.engine.core.Lights;
+using ccml.raytracer.engine.core.Materials;
 using ccml.raytracer.engine.core.Shapes;
 
 namespace ccml.raytracer.engine.core
@@ -232,5 +234,42 @@ namespace ccml.raytracer.engine.core
         /// </summary>
         /// <returns>The sphere</returns>
         public static CrtSphere Sphere() => new CrtSphere();
+
+        /// <summary>
+        /// Create a point light
+        ///   A light source with no size, existing at a single point in space.It is also defined by its intensity,
+        ///   or how bright it is. This intensity also describes the color of the light source.
+        /// </summary>
+        /// <param name="position">the position of a light</param>
+        /// <param name="intensity">the intensity/color of the light</param>
+        /// <returns>the point light</returns>
+        public static CrtPointLight PointLight(CrtPoint position, CrtColor intensity) =>
+            new CrtPointLight(position, intensity);
+
+        /// <summary>
+        /// Create an uniform color material
+        /// </summary>
+        /// <param name="color">the color of the surface</param>
+        /// <param name="ambient">the % part of the reflected ambient light</param>
+        /// <param name="diffuse">the % part of the reflected diffuse light</param>
+        /// <param name="specular">the % part of the reflected specular light</param>
+        /// <param name="shininess">+/- 10 very large highlight ==> +/- 200 very small highlight</param>
+        /// <returns>the material</returns>
+        public static CrtUniformColorMaterial UniformColorMaterial(CrtColor color, double ambient, double diffuse, double specular,
+            double shininess)
+            => new CrtUniformColorMaterial(color, ambient, diffuse, specular, shininess);
+
+        /// <summary>
+        /// Create an uniform color material with the following parameters
+        ///      color = white
+        ///    ambient = 0.1
+        ///    diffuse = 0.9
+        ///   specular = 0.9
+        ///  shininess = 200.0
+        /// </summary>
+        /// <returns>the material</returns>
+        public static CrtUniformColorMaterial UniformColorMaterial()
+            => UniformColorMaterial(Color(1,1,1), 0.1, 0.9, 0.9, 200.0);
+
     }
 }

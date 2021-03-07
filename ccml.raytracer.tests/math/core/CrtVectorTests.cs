@@ -131,5 +131,36 @@ namespace ccml.raytracer.tests.math.core
 
         #endregion
 
+        #region Refecting a vector
+
+        // Scenario: Reflecting a vector approaching at 45°
+        [Test]
+        public void ReflectingAVectorApproachingAt45Deg()
+        {
+            // Given v ← vector(1, -1, 0)
+            var v = CrtFactory.Vector(1, -1, 0);
+            // And n ← vector(0, 1, 0)
+            var n = CrtFactory.Vector(0,1,0);
+            // When r ← reflect(v, n)
+            var r = v.ReflectBy(n);
+            // Then r = vector(1, 1, 0)
+            Assert.IsTrue(r == CrtFactory.Vector(1,1,0));
+        }
+
+        // Scenario: Reflecting a vector off a slanted surface
+        [Test]
+        public void ReflectingAVectorOffASlantedSurface()
+        {
+            // Given v ← vector(0, -1, 0)
+            var v = CrtFactory.Vector(0, -1, 0);
+            // And n ← vector(√2/2, √2/2, 0)
+            var n = CrtFactory.Vector(Math.Sqrt(2.0)/2, Math.Sqrt(2.0) / 2, 0);
+            // When r ← reflect(v, n)
+            var r = v.ReflectBy(n);
+            // Then r = vector(1, 0, 0)
+            Assert.IsTrue(r == CrtFactory.Vector(1, 0, 0));
+        }
+
+        #endregion
     }
 }

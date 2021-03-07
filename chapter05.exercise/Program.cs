@@ -25,7 +25,7 @@ namespace chapter05.exercise
                 for (int w = 0; w < canvasSize; w++)
                 {
                     var cx = (w - canvasHalfSize) * canvasToWallFactor;
-                    var cy = (h - canvasHalfSize) * canvasToWallFactor;
+                    var cy = -(h - canvasHalfSize) * canvasToWallFactor;
                     var r = CrtFactory.Ray(origin, CrtFactory.Point(cx, cy, wallZ) - origin);
                     var xs = sphere.Intersect(r);
                     if (xs.Count > 0)
