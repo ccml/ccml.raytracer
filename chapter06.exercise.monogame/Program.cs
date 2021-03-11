@@ -74,7 +74,7 @@ namespace chapter06.exercise.monogame
             var origin = CrtFactory.Point(0, 0, -5);
             //
             // trying to cast the shadow of a unit sphere onto some wall behind it
-            for (int i = 0; i < 360; i++)
+            for (int i = 10; i < 200; i++)
             {
                 while (_isDirty)
                 {
@@ -82,11 +82,11 @@ namespace chapter06.exercise.monogame
                 }
                 var s = CrtFactory.Sphere();
                 ((CrtUniformColorMaterial)s.Material).Color = CrtFactory.Color(1, 0.2, 1);
-                s.Material.Ambient = 0.05;
+                s.Material.Ambient = 0.2;
                 s.Material.Diffuse = 0.9;
                 s.Material.Specular = 0.9;
-                s.Material.Shininess = 50;
-                s.SetTransformMatrix(CrtFactory.ZRotationMatrix(i * 2 * Math.PI / 360) * CrtFactory.ScalingMatrix(0.5, 1, 1));
+                s.Material.Shininess = i;
+                // s.SetTransformMatrix(CrtFactory.ZRotationMatrix(i * 2 * Math.PI / 360) * CrtFactory.ScalingMatrix(0.5, 1, 1));
                 //
                 RenderSphere(canvasSize, origin, wallSize, wallZ, s);
                 _isDirty = true;

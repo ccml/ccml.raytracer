@@ -133,7 +133,7 @@ namespace ccml.raytracer.tests.math.core
             // And s ← sphere()
             var s = CrtFactory.Sphere();
             // When set_transform(s, scaling(2, 2, 2))
-            s.SetTransformMatrix(CrtFactory.ScalingMatrix(2,2,2));
+            s.TransformMatrix = CrtFactory.ScalingMatrix(2,2,2);
             // And xs ← intersect(s, r)
             var xs = s.Intersect(r);
             // Then xs.count = 2
@@ -153,12 +153,78 @@ namespace ccml.raytracer.tests.math.core
             // And s ← sphere()
             var s = CrtFactory.Sphere();
             // When set_transform(s, translation(5, 0, 0))
-            s.SetTransformMatrix(CrtFactory.TranslationMatrix(5,0,0));
+            s.TransformMatrix = CrtFactory.TranslationMatrix(5,0,0);
             // And xs ← intersect(s, r)
             var xs = s.Intersect(r);
             // Then xs.count = 0
             Assert.AreEqual(0, xs.Count);
         }
 
+        #region PreComputeHits
+
+        // Scenario: Precomputing the state of an intersection
+        [Test]
+        public void PrecomputingTheStateOfAnIntersection()
+        {
+            // Given r ← ray(point(0, 0, -5), vector(0, 0, 1))
+            var r = CrtFactory.Ray(CrtFactory.Point(0, 0, -5), CrtFactory.Vector(0, 0, 1));
+            // And shape ← sphere()
+            var shape = CrtFactory.Sphere();
+            // And i ← intersection(4, shape)
+            var i = shape.Intersect(r).Single(ie => CrtReal.AreEquals(ie.T, 4));
+            // When comps ← prepare_computations(i, r)
+            var comps = CrtFactory.Engine().PrepareComputations(i, r);
+            // Then comps.t = i.t
+            Assert.IsTrue(CrtReal.AreEquals(comps.T, i.T));
+            // And comps.object = i.object
+            Assert.AreSame(comps.TheObject, i.TheObject);
+            // And comps.point = point(0, 0, -1)
+            Assert.IsTrue(comps.HitPoint == CrtFactory.Point(0, 0, -1));
+            // And comps.eyev = vector(0, 0, -1)
+            Assert.IsTrue(comps.EyeVector == CrtFactory.Vector(0, 0, -1));
+            // And comps.normalv = vector(0, 0, -1)
+            Assert.IsTrue(comps.NormalVector == CrtFactory.Vector(0, 0, -1));
+        }
+
+        // Scenario: The hit, when an intersection occurs on the outside
+        [Test]
+        public void TheHitWhenAnIntersectionOccursOnTheOutside()
+        {
+            // Given r ← ray(point(0, 0, -5), vector(0, 0, 1))
+            var r = CrtFactory.Ray(CrtFactory.Point(0, 0, -5), CrtFactory.Vector(0, 0, 1));
+            // And shape ← sphere()
+            var shape = CrtFactory.Sphere();
+            // And i ← intersection(4, shape)
+            var i = shape.Intersect(r).Single(ie => CrtReal.AreEquals(ie.T, 4));
+            // When comps ← prepare_computations(i, r)
+            var comps = CrtFactory.Engine().PrepareComputations(i, r);
+            // Then comps.inside = false
+            Assert.IsFalse(comps.IsInside);
+        }
+
+        // Scenario: The hit, when an intersection occurs on the inside
+        [Test]
+        public void TheHitWhenAnIntersectionOccursOnTheInside()
+        {
+            // Given r ← ray(point(0, 0, 0), vector(0, 0, 1))
+            var r = CrtFactory.Ray(CrtFactory.Point(0, 0, 0), CrtFactory.Vector(0, 0, 1));
+            // And shape ← sphere()
+            var shape = CrtFactory.Sphere();
+            // And i ← intersection(1, shape)
+            var i = shape.Intersect(r).Single(ie => CrtReal.AreEquals(ie.T, 1));
+            // When comps ← prepare_computations(i, r)
+            var comps = CrtFactory.Engine().PrepareComputations(i, r);
+            // Then comps.point = point(0, 0, 1)
+            Assert.IsTrue(comps.HitPoint == CrtFactory.Point(0, 0, 1));
+            // And comps.eyev = vector(0, 0, -1)
+            Assert.IsTrue(comps.EyeVector == CrtFactory.Vector(0, 0, -1));
+            // And comps.inside = true
+            Assert.IsTrue(comps.IsInside);
+            // # normal would have been (0, 0, 1), but is inverted!
+            // And comps.normalv = vector(0, 0, -1)
+            Assert.IsTrue(comps.NormalVector == CrtFactory.Vector(0, 0, -1));
+        }
+
+        #endregion
     }
 }

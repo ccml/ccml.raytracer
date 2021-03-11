@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ccml.raytracer.tests.math.core;
 
 namespace ccml.raytracer.engine.core.Engine
 {
@@ -65,6 +66,31 @@ namespace ccml.raytracer.engine.core.Engine
             }
 
             return ambient + diffuse + specular;
+        }
+
+        public CrtIntersectionComputation PrepareComputations(CrtIntersection intersection, CrtRay r)
+        {
+            var comps = new CrtIntersectionComputation();
+            comps.T = intersection.T;
+            comps.TheObject = intersection.TheObject;
+            comps.HitPoint = r.PositionAtTime(intersection.T);
+            comps.EyeVector = -r.Direction;
+            comps.NormalVector = intersection.TheObject.NormalAt(comps.HitPoint);
+            if (CrtReal.CompareTo(comps.NormalVector * comps.EyeVector, 0) < 0)
+            {
+                comps.IsInside = true;
+                comps.NormalVector = -comps.NormalVector;
+            }
+            else
+            {
+                comps.IsInside = false;
+            }
+            return comps;
+        }
+
+        public CrtColor ShadeHit(CrtWorld w, CrtIntersectionComputation comps)
+        {
+            return Lighting(comps.TheObject.Material, w.Lights[0], comps.HitPoint, comps.EyeVector, comps.NormalVector);
         }
     }
 }

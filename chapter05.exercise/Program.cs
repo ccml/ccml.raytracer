@@ -62,22 +62,22 @@ namespace chapter05.exercise
             //
             // trying to cast the shadow of a Y scaled sphere onto some wall behind it
             s = CrtFactory.Sphere();
-            s.SetTransformMatrix(CrtFactory.ScalingMatrix(1,0.5,1));
+            s.TransformMatrix = CrtFactory.ScalingMatrix(1,0.5,1);
             Process(canvasSize, origin, wallSize, wallZ, s, @"D:\Temp\TheRayTracerChallenge\output\chapter05\yscaled_sphere_shadow.ppm");
             //
             // trying to cast the shadow of a X scaled sphere onto some wall behind it
             s = CrtFactory.Sphere();
-            s.SetTransformMatrix(CrtFactory.ScalingMatrix(0.5, 1, 1));
+            s.TransformMatrix = CrtFactory.ScalingMatrix(0.5, 1, 1);
             Process(canvasSize, origin, wallSize, wallZ, s, @"D:\Temp\TheRayTracerChallenge\output\chapter05\xscaled_sphere_shadow.ppm");
             //
             // trying to cast the shadow of a x scaled and z rotated sphere onto some wall behind it
             s = CrtFactory.Sphere();
-            s.SetTransformMatrix(CrtFactory.ZRotationMatrix(Math.PI/4) * CrtFactory.ScalingMatrix(0.5, 1, 1));
+            s.TransformMatrix = CrtFactory.ZRotationMatrix(Math.PI/4) * CrtFactory.ScalingMatrix(0.5, 1, 1);
             Process(canvasSize, origin, wallSize, wallZ, s, @"D:\Temp\TheRayTracerChallenge\output\chapter05\xscaled_zrotation_sphere_shadow.ppm");
             //
             // trying to cast the shadow of a x scaled and skewed sphere onto some wall behind it
             s = CrtFactory.Sphere();
-            s.SetTransformMatrix(CrtFactory.ShearingMatrix(1,0,0,0,0,0) * CrtFactory.ScalingMatrix(0.5, 1, 1));
+            s.TransformMatrix = CrtFactory.ShearingMatrix(1,0,0,0,0,0) * CrtFactory.ScalingMatrix(0.5, 1, 1);
             Process(canvasSize, origin, wallSize, wallZ, s, @"D:\Temp\TheRayTracerChallenge\output\chapter05\xscaled_skewed_sphere_shadow.ppm");
             //
             //

@@ -45,5 +45,16 @@ namespace ccml.raytracer.engine.core
         {
             return CrtFactory.Ray(transformationMatrix * Origin, transformationMatrix * Direction);
         }
+
+        public IList<CrtIntersection> Intersect(CrtWorld w)
+        {
+            var intersections = new List<CrtIntersection>();
+            foreach (var wObject in w.Objects)
+            {
+                var wIntersections = wObject.Intersect(this);
+                intersections.AddRange(wIntersections);
+            }
+            return CrtFactory.Intersections(intersections.ToArray());
+        }
     }
 }

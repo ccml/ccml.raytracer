@@ -9,13 +9,12 @@ namespace ccml.raytracer.engine.core.Shapes
 {
     public class CrtSphere : CrtShape
     {
+        // (*) Just for convenience but it's always equals to (0,0,0) and don't change
         public CrtPoint Center { get; private set; }
-        public CrtMaterial Material { get; set; }
         
         internal CrtSphere() : base()
         {
             Center = CrtFactory.Point(0, 0, 0);
-            Material = CrtFactory.UniformColorMaterial();
         }
 
         public override IList<CrtIntersection> Intersect(CrtRay r)
@@ -67,6 +66,40 @@ namespace ccml.raytracer.engine.core.Shapes
             var worldNormal = TransposedInverseTransformMatrix * ((CrtTuple)shapeNormal);
             worldNormal.W = 0.0;
             return ~CrtFactory.Vector(worldNormal.X, worldNormal.Y, worldNormal.Z);
+        }
+
+        public static bool operator ==(CrtSphere s1, CrtSphere s2)
+        {
+            return (((CrtShape) s1) == ((CrtShape) s2));
+                   // because (*
+                   //&&
+                   //s1.Center == s2.Center;
+        }
+
+        public static bool operator !=(CrtSphere s1, CrtSphere s2)
+        {
+            return (((CrtShape)s1) != ((CrtShape)s2));
+                   // because (*
+                   //||
+                   //s1.Center != s2.Center;
+        }
+
+        protected bool Equals(CrtSphere other)
+        {
+            return base.Equals(other) && Equals(Center, other.Center);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((CrtSphere) obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(base.GetHashCode(), Center);
         }
     }
 }

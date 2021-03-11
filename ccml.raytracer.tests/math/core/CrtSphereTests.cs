@@ -111,7 +111,7 @@ namespace ccml.raytracer.tests.math.core
             // And t ← translation(2, 3, 4)
             var t = CrtFactory.TranslationMatrix(2, 3, 4);
             // When set_transform(s, t)
-            s.SetTransformMatrix(t);
+            s.TransformMatrix = t;
             // Then s.transform = t
             Assert.AreSame(s.TransformMatrix, t);
         }
@@ -185,7 +185,7 @@ namespace ccml.raytracer.tests.math.core
             // Given s ← sphere()
             var s = CrtFactory.Sphere();
             // And set_transform(s, translation(0, 1, 0))
-            s.SetTransformMatrix(CrtFactory.TranslationMatrix(0,1,0));
+            s.TransformMatrix = CrtFactory.TranslationMatrix(0,1,0);
             // When n ← normal_at(s, point(0, 1.70711, -0.70711))
             var n = s.NormalAt(CrtFactory.Point(0, 1.70711, -0.70711));
             // Then n = vector(0, 0.70711, -0.70711)
@@ -201,7 +201,7 @@ namespace ccml.raytracer.tests.math.core
             // And m ← scaling(1, 0.5, 1) * rotation_z(π/5)
             var m = CrtFactory.ScalingMatrix(1, 0.5, 1) * CrtFactory.ZRotationMatrix(Math.PI / 5);
             // And set_transform(s, m)
-            s.SetTransformMatrix(m);
+            s.TransformMatrix = m;
             // When n ← normal_at(s, point(0, √2/2, -√2/2))
             var n = s.NormalAt(CrtFactory.Point(0, Math.Sqrt(2.0)/2, -Math.Sqrt(2.0)/2));
             // Then n = vector(0, 0.97014, -0.24254)

@@ -48,8 +48,8 @@ namespace ccml.raytracer.ui.monogame.screen
             // Create a new SpriteBatch, which can be used to draw textures.
             _context.GraphicsDevice = GraphicsDevice;
             _context.SpriteBatch = new SpriteBatch(GraphicsDevice);
-            _context.Width = 400;
-            _context.Height = 400;
+            _context.Width = _width;
+            _context.Height = _height;
             _image = new MonoGameRaytracerImage(_context);
             Task.Run(() => _renderImage());
         }

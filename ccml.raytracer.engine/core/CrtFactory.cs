@@ -221,7 +221,7 @@ namespace ccml.raytracer.engine.core
         /// </summary>
         /// <param name="xs">the hits</param>
         /// <returns>the list</returns>
-        public static IList<CrtIntersection> Intersections(params CrtIntersection[] xs) => xs.OrderBy(i => i.T).ToList();
+        public static List<CrtIntersection> Intersections(params CrtIntersection[] xs) => xs.OrderBy(i => i.T).ToList();
 
         /// <summary>
         /// Create the ray tracer engine
@@ -255,8 +255,8 @@ namespace ccml.raytracer.engine.core
         /// <param name="specular">the % part of the reflected specular light</param>
         /// <param name="shininess">+/- 10 very large highlight ==> +/- 200 very small highlight</param>
         /// <returns>the material</returns>
-        public static CrtUniformColorMaterial UniformColorMaterial(CrtColor color, double ambient, double diffuse, double specular,
-            double shininess)
+        public static CrtUniformColorMaterial UniformColorMaterial(CrtColor color, double ambient = 0.1, double diffuse = 0.9, double specular = 0.9,
+            double shininess = 200)
             => new CrtUniformColorMaterial(color, ambient, diffuse, specular, shininess);
 
         /// <summary>
@@ -269,7 +269,55 @@ namespace ccml.raytracer.engine.core
         /// </summary>
         /// <returns>the material</returns>
         public static CrtUniformColorMaterial UniformColorMaterial()
-            => UniformColorMaterial(Color(1,1,1), 0.1, 0.9, 0.9, 200.0);
+            => UniformColorMaterial(Color(1,1,1));
 
+        public static CrtWorld World()
+        {
+            return new CrtWorld();
+        }
+
+        public static CrtWorld DefaultWorld()
+        {
+            var w = World();
+            w.Add(PointLight(Point(-10, 10, -10), Color(1, 1, 1)));
+            var s1 = CrtFactory.Sphere();
+            s1.Material = CrtFactory.UniformColorMaterial(CrtFactory.Color(0.8, 1.0, 0.6), diffuse:0.7, specular:0.2);
+            var s2 = CrtFactory.Sphere();
+            s2.TransformMatrix = CrtFactory.ScalingMatrix(0.5, 0.5, 0.5);
+            w.Add(s1, s2);
+            return w;
+        }
+
+        /// <summary>
+        /// Create a view transformation matrix
+        /// </summary>
+        /// <param name="from">Eye position</param>
+        /// <param name="to">A point where the eye look at</param>
+        /// <param name="up">Indicate which direction is up</param>
+        /// <returns>The transformation matrix</returns>
+        public static CrtMatrix ViewTransformation(CrtPoint from, CrtPoint to, CrtVector up)
+        {
+            var forward = ~(to - from);
+            var upn = ~up;
+            var left = forward ^ upn;
+            var trueUp = left ^ forward;
+            var orientation = CrtFactory.Matrix(
+                new double[] { left.X, left.Y, left.Z, 0.0 },
+                new double[] { trueUp.X, trueUp.Y, trueUp.Z, 0.0 },
+                new double[] { -forward.X, -forward.Y, -forward.Z, 0.0 },
+                new double[] { 0.0, 0.0, 0.0, 1.0 }
+            );
+            return orientation * CrtFactory.TranslationMatrix(-from.X, -from.Y, -from.Z);
+        }
+
+        /// <summary>
+        /// Create a camera
+        /// </summary>
+        /// <param name="hSize">Horizontal image resolution</param>
+        /// <param name="vSize">Vertical image resolution</param>
+        /// <param name="fieldOfView">View angle of the camera</param>
+        /// <returns>The camera</returns>
+        public static CrtCamera Camera(int hSize, int vSize, double fieldOfView) =>
+            new CrtCamera(hSize, vSize, fieldOfView);
     }
 }

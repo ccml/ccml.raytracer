@@ -84,25 +84,25 @@ namespace chapter06.exercise
             // trying to cast the shadow of a Y scaled sphere onto some wall behind it
             s = CrtFactory.Sphere();
             ((CrtUniformColorMaterial)s.Material).Color = CrtFactory.Color(1, 0.2, 1);
-            s.SetTransformMatrix(CrtFactory.ScalingMatrix(1, 0.5, 1));
+            s.TransformMatrix = CrtFactory.ScalingMatrix(1, 0.5, 1);
             Process(canvasSize, origin, wallSize, wallZ, s, @"D:\Temp\TheRayTracerChallenge\output\chapter06\yscaled_sphere.ppm");
             //
             // trying to cast the shadow of a X scaled sphere onto some wall behind it
             s = CrtFactory.Sphere();
             ((CrtUniformColorMaterial)s.Material).Color = CrtFactory.Color(1, 0.2, 1);
-            s.SetTransformMatrix(CrtFactory.ScalingMatrix(0.5, 1, 1));
+            s.TransformMatrix = CrtFactory.ScalingMatrix(0.5, 1, 1);
             Process(canvasSize, origin, wallSize, wallZ, s, @"D:\Temp\TheRayTracerChallenge\output\chapter06\xscaled_sphere.ppm");
             //
             // trying to cast the shadow of a x scaled and z rotated sphere onto some wall behind it
             s = CrtFactory.Sphere();
             ((CrtUniformColorMaterial)s.Material).Color = CrtFactory.Color(1, 0.2, 1);
-            s.SetTransformMatrix(CrtFactory.ZRotationMatrix(Math.PI / 4) * CrtFactory.ScalingMatrix(0.5, 1, 1));
+            s.TransformMatrix = CrtFactory.ZRotationMatrix(Math.PI / 4) * CrtFactory.ScalingMatrix(0.5, 1, 1);
             Process(canvasSize, origin, wallSize, wallZ, s, @"D:\Temp\TheRayTracerChallenge\output\chapter06\xscaled_zrotation_sphere.ppm");
             //
             // trying to cast the shadow of a x scaled and skewed sphere onto some wall behind it
             s = CrtFactory.Sphere();
             ((CrtUniformColorMaterial)s.Material).Color = CrtFactory.Color(1, 0.2, 1);
-            s.SetTransformMatrix(CrtFactory.ShearingMatrix(1, 0, 0, 0, 0, 0) * CrtFactory.ScalingMatrix(0.5, 1, 1));
+            s.TransformMatrix = CrtFactory.ShearingMatrix(1, 0, 0, 0, 0, 0) * CrtFactory.ScalingMatrix(0.5, 1, 1);
             Process(canvasSize, origin, wallSize, wallZ, s, @"D:\Temp\TheRayTracerChallenge\output\chapter06\xscaled_skewed_sphere.ppm");
             //
             //
