@@ -13,7 +13,7 @@ namespace chapter07.exercise.monogame
         private static CrtCanvas _canvas;
         private static MonoGameRaytracerWindow _window;
 
-        private static async Task RenderImage(int hSize, int vSize, CrtCamera camera)
+        private static async Task Render(int hSize, int vSize)
         {
             var world = CrtFactory.World();
             //
@@ -85,26 +85,21 @@ namespace chapter07.exercise.monogame
                 CrtFactory.PointLight(CrtFactory.Point(-10, 10, -10), CrtFactory.Color(1, 1, 1))
             );
             //
-            _canvas = camera.Render(world);
-            _isDirty = true;
-        }
-
-        private static async Task Render(int hSize, int vSize)
-        {
-            for (int i = 0; i < 11; i++)
+            int nbr = 36;
+            for (int i = 0; i <= nbr; i++)
             {
                 var camera = CrtFactory.Camera(hSize, vSize, Math.PI / 3.0);
                 camera.ViewTransformMatrix =
                     CrtFactory.ViewTransformation(
-                        CrtFactory.Point(0, 1.5, -5),
+                        CrtFactory.Point(0, 2, -6),
                         CrtFactory.Point(0.0, 1.0, 0.0),
-                        CrtFactory.ZRotationMatrix(Math.PI / 10 * i * 2) * CrtFactory.Vector(0.0, 1.0, 0.0)
+                        CrtFactory.ZRotationMatrix(Math.PI / nbr * i * 2) * CrtFactory.Vector(0.0, 1.0, 0.0)
                     );
-                await RenderImage(hSize, vSize, camera);
+                _canvas = camera.Render(world);
+                _isDirty = true;
             }
             Console.WriteLine("Done !");
         }
-
 
         private static async Task UpdateImage()
         {
