@@ -8,7 +8,7 @@ using NUnit.Framework;
 
 namespace ccml.raytracer.tests.math.core
 {
-    public class ViewTransformationsTests
+    public class CrtViewTransformationsTests
     {
         [SetUp]
         public void Setup()

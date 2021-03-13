@@ -236,6 +236,12 @@ namespace ccml.raytracer.engine.core
         public static CrtSphere Sphere() => new CrtSphere();
 
         /// <summary>
+        /// Create a plane
+        /// </summary>
+        /// <returns>The plane</returns>
+        public static CrtPlane Plane() => new CrtPlane();
+
+        /// <summary>
         /// Create a point light
         ///   A light source with no size, existing at a single point in space.It is also defined by its intensity,
         ///   or how bright it is. This intensity also describes the color of the light source.
@@ -319,5 +325,7 @@ namespace ccml.raytracer.engine.core
         /// <returns>The camera</returns>
         public static CrtCamera Camera(int hSize, int vSize, double fieldOfView) =>
             new CrtCamera(hSize, vSize, fieldOfView);
+
+        public static CrtShape TestShape() => new CrtTestShape();
     }
 }

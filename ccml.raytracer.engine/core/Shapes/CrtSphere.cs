@@ -17,11 +17,8 @@ namespace ccml.raytracer.engine.core.Shapes
             Center = CrtFactory.Point(0, 0, 0);
         }
 
-        public override IList<CrtIntersection> Intersect(CrtRay r)
+        public override IList<CrtIntersection> LocalIntersect(CrtRay r)
         {
-            // !!! The intersection must be done with the ray 
-            //     transformed in the shape world !!!
-            //
             // # the vector from the sphere's center, to the ray origin
             // # remember: the sphere is centered at the world origin
             // sphere_to_ray ← ray.origin - point(0, 0, 0)
@@ -35,12 +32,9 @@ namespace ccml.raytracer.engine.core.Shapes
             //   t2 ← (-b + √(discriminant)) / (2 * a)
             // make sure the intersections are returned in increasing order
             //
-            // The ray in the shape world
-            var tr = r.Transform(InverseTransformMatrix);
-            //
-            var sphereToRay = tr.Origin - Center;
-            var a = tr.Direction * tr.Direction;
-            var b = 2 * (tr.Direction * sphereToRay);
+            var sphereToRay = r.Origin - Center;
+            var a = r.Direction * r.Direction;
+            var b = 2 * (r.Direction * sphereToRay);
             var c = (sphereToRay * sphereToRay) - 1;
             var discriminant = b * b - 4 * a * c;
             var compare = CrtReal.CompareTo(discriminant, 0.0);
@@ -59,13 +53,9 @@ namespace ccml.raytracer.engine.core.Shapes
             }
         }
 
-        public override CrtVector NormalAt(CrtPoint point)
+        public override CrtVector LocalNormalAt(CrtPoint point)
         {
-            var shapePoint = InverseTransformMatrix * point;
-            var shapeNormal = shapePoint - Center;
-            var worldNormal = TransposedInverseTransformMatrix * ((CrtTuple)shapeNormal);
-            worldNormal.W = 0.0;
-            return ~CrtFactory.Vector(worldNormal.X, worldNormal.Y, worldNormal.Z);
+            return point - Center;
         }
 
         public static bool operator ==(CrtSphere s1, CrtSphere s2)
