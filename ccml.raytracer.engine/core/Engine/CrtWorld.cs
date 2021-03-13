@@ -29,7 +29,7 @@ namespace ccml.raytracer.engine.core
             Lights.AddRange(lights);
         }
 
-        public CrtColor ColorAt(CrtRay r)
+        private List<CrtIntersection> Intersect(CrtRay r)
         {
             var intersections = new List<CrtIntersection>();
             foreach (var anObject in Objects)
@@ -37,7 +37,19 @@ namespace ccml.raytracer.engine.core
                 intersections.AddRange(anObject.Intersect(r));
                 intersections = CrtFactory.Intersections(intersections.ToArray());
             }
-            var hit = intersections.FirstOrDefault(i => CrtReal.CompareTo(i.T, 0.0) > 0);
+
+            return intersections;
+        }
+
+        private CrtIntersection Hit(List<CrtIntersection> intersections)
+        {
+            return intersections.FirstOrDefault(i => CrtReal.CompareTo(i.T, 0.0) > 0);
+        }
+
+        public CrtColor ColorAt(CrtRay r)
+        {
+            var intersections = Intersect(r);
+            var hit = Hit(intersections);
             if (hit == null)
             {
                 return CrtFactory.Color(0, 0, 0);
@@ -47,6 +59,24 @@ namespace ccml.raytracer.engine.core
                 var comps = CrtFactory.Engine().PrepareComputations(hit, r);
                 var c = CrtFactory.Engine().ShadeHit(this, comps);
                 return c;
+            }
+        }
+
+        public bool IsShadowed(CrtPoint point)
+        {
+            var v = Lights[0].Position - point;
+            var distance = !v;
+            var direction = ~v;
+            var r = CrtFactory.Ray(point, direction);
+            var intersections = Intersect(r);
+            var h = Hit(intersections);
+            if ((h != null) && (h.T < distance))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
     }

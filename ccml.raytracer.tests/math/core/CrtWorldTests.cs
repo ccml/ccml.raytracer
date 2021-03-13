@@ -173,5 +173,107 @@ namespace ccml.raytracer.tests.math.core
         }
 
         #endregion
+
+        #region Shadowing
+
+        // Scenario: There is no shadow when nothing is collinear with point and light
+        [Test]
+        public void ThereIsNoShadowWhenNothingIsCollinearWithPointAndLight()
+        {
+            // Given w ← default_world()
+            var w = CrtFactory.DefaultWorld();
+            // And p ← point(0, 10, 0)
+            var p = CrtFactory.Point(0, 10, 0);
+            // Then is_shadowed(w, p) is false
+            Assert.IsFalse(w.IsShadowed(p));
+        }
+
+        // Scenario: The shadow when an object is between the point and the light
+        [Test]
+        public void TheShadowWhenAnObjectIsBetweenThePointAndTheLight()
+        {
+            // Given w ← default_world()
+            var w = CrtFactory.DefaultWorld();
+            // And p ← point(10, -10, 10)
+            var p = CrtFactory.Point(10, -10, 10);
+            // Then is_shadowed(w, p) is true
+            Assert.IsTrue(w.IsShadowed(p));
+        }
+
+        // Scenario: There is no shadow when an object is behind the light
+        [Test]
+        public void ThereIsNoShadowWhenAnObjectIsBehindTheLight()
+        {
+            // Given w ← default_world()
+            var w = CrtFactory.DefaultWorld();
+            // And p ← point(-20, 20, -20)
+            var p = CrtFactory.Point(-20, 20, -20);
+            // Then is_shadowed(w, p) is false
+            Assert.IsFalse(w.IsShadowed(p));
+        }
+
+        // Scenario: There is no shadow when an object is behind the point
+        [Test]
+        public void ThereIsNoShadowWhenAnObjectIsBehindThePoint()
+        {
+            // Given w ← default_world()
+            var w = CrtFactory.DefaultWorld();
+            // And p ← point(-2, 2, -2)
+            var p = CrtFactory.Point(-2, 2, -2);
+            // Then is_shadowed(w, p) is false
+            Assert.IsFalse(w.IsShadowed(p));
+        }
+
+        // Scenario: shade_hit() is given an intersection in shadow
+        [Test]
+        public void ShadeHitIsGivenAnIntersectionInShadow()
+        {
+            // Given w ← world()
+            var w = CrtFactory.World();
+            // And w.light ← point_light(point(0, 0, -10), color(1, 1, 1))
+            w.Add(CrtFactory.PointLight(CrtFactory.Point(0, 0, -10), CrtFactory.Color(1, 1, 1)));
+            // And s1 ← sphere()
+            var s1 = CrtFactory.Sphere();
+            // And s1 is added to w
+            w.Add(s1);
+            // And s2 ← sphere() with:
+            //      | transform | translation(0, 0, 10) |
+            var s2 = CrtFactory.Sphere();
+            s2.TransformMatrix = CrtFactory.TranslationMatrix(0, 0, 10);
+            // And s2 is added to w
+            w.Add(s2);
+            // And r ← ray(point(0, 0, 5), vector(0, 0, 1))
+            var r = CrtFactory.Ray(CrtFactory.Point(0, 0, 5), CrtFactory.Vector(0, 0, 1));
+            // And i ← intersection(4, s2)
+            var i = s2.Intersect(r).Single(i => CrtReal.AreEquals(i.T, 4.0));
+            // When comps ← prepare_computations(i, r)
+            var comps = CrtFactory.Engine().PrepareComputations(i, r);
+            // And c ← shade_hit(w, comps)
+            var c = CrtFactory.Engine().ShadeHit(w, comps);
+            // Then c = color(0.1, 0.1, 0.1)
+            Assert.IsTrue(c == CrtFactory.Color(0.1, 0.1, 0.1));
+        }
+
+        // Scenario: The hit should offset the point
+        [Test]
+        public void TheHitShouldOffsetThePoint()
+        {
+            // Given r ← ray(point(0, 0, -5), vector(0, 0, 1))
+            var r = CrtFactory.Ray(CrtFactory.Point(0, 0, -5), CrtFactory.Vector(0, 0, 1));
+            // And shape ← sphere() with:
+            //      | transform | translation(0, 0, 1) |
+            var shape = CrtFactory.Sphere();
+            shape.TransformMatrix = CrtFactory.TranslationMatrix(0, 0, 1);
+            // And i ← intersection(5, shape)
+            var i = shape.Intersect(r).Single(i => CrtReal.AreEquals(i.T, 5.0));
+            // When comps ← prepare_computations(i, r)
+            var comps = CrtFactory.Engine().PrepareComputations(i, r);
+            // Then comps.over_point.z< -EPSILON/2
+            Assert.IsTrue(comps.OverPoint.Z < -CrtReal.EPSILON/2.0);
+            // And comps.point.z > comps.over_point.z
+            Assert.IsTrue(CrtReal.CompareTo(comps.HitPoint.Z, comps.OverPoint.Z) > 0);
+        }
+
+        #endregion
     }
 }

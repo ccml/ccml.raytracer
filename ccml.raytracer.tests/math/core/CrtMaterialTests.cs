@@ -157,5 +157,27 @@ namespace ccml.raytracer.tests.math.core
         }
 
         #endregion
+
+        #region Shadowing
+
+        // Scenario: Lighting with the surface in shadow
+        [Test]
+        public void LightingWithThSurfaceInShadow()
+        {
+            // Given eyev ← vector(0, 0, -1)
+            var eyev = CrtFactory.Vector(0, 0, -1);
+            // And normalv ← vector(0, 0, -1)
+            var normalv = CrtFactory.Vector(0, 0, -1);
+            // And light ← point_light(point(0, 0, -10), color(1, 1, 1))
+            var light = CrtFactory.PointLight(CrtFactory.Point(0, 0, -10), CrtFactory.Color(1, 1, 1));
+            // And in_shadow ← true
+            var inShadow = true;
+            // When result ← lighting(m, light, position, eyev, normalv, in_shadow)
+            var result = CrtFactory.Engine().Lighting(_sharedMaterial, light, _sharedHitPoint, eyev, normalv, inShadow);
+            // Then result = color(0.1, 0.1, 0.1)
+            Assert.IsTrue(result == CrtFactory.Color(0.1, 0.1, 0.1));
+        }
+
+        #endregion
     }
 }

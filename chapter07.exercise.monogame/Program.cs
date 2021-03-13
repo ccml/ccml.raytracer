@@ -38,7 +38,7 @@ namespace chapter07.exercise.monogame
             leftWall.Material = floor.Material;
             world.Objects.Add(leftWall);
             //
-            // Add left wall
+            // Add right wall
             var rightWall = CrtFactory.Sphere();
             rightWall.TransformMatrix =
                 CrtFactory.TranslationMatrix(0, 0, 5)

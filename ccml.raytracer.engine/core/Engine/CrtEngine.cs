@@ -21,7 +21,7 @@ namespace ccml.raytracer.engine.core.Engine
             return intersections.FirstOrDefault(i => CrtReal.CompareTo(i.T, 0.0) >= 0);
         }
 
-        public CrtColor Lighting(CrtMaterial material, CrtPointLight light, CrtPoint hitPoint, CrtVector eyeVector, CrtVector normalVector)
+        public CrtColor Lighting(CrtMaterial material, CrtPointLight light, CrtPoint hitPoint, CrtVector eyeVector, CrtVector normalVector, bool inShadow = false)
         {
             // combine the surface color with the light's color/intensity
             var effectiveColor = ((CrtUniformColorMaterial) material).Color * light.Intensity;
@@ -32,39 +32,43 @@ namespace ccml.raytracer.engine.core.Engine
             // compute the ambient contribution
             var ambient = effectiveColor * material.Ambient;
             //
-            CrtColor diffuse = null;
-            CrtColor specular = null;
+            CrtColor diffuse = CrtFactory.Color(0, 0, 0);
+            CrtColor specular = CrtFactory.Color(0, 0, 0);
             //
-            // lightDotNormal represents the cosine of the angle between the
-            // lightVector and normalVector. A negative number means the
-            // light is on the other side of the surface.
-            var lightDotNormal = lightVector * normalVector;
-            if (CrtReal.CompareTo(lightDotNormal, 0.0) < 0)
+            if (!inShadow)
             {
-                diffuse = CrtFactory.Color(0, 0, 0);
-                specular = CrtFactory.Color(0, 0, 0);
-            }
-            else
-            {
-                // compute the diffuse contribution
-                diffuse = effectiveColor * material.Diffuse * lightDotNormal;
-                // reflectDotEye represents the cosine of the angle between the
-                // reflectionVector and the eyeVector. A negative number means the
-                // light reflects away from the eye.
-                var reflectVector = (-lightVector).ReflectBy(normalVector);
-                var reflectDotEye = reflectVector * eyeVector;
-                if (CrtReal.CompareTo(reflectDotEye, 0.0) <= 0)
+                //
+                // lightDotNormal represents the cosine of the angle between the
+                // lightVector and normalVector. A negative number means the
+                // light is on the other side of the surface.
+                var lightDotNormal = lightVector * normalVector;
+                if (CrtReal.CompareTo(lightDotNormal, 0.0) < 0)
                 {
+                    diffuse = CrtFactory.Color(0, 0, 0);
                     specular = CrtFactory.Color(0, 0, 0);
                 }
                 else
                 {
-                    // compute the specular contribution
-                    var factor = Math.Pow(reflectDotEye, material.Shininess);
-                    specular = light.Intensity * material.Specular * factor;
+                    // compute the diffuse contribution
+                    diffuse = effectiveColor * material.Diffuse * lightDotNormal;
+                    // reflectDotEye represents the cosine of the angle between the
+                    // reflectionVector and the eyeVector. A negative number means the
+                    // light reflects away from the eye.
+                    var reflectVector = (-lightVector).ReflectBy(normalVector);
+                    var reflectDotEye = reflectVector * eyeVector;
+                    if (CrtReal.CompareTo(reflectDotEye, 0.0) <= 0)
+                    {
+                        specular = CrtFactory.Color(0, 0, 0);
+                    }
+                    else
+                    {
+                        // compute the specular contribution
+                        var factor = Math.Pow(reflectDotEye, material.Shininess);
+                        specular = light.Intensity * material.Specular * factor;
+                    }
                 }
             }
-
+            //
             return ambient + diffuse + specular;
         }
 
@@ -85,12 +89,14 @@ namespace ccml.raytracer.engine.core.Engine
             {
                 comps.IsInside = false;
             }
+            comps.OverPoint = comps.HitPoint + comps.NormalVector * CrtReal.EPSILON;
             return comps;
         }
 
         public CrtColor ShadeHit(CrtWorld w, CrtIntersectionComputation comps)
         {
-            return Lighting(comps.TheObject.Material, w.Lights[0], comps.HitPoint, comps.EyeVector, comps.NormalVector);
+            var shadowed = w.IsShadowed(comps.OverPoint);
+            return Lighting(comps.TheObject.Material, w.Lights[0], comps.HitPoint, comps.EyeVector, comps.NormalVector, shadowed);
         }
     }
 }
