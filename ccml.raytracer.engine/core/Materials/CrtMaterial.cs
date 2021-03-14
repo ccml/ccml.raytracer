@@ -3,12 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ccml.raytracer.engine.core.Materials.Patterns;
 using Microsoft.VisualBasic.CompilerServices;
 
 namespace ccml.raytracer.engine.core.Materials
 {
-    public abstract class CrtMaterial
+    public class CrtMaterial
     {
+        public CrtColor Color { get; set; }
+
+        public CrtPattern Pattern { get; set; }
+
         private double _ambient;
         public double Ambient
         {
@@ -57,26 +62,53 @@ namespace ccml.raytracer.engine.core.Materials
         }
 
         /// <summary>
-        /// Create a material
+        /// Create a color material
         /// </summary>
+        /// <param name="color">Color of the material</param>
         /// <param name="ambient">the % part of the reflected ambient light</param>
         /// <param name="diffuse">the % part of the reflected diffuse light</param>
         /// <param name="specular">the % part of the reflected specular light</param>
         /// <param name="shininess">+/- 10 very large highlight ==> +/- 200 very small highlight</param>
-        internal CrtMaterial(double ambient, double diffuse, double specular, double shininess)
+        internal CrtMaterial(CrtColor color, double ambient, double diffuse, double specular, double shininess)
         {
+            Color = color;
             Ambient = ambient;
             Diffuse = diffuse;
             Specular = specular;
             Shininess = shininess;
         }
 
+        /// <summary>
+        /// Create a pattern material
+        /// </summary>
+        /// <param name="pattern">Pattern of the material</param>
+        /// <param name="ambient">the % part of the reflected ambient light</param>
+        /// <param name="diffuse">the % part of the reflected diffuse light</param>
+        /// <param name="specular">the % part of the reflected specular light</param>
+        /// <param name="shininess">+/- 10 very large highlight ==> +/- 200 very small highlight</param>
+        internal CrtMaterial(CrtPattern pattern, double ambient, double diffuse, double specular, double shininess)
+        {
+            Pattern = pattern;
+            Ambient = ambient;
+            Diffuse = diffuse;
+            Specular = specular;
+            Shininess = shininess;
+        }
+
+        public bool HasPattern => Pattern != null;
+
         public static bool operator ==(CrtMaterial m1, CrtMaterial m2)
         {
             if (m1 is null) throw new ArgumentException();
             if (m2 is null) throw new ArgumentException();
-            return m1.SpecificEquals(m2)
-                   && 
+            return m1.HasPattern == m2.HasPattern
+                   &&
+                   (
+                       (!m1.HasPattern && (m1.Color == m2.Color))
+                       ||
+                       (m1.HasPattern && (m1.Pattern == m2.Pattern))
+                   )
+                   &&
                    CrtReal.AreEquals(m1.Ambient, m2.Ambient)
                    &&
                    CrtReal.AreEquals(m1.Diffuse, m2.Diffuse)
@@ -90,7 +122,11 @@ namespace ccml.raytracer.engine.core.Materials
         {
             if (m1 is null) throw new ArgumentException();
             if (m2 is null) throw new ArgumentException();
-            return !m1.SpecificEquals(m2)
+            return m1.HasPattern != m2.HasPattern
+                   ||
+                   (!m1.HasPattern && (m1.Color != m2.Color))
+                   ||
+                   (m1.HasPattern && (m1.Pattern != m2.Pattern))
                    ||
                    !CrtReal.AreEquals(m1.Ambient, m2.Ambient)
                    ||
@@ -101,11 +137,9 @@ namespace ccml.raytracer.engine.core.Materials
                    !CrtReal.AreEquals(m1.Shininess, m2.Shininess);
         }
 
-        protected abstract bool SpecificEquals(CrtMaterial m);
-
         protected bool Equals(CrtMaterial other)
         {
-            return _ambient.Equals(other._ambient) && _diffuse.Equals(other._diffuse) && _specular.Equals(other._specular) && _shininess.Equals(other._shininess);
+            return _ambient.Equals(other._ambient) && _diffuse.Equals(other._diffuse) && _specular.Equals(other._specular) && _shininess.Equals(other._shininess) && Equals(Color, other.Color) && Equals(Pattern, other.Pattern);
         }
 
         public override bool Equals(object obj)
@@ -118,7 +152,7 @@ namespace ccml.raytracer.engine.core.Materials
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(_ambient, _diffuse, _specular, _shininess);
+            return HashCode.Combine(_ambient, _diffuse, _specular, _shininess, Color, Pattern);
         }
     }
 }

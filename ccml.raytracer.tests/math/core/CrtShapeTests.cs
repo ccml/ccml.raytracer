@@ -45,7 +45,7 @@ namespace ccml.raytracer.tests.math.core
             // Given s ← test_shape()
             var s = CrtFactory.TestShape();
             // And m ← material()
-            var m = CrtFactory.UniformColorMaterial();
+            var m = CrtFactory.Material();
             // And m.ambient ← 1
             m.Ambient = 1;
             // When s.material ← m

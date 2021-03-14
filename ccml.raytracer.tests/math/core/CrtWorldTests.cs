@@ -40,7 +40,7 @@ namespace ccml.raytracer.tests.math.core
             //      | material.diffuse | 0.7 |
             //      | material.specular | 0.2 |
             var s1 = CrtFactory.Sphere();
-            s1.Material = CrtFactory.UniformColorMaterial(CrtFactory.Color(0.8, 1.0, 0.6), diffuse:0.7, specular:0.2);
+            s1.Material = CrtFactory.Material(CrtFactory.Color(0.8, 1.0, 0.6), diffuse:0.7, specular:0.2);
             // And s2 ← sphere() with:
             //      | transform | scaling(0.5, 0.5, 0.5) |
             var s2 = CrtFactory.Sphere();
@@ -169,7 +169,7 @@ namespace ccml.raytracer.tests.math.core
             // When c ← color_at(w, r)
             var c = w.ColorAt(r);
             // Then c = inner.material.color
-            Assert.IsTrue(c == ((CrtUniformColorMaterial)inner.Material).Color);
+            Assert.IsTrue(c == inner.Material.Color);
         }
 
         #endregion

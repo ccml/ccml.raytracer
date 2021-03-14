@@ -20,7 +20,7 @@ namespace ccml.raytracer.tests.math.core
             // Background:
             //    Given m ← material()
             //    And position ← point(0, 0, 0)
-            _sharedMaterial = CrtFactory.UniformColorMaterial();
+            _sharedMaterial = CrtFactory.Material();
             _sharedHitPoint = CrtFactory.Point(0, 0, 0);
         }
 
@@ -29,7 +29,7 @@ namespace ccml.raytracer.tests.math.core
         public void TheDefaultMaterial()
         {
             // Given m ← material()
-            var m = CrtFactory.UniformColorMaterial();
+            var m = CrtFactory.Material();
             // Then m.color = color(1, 1, 1)
             Assert.IsTrue(m.Color == CrtFactory.Color(1,1,1));
             // And m.ambient = 0.1
@@ -51,7 +51,7 @@ namespace ccml.raytracer.tests.math.core
             // Given s ← sphere()
             var s = CrtFactory.Sphere();
             // When m ← s.material
-            var m = CrtFactory.UniformColorMaterial();
+            var m = CrtFactory.Material();
             // Then m = material()
             Assert.IsTrue(s.Material == m);
         }
@@ -63,7 +63,7 @@ namespace ccml.raytracer.tests.math.core
             // Given s ← sphere()
             var s = CrtFactory.Sphere();
             // And m ← material()
-            var m = CrtFactory.UniformColorMaterial();
+            var m = CrtFactory.Material();
             // And m.ambient ← 1
             m.Ambient = 1;
             // When s.material ← m
@@ -87,7 +87,7 @@ namespace ccml.raytracer.tests.math.core
             // And light ← point_light(point(0, 0, -10), color(1, 1, 1))
             var light = CrtFactory.PointLight(CrtFactory.Point(0, 0, -10), CrtFactory.Color(1, 1, 1));
             // When result ← lighting(m, light, position, eyev, normalv)
-            var result = CrtFactory.Engine().Lighting(_sharedMaterial, light, _sharedHitPoint, eyev, normalv);
+            var result = CrtFactory.Engine().Lighting(_sharedMaterial, CrtFactory.Sphere(), light, _sharedHitPoint, eyev, normalv);
             // Then result = color(1.9, 1.9, 1.9)
             Assert.IsTrue(result == CrtFactory.Color(1.9,1.9,1.9));
         }
@@ -103,7 +103,7 @@ namespace ccml.raytracer.tests.math.core
             // And light ← point_light(point(0, 0, -10), color(1, 1, 1))
             var light = CrtFactory.PointLight(CrtFactory.Point(0, 0, -10), CrtFactory.Color(1, 1, 1));
             // When result ← lighting(m, light, position, eyev, normalv)
-            var result = CrtFactory.Engine().Lighting(_sharedMaterial, light, _sharedHitPoint, eyev, normalv);
+            var result = CrtFactory.Engine().Lighting(_sharedMaterial, CrtFactory.Sphere(), light, _sharedHitPoint, eyev, normalv);
             // Then result = color(1.0, 1.0, 1.0)
             Assert.IsTrue(result == CrtFactory.Color(1.0, 1.0, 1.0));
         }
@@ -119,7 +119,7 @@ namespace ccml.raytracer.tests.math.core
             // And light ← point_light(point(0, 10, -10), color(1, 1, 1))
             var light = CrtFactory.PointLight(CrtFactory.Point(0, 10, -10), CrtFactory.Color(1, 1, 1));
             // When result ← lighting(m, light, position, eyev, normalv)
-            var result = CrtFactory.Engine().Lighting(_sharedMaterial, light, _sharedHitPoint, eyev, normalv);
+            var result = CrtFactory.Engine().Lighting(_sharedMaterial, CrtFactory.Sphere(), light, _sharedHitPoint, eyev, normalv);
             // Then result = color(0.7364, 0.7364, 0.7364)
             Assert.IsTrue(result == CrtFactory.Color(0.7364, 0.7364, 0.7364));
         }
@@ -135,7 +135,7 @@ namespace ccml.raytracer.tests.math.core
             // And light ← point_light(point(0, 10, -10), color(1, 1, 1))
             var light = CrtFactory.PointLight(CrtFactory.Point(0, 10, -10), CrtFactory.Color(1, 1, 1));
             // When result ← lighting(m, light, position, eyev, normalv)
-            var result = CrtFactory.Engine().Lighting(_sharedMaterial, light, _sharedHitPoint, eyev, normalv);
+            var result = CrtFactory.Engine().Lighting(_sharedMaterial, CrtFactory.Sphere(), light, _sharedHitPoint, eyev, normalv);
             // Then result = color(1.6364, 1.6364, 1.6364)
             Assert.IsTrue(result == CrtFactory.Color(1.6364, 1.6364, 1.6364));
         }
@@ -151,7 +151,7 @@ namespace ccml.raytracer.tests.math.core
             // And light ← point_light(point(0, 0, 10), color(1, 1, 1))
             var light = CrtFactory.PointLight(CrtFactory.Point(0, 0, 10), CrtFactory.Color(1, 1, 1));
             // When result ← lighting(m, light, position, eyev, normalv)
-            var result = CrtFactory.Engine().Lighting(_sharedMaterial, light, _sharedHitPoint, eyev, normalv);
+            var result = CrtFactory.Engine().Lighting(_sharedMaterial, CrtFactory.Sphere(), light, _sharedHitPoint, eyev, normalv);
             // Then result = color(0.1, 0.1, 0.1)
             Assert.IsTrue(result == CrtFactory.Color(0.1, 0.1, 0.1));
         }
@@ -173,7 +173,7 @@ namespace ccml.raytracer.tests.math.core
             // And in_shadow ← true
             var inShadow = true;
             // When result ← lighting(m, light, position, eyev, normalv, in_shadow)
-            var result = CrtFactory.Engine().Lighting(_sharedMaterial, light, _sharedHitPoint, eyev, normalv, inShadow);
+            var result = CrtFactory.Engine().Lighting(_sharedMaterial, CrtFactory.Sphere(), light, _sharedHitPoint, eyev, normalv, inShadow);
             // Then result = color(0.1, 0.1, 0.1)
             Assert.IsTrue(result == CrtFactory.Color(0.1, 0.1, 0.1));
         }

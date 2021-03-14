@@ -13,7 +13,7 @@ namespace ccml.raytracer.engine.core.Shapes
         public CrtMaterial Material { get; set; }
 
         private CrtMatrix _transformMatrix;
-        // The transformation matrix to the overall world
+        // The transformation matrix of the object to the overall world
         public CrtMatrix TransformMatrix
         {
             get => _transformMatrix;
@@ -37,7 +37,7 @@ namespace ccml.raytracer.engine.core.Shapes
 
         internal CrtShape()
         {
-            Material = CrtFactory.UniformColorMaterial();
+            Material = CrtFactory.Material();
             TransformMatrix = CrtFactory.IdentityMatrix(4, 4);
         }
 

@@ -18,8 +18,8 @@ namespace chapter09.exercise.monogame
             //
             // Add floor
             var floor = CrtFactory.Plane();
-            floor.Material = CrtFactory.UniformColorMaterial();
-            ((CrtUniformColorMaterial)floor.Material).Color = CrtFactory.Color(1, 0.9, 0.9);
+            floor.Material = CrtFactory.Material();
+            floor.Material.Color = CrtFactory.Color(1, 0.9, 0.9);
             floor.Material.Specular = 0;
             world.Objects.Add(floor);
             //
@@ -40,7 +40,7 @@ namespace chapter09.exercise.monogame
             // Add large sphere in the middle
             var middle = CrtFactory.Sphere();
             middle.TransformMatrix = CrtFactory.TranslationMatrix(-0.5, 0.75, 0.5);
-            ((CrtUniformColorMaterial)middle.Material).Color = CrtFactory.Color(0.1, 1, 0.5);
+            middle.Material.Color = CrtFactory.Color(0.1, 1, 0.5);
             middle.Material.Diffuse = 0.7;
             middle.Material.Specular = 0.3;
             world.Objects.Add(middle);
@@ -51,7 +51,7 @@ namespace chapter09.exercise.monogame
                 CrtFactory.TranslationMatrix(1.5, 0, -0.5)
                 *
                 CrtFactory.ScalingMatrix(0.5, 0.5, 0.5);
-            ((CrtUniformColorMaterial)right.Material).Color = CrtFactory.Color(0.5, 1, 0.1);
+            right.Material.Color = CrtFactory.Color(0.5, 1, 0.1);
             right.Material.Diffuse = 0.7;
             right.Material.Specular = 0.3;
             world.Objects.Add(right);
@@ -62,7 +62,7 @@ namespace chapter09.exercise.monogame
                 CrtFactory.TranslationMatrix(-1.5, 0.33, -0.75)
                 *
                 CrtFactory.ScalingMatrix(0.33, 0.33, 0.33);
-            ((CrtUniformColorMaterial)left.Material).Color = CrtFactory.Color(1, 0.8, 0.1);
+            left.Material.Color = CrtFactory.Color(1, 0.8, 0.1);
             left.Material.Diffuse = 0.7;
             left.Material.Specular = 0.3;
             world.Objects.Add(left);

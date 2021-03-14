@@ -48,6 +48,7 @@ namespace chapter06.exercise.monogame
                             var eyeVector = -r.Direction;
                             var color = CrtFactory.Engine().Lighting(
                                 sphere.Material,
+                                sphere,
                                 light,
                                 hitPoint,
                                 eyeVector,
@@ -81,7 +82,7 @@ namespace chapter06.exercise.monogame
                     await Task.Delay(5);
                 }
                 var s = CrtFactory.Sphere();
-                ((CrtUniformColorMaterial)s.Material).Color = CrtFactory.Color(1, 0.2, 1);
+                s.Material.Color = CrtFactory.Color(1, 0.2, 1);
                 s.Material.Ambient = 0.2;
                 s.Material.Diffuse = 0.9;
                 s.Material.Specular = 0.9;

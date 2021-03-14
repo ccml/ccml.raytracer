@@ -27,15 +27,15 @@ namespace chapter08.exercise.monogame
                 CrtFactory.XRotationMatrix(Math.PI / 2.0)
                 *
                 CrtFactory.ScalingMatrix(10, 0.01, 10);
-            rightWall.Material = CrtFactory.UniformColorMaterial();
-            ((CrtUniformColorMaterial)rightWall.Material).Color = CrtFactory.Color(1, 0.9, 0.9);
+            rightWall.Material = CrtFactory.Material();
+            rightWall.Material.Color = CrtFactory.Color(1, 0.9, 0.9);
             rightWall.Material.Specular = 0;
             world.Objects.Add(rightWall);
             //
             {
                 var sphere = CrtFactory.Sphere();
                 sphere.TransformMatrix = CrtFactory.TranslationMatrix(-1.25, 0, -0.75);
-                ((CrtUniformColorMaterial)sphere.Material).Color = CrtFactory.Color(0.1, 1, 0.5);
+                sphere.Material.Color = CrtFactory.Color(0.1, 1, 0.5);
                 sphere.Material.Diffuse = 0.7;
                 sphere.Material.Specular = 0.3;
                 world.Objects.Add(sphere);
@@ -43,7 +43,7 @@ namespace chapter08.exercise.monogame
             {
                 var sphere = CrtFactory.Sphere();
                 sphere.TransformMatrix = CrtFactory.TranslationMatrix(-0.75, 0.75, -0.75);
-                ((CrtUniformColorMaterial)sphere.Material).Color = CrtFactory.Color(0.1, 0.1, 0.8);
+                sphere.Material.Color = CrtFactory.Color(0.1, 0.1, 0.8);
                 sphere.Material.Diffuse = 0.7;
                 sphere.Material.Specular = 0.3;
                 world.Objects.Add(sphere);
@@ -56,7 +56,7 @@ namespace chapter08.exercise.monogame
                     CrtFactory.ZRotationMatrix(-Math.PI / 6)
                     *
                     CrtFactory.ScalingMatrix(0.2, 1, 0.2);
-                ((CrtUniformColorMaterial)sphere.Material).Color = CrtFactory.Color(0.1, 0.1, 0.8);
+                sphere.Material.Color = CrtFactory.Color(0.1, 0.1, 0.8);
                 sphere.Material.Diffuse = 0.7;
                 sphere.Material.Specular = 0.3;
                 world.Objects.Add(sphere);
@@ -69,7 +69,7 @@ namespace chapter08.exercise.monogame
                     CrtFactory.YRotationMatrix(Math.PI/4)
                     *
                     CrtFactory.ScalingMatrix(1.25, 0.2, 0.2);
-                ((CrtUniformColorMaterial)sphere.Material).Color = CrtFactory.Color(0.1, 0.1, 0.8);
+                sphere.Material.Color = CrtFactory.Color(0.1, 0.1, 0.8);
                 sphere.Material.Diffuse = 0.7;
                 sphere.Material.Specular = 0.3;
                 world.Objects.Add(sphere);
@@ -82,7 +82,7 @@ namespace chapter08.exercise.monogame
                     CrtFactory.YRotationMatrix(Math.PI / 4)
                     *
                     CrtFactory.ScalingMatrix(1.25, 0.2, 0.2);
-                ((CrtUniformColorMaterial)sphere.Material).Color = CrtFactory.Color(0.8, 0.8, 0.0);
+                sphere.Material.Color = CrtFactory.Color(0.8, 0.8, 0.0);
                 sphere.Material.Diffuse = 0.7;
                 sphere.Material.Specular = 0.3;
                 world.Objects.Add(sphere);
@@ -95,7 +95,7 @@ namespace chapter08.exercise.monogame
                     CrtFactory.YRotationMatrix(Math.PI / 4)
                     *
                     CrtFactory.ScalingMatrix(1.25, 0.2, 0.2);
-                ((CrtUniformColorMaterial)sphere.Material).Color = CrtFactory.Color(0.8, 0.0, 0.8);
+                sphere.Material.Color = CrtFactory.Color(0.8, 0.0, 0.8);
                 sphere.Material.Diffuse = 0.7;
                 sphere.Material.Specular = 0.3;
                 world.Objects.Add(sphere);
@@ -103,7 +103,7 @@ namespace chapter08.exercise.monogame
             CrtSphere littleFinger = null;
             {
                 littleFinger = CrtFactory.Sphere();
-                ((CrtUniformColorMaterial)littleFinger.Material).Color = CrtFactory.Color(0.8, 0.0, 0.8);
+                littleFinger.Material.Color = CrtFactory.Color(0.8, 0.0, 0.8);
                 littleFinger.Material.Diffuse = 0.7;
                 littleFinger.Material.Specular = 0.3;
                 world.Objects.Add(littleFinger);

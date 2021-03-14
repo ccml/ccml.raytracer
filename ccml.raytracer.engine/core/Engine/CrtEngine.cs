@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ccml.raytracer.engine.core.Shapes;
 using ccml.raytracer.tests.math.core;
 
 namespace ccml.raytracer.engine.core.Engine
@@ -21,10 +22,15 @@ namespace ccml.raytracer.engine.core.Engine
             return intersections.FirstOrDefault(i => CrtReal.CompareTo(i.T, 0.0) >= 0);
         }
 
-        public CrtColor Lighting(CrtMaterial material, CrtPointLight light, CrtPoint hitPoint, CrtVector eyeVector, CrtVector normalVector, bool inShadow = false)
+        public CrtColor Lighting(CrtMaterial material, CrtShape theObject, CrtPointLight light, CrtPoint hitPoint, CrtVector eyeVector, CrtVector normalVector, bool inShadow = false)
         {
+            var color = material.Color;
+            if (material.HasPattern)
+            {
+                color = material.Pattern.PatternAt(theObject, hitPoint);
+            }
             // combine the surface color with the light's color/intensity
-            var effectiveColor = ((CrtUniformColorMaterial) material).Color * light.Intensity;
+            var effectiveColor = color * light.Intensity;
             //
             // find the direction to the light source
             var lightVector = ~(light.Position - hitPoint);
@@ -96,7 +102,7 @@ namespace ccml.raytracer.engine.core.Engine
         public CrtColor ShadeHit(CrtWorld w, CrtIntersectionComputation comps)
         {
             var shadowed = w.IsShadowed(comps.OverPoint);
-            return Lighting(comps.TheObject.Material, w.Lights[0], comps.HitPoint, comps.EyeVector, comps.NormalVector, shadowed);
+            return Lighting(comps.TheObject.Material, comps.TheObject, w.Lights[0], comps.OverPoint, comps.EyeVector, comps.NormalVector, shadowed);
         }
     }
 }

@@ -5,6 +5,7 @@ using System.Xml.Linq;
 using ccml.raytracer.engine.core.Engine;
 using ccml.raytracer.engine.core.Lights;
 using ccml.raytracer.engine.core.Materials;
+using ccml.raytracer.engine.core.Materials.Patterns;
 using ccml.raytracer.engine.core.Shapes;
 
 namespace ccml.raytracer.engine.core
@@ -261,9 +262,9 @@ namespace ccml.raytracer.engine.core
         /// <param name="specular">the % part of the reflected specular light</param>
         /// <param name="shininess">+/- 10 very large highlight ==> +/- 200 very small highlight</param>
         /// <returns>the material</returns>
-        public static CrtUniformColorMaterial UniformColorMaterial(CrtColor color, double ambient = 0.1, double diffuse = 0.9, double specular = 0.9,
+        public static CrtMaterial Material(CrtColor color, double ambient = 0.1, double diffuse = 0.9, double specular = 0.9,
             double shininess = 200)
-            => new CrtUniformColorMaterial(color, ambient, diffuse, specular, shininess);
+            => new CrtMaterial(color, ambient, diffuse, specular, shininess);
 
         /// <summary>
         /// Create an uniform color material with the following parameters
@@ -274,20 +275,28 @@ namespace ccml.raytracer.engine.core
         ///  shininess = 200.0
         /// </summary>
         /// <returns>the material</returns>
-        public static CrtUniformColorMaterial UniformColorMaterial()
-            => UniformColorMaterial(Color(1,1,1));
+        public static CrtMaterial Material()
+            => Material(Color(1,1,1));
 
+        /// <summary>
+        /// Create an empty world
+        /// </summary>
+        /// <returns>The world</returns>
         public static CrtWorld World()
         {
             return new CrtWorld();
         }
 
+        /// <summary>
+        /// Create a world for test purpose
+        /// </summary>
+        /// <returns>The test world</returns>
         public static CrtWorld DefaultWorld()
         {
             var w = World();
             w.Add(PointLight(Point(-10, 10, -10), Color(1, 1, 1)));
             var s1 = CrtFactory.Sphere();
-            s1.Material = CrtFactory.UniformColorMaterial(CrtFactory.Color(0.8, 1.0, 0.6), diffuse:0.7, specular:0.2);
+            s1.Material = CrtFactory.Material(CrtFactory.Color(0.8, 1.0, 0.6), diffuse:0.7, specular:0.2);
             var s2 = CrtFactory.Sphere();
             s2.TransformMatrix = CrtFactory.ScalingMatrix(0.5, 0.5, 0.5);
             w.Add(s1, s2);
@@ -327,5 +336,92 @@ namespace ccml.raytracer.engine.core
             new CrtCamera(hSize, vSize, fieldOfView);
 
         public static CrtShape TestShape() => new CrtTestShape();
+
+        public static CrtPattern TestPattern() => new CrtTestPattern();
+
+        /// <summary>
+        /// Create a solid color pattern
+        ///   => returns always the same color
+        /// </summary>
+        /// <param name="color">the color</param>
+        /// <returns>the pattern</returns>
+        public static CrtPattern SolidColor(CrtColor color) => new CrtSolidColorPattern(color);
+
+        /// <summary>
+        /// Create a stripe pattern
+        ///   => colorA if floor(x) mod 2 = 0
+        ///      colorB otherwise
+        /// </summary>
+        /// <param name="colorA">the colorA</param>
+        /// <param name="colorB">the colorB</param>
+        /// <returns>the pattern</returns>
+        public static CrtPattern StripePattern(CrtColor colorA, CrtColor colorB) => new CrtStripedPattern(colorA, colorB);
+
+        /// <summary>
+        /// Create a gradient pattern
+        ///    ==> color = gradientA + (gradientB − gradientA) ∗ (x − floor(x))
+        /// </summary>
+        /// <param name="gradientA">the gradientA color</param>
+        /// <param name="gradientB">the gradientB color</param>
+        /// <returns>the pattern</returns>
+        public static CrtPattern GradientPattern(CrtColor gradientA, CrtColor gradientB) => new CrtGradientPattern(gradientA, gradientB);
+
+        /// <summary>
+        /// Create a ring pattern (depends on two dimensions, x and z)
+        ///   => colorA if floor(sqrt(x*x+z*z) mod 2 = 0
+        ///      colorB otherwise
+        /// </summary>
+        /// <param name="colorA">the colorA</param>
+        /// <param name="colorB">the colorB</param>
+        /// <returns>the pattern</returns>
+        public static CrtPattern RingPattern(CrtColor colorA, CrtColor colorB) => new CrtRingPattern(colorA, colorB);
+
+        /// <summary>
+        /// Create a 3D Checker pattern (depends on two dimensions, x and z)
+        ///   => colorA if (floor(x) + floor(y) + floor(z)) mod 2 = 0
+        ///      colorB otherwise
+        /// </summary>
+        /// <param name="colorA">the colorA</param>
+        /// <param name="colorB">the colorB</param>
+        /// <returns>the pattern</returns>
+        public static CrtPattern Checker3DPattern(CrtColor colorA, CrtColor colorB) => new CrtChecker3DPattern(colorA, colorB);
+
+        /// <summary>
+        /// Create a gradient pattern (depends on two dimensions, x and z)
+        ///    ==> color = gradientA + (gradientB − gradientA) ∗ (sqrt(x*x+z*z) − floor(sqrt(x*x+z*z)))
+        /// </summary>
+        /// <param name="gradientA">the gradientA color</param>
+        /// <param name="gradientB">the gradientB color</param>
+        /// <returns>the pattern</returns>
+        public static CrtPattern RadialGradientPattern(CrtColor gradientA, CrtColor gradientB) => new CrtRadialGradientPattern(gradientA, gradientB);
+
+        /// <summary>
+        /// Create a blended pattern
+        ///    ==> color = f( (color returned  by patternA), (color returned by patternB))
+        ///                f is the blending method
+        /// </summary>
+        /// <param name="patternA">the pattern A</param>
+        /// <param name="patternB">the pattern B</param>
+        /// <param name="blendingMethod">the blendingMethod</param>
+        /// <returns>the pattern</returns>
+        public static CrtPattern BlendedPattern(CrtPattern patternA, CrtPattern patternB, string blendingMethod = CrtBlendedPattern.BLENDING_METHOD_AVERAGE) => new CrtBlendedPattern(patternA, patternB, blendingMethod);
+
+        /// <summary>
+        /// Create a pattern where point position on the inner pattern is perturbed by a function
+        /// </summary>
+        /// <param name="pattern">the inner pattern</param>
+        /// <param name="perturbationFunction">the function perturbing the point</param>
+        /// <returns>the pattern</returns>
+        public static CrtPattern PerturbedPattern(CrtPattern pattern, Func<CrtPoint, CrtPoint> perturbationFunction) =>
+            new CrtPerturbedPattern(pattern, perturbationFunction);
+
+        /// <summary>
+        /// Create a pattern where the returned color returned by an inner pattern is perturbed by a function
+        /// </summary>
+        /// <param name="pattern">the inner pattern</param>
+        /// <param name="perturbationFunction">the function perturbing the color</param>
+        /// <returns>the inner pattern</returns>
+        public static CrtPattern PerturbedColorPattern(CrtPattern pattern, Func<CrtPoint, CrtColor, CrtColor> perturbationFunction) =>
+            new CrtPerturbedColorPattern(pattern, perturbationFunction);
     }
 }
