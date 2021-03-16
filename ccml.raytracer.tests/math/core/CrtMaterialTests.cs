@@ -179,5 +179,38 @@ namespace ccml.raytracer.tests.math.core
         }
 
         #endregion
+
+        #region Reflection
+
+        // Scenario: Reflectivity for the default material
+        [Test]
+        public void ReflectivityForTheDefaultMaterial()
+        {
+            // Given m ← material()
+            var m = CrtFactory.Material();
+            // Then m.reflective = 0.0
+            Assert.IsTrue(CrtReal.AreEquals(m.Reflective, 0.0));
+        }
+
+        // Scenario: Precomputing the reflection vector
+        [Test]
+        public void PrecomputingTheReflectionVector()
+        {
+            // Given shape ← plane()
+            var shape = CrtFactory.Plane();
+            // And r ← ray(point(0, 1, -1), vector(0, -√2/2, √2/2))
+            var r = CrtFactory.Ray(
+                CrtFactory.Point(0, 1, -1),
+                CrtFactory.Vector(0, -Math.Sqrt(2.0) / 2.0, Math.Sqrt(2.0) / 2.0)
+            );
+            // And i ← intersection(√2, shape)
+            var i = CrtFactory.Intersection(Math.Sqrt(2.0), shape);
+            // When comps ← prepare_computations(i, r)
+            var comps = CrtFactory.Engine().PrepareComputations(i, r);
+            // Then comps.reflectv = vector(0, √2/2, √2/2)
+            Assert.IsTrue(comps.ReflectVector == CrtFactory.Vector(0, Math.Sqrt(2.0) / 2.0, Math.Sqrt(2.0) / 2.0));
+        }
+
+        #endregion
     }
 }

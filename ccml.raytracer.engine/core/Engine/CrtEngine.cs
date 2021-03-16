@@ -38,8 +38,8 @@ namespace ccml.raytracer.engine.core.Engine
             // compute the ambient contribution
             var ambient = effectiveColor * material.Ambient;
             //
-            CrtColor diffuse = CrtFactory.Color(0, 0, 0);
-            CrtColor specular = CrtFactory.Color(0, 0, 0);
+            CrtColor diffuse = CrtColor.COLOR_BLACK;
+            CrtColor specular = CrtColor.COLOR_BLACK;
             //
             if (!inShadow)
             {
@@ -50,8 +50,9 @@ namespace ccml.raytracer.engine.core.Engine
                 var lightDotNormal = lightVector * normalVector;
                 if (CrtReal.CompareTo(lightDotNormal, 0.0) < 0)
                 {
-                    diffuse = CrtFactory.Color(0, 0, 0);
-                    specular = CrtFactory.Color(0, 0, 0);
+                    // They are already black
+                    //diffuse = CrtColor.COLOR_BLACK;
+                    //specular = CrtColor.COLOR_BLACK;
                 }
                 else
                 {
@@ -64,7 +65,8 @@ namespace ccml.raytracer.engine.core.Engine
                     var reflectDotEye = reflectVector * eyeVector;
                     if (CrtReal.CompareTo(reflectDotEye, 0.0) <= 0)
                     {
-                        specular = CrtFactory.Color(0, 0, 0);
+                        // It's already black
+                        // specular = CrtColor.COLOR_BLACK;
                     }
                     else
                     {
@@ -95,14 +97,17 @@ namespace ccml.raytracer.engine.core.Engine
             {
                 comps.IsInside = false;
             }
+            comps.ReflectVector = r.Direction.ReflectBy(comps.NormalVector);
             comps.OverPoint = comps.HitPoint + comps.NormalVector * CrtReal.EPSILON;
             return comps;
         }
 
-        public CrtColor ShadeHit(CrtWorld w, CrtIntersectionComputation comps)
+        public CrtColor ShadeHit(CrtWorld w, CrtIntersectionComputation comps, int remaining = 4)
         {
             var shadowed = w.IsShadowed(comps.OverPoint);
-            return Lighting(comps.TheObject.Material, comps.TheObject, w.Lights[0], comps.OverPoint, comps.EyeVector, comps.NormalVector, shadowed);
+            var surface = Lighting(comps.TheObject.Material, comps.TheObject, w.Lights[0], comps.OverPoint, comps.EyeVector, comps.NormalVector, shadowed);
+            var reflected = w.ReflectedColor(comps, remaining);
+            return surface + reflected;
         }
     }
 }

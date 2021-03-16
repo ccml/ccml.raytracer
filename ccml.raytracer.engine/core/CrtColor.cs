@@ -4,6 +4,12 @@ namespace ccml.raytracer.engine.core
 {
     public class CrtColor
     {
+        public static CrtColor COLOR_BLACK => CrtFactory.Color(0.0, 0.0, 0.0);
+        public static CrtColor COLOR_WHITE => CrtFactory.Color(1.0, 1.0, 1.0);
+        public static CrtColor COLOR_RED => CrtFactory.Color(1.0, 0.0, 0.0);
+        public static CrtColor COLOR_GREEN => CrtFactory.Color(0.0, 1.0, 0.0);
+        public static CrtColor COLOR_BLUE => CrtFactory.Color(0.0, 0.0, 1.0);
+
         public double Red { get; set; }
         public double Green { get; set; }
         public double Blue { get; set; }

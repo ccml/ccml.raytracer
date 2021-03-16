@@ -90,7 +90,7 @@ namespace ccml.raytracer.tests.math.core
             // And shape ← the first object in w
             var shape = w.Objects[0];
             // And i ← intersection(4, shape)
-            var i = shape.Intersect(r).Single(ie => CrtReal.AreEquals(ie.T, 4));
+            var i = CrtFactory.Intersection(4.0, shape);
             // When comps ← prepare_computations(i, r)
             var comps = CrtFactory.Engine().PrepareComputations(i, r);
             // And c ← shade_hit(w, comps)
@@ -113,7 +113,7 @@ namespace ccml.raytracer.tests.math.core
             // And shape ← the second object in w
             var shape = w.Objects[1];
             // And i ← intersection(0.5, shape)
-            var i = shape.Intersect(r).Single(ie => CrtReal.AreEquals(ie.T, 0.5));
+            var i = CrtFactory.Intersection(0.5, shape);
             // When comps ← prepare_computations(i, r)
             var comps = CrtFactory.Engine().PrepareComputations(i, r);
             // And c ← shade_hit(w, comps)
@@ -245,7 +245,7 @@ namespace ccml.raytracer.tests.math.core
             // And r ← ray(point(0, 0, 5), vector(0, 0, 1))
             var r = CrtFactory.Ray(CrtFactory.Point(0, 0, 5), CrtFactory.Vector(0, 0, 1));
             // And i ← intersection(4, s2)
-            var i = s2.Intersect(r).Single(i => CrtReal.AreEquals(i.T, 4.0));
+            var i = CrtFactory.Intersection(4.0, s2);
             // When comps ← prepare_computations(i, r)
             var comps = CrtFactory.Engine().PrepareComputations(i, r);
             // And c ← shade_hit(w, comps)
@@ -265,13 +265,152 @@ namespace ccml.raytracer.tests.math.core
             var shape = CrtFactory.Sphere();
             shape.TransformMatrix = CrtFactory.TranslationMatrix(0, 0, 1);
             // And i ← intersection(5, shape)
-            var i = shape.Intersect(r).Single(i => CrtReal.AreEquals(i.T, 5.0));
+            var i = CrtFactory.Intersection(5.0, shape);
             // When comps ← prepare_computations(i, r)
             var comps = CrtFactory.Engine().PrepareComputations(i, r);
             // Then comps.over_point.z< -EPSILON/2
             Assert.IsTrue(comps.OverPoint.Z < -CrtReal.EPSILON/2.0);
             // And comps.point.z > comps.over_point.z
             Assert.IsTrue(CrtReal.CompareTo(comps.HitPoint.Z, comps.OverPoint.Z) > 0);
+        }
+
+        #endregion
+
+        #region Reflection
+
+        // Scenario: The reflected color for a nonreflective material
+        [Test]
+        public void TheReflectedColorForANonreflectiveMaterial()
+        {
+            // Given w ← default_world()
+            var w = CrtFactory.DefaultWorld();
+            // And r ← ray(point(0, 0, 0), vector(0, 0, 1))
+            var r = CrtFactory.Ray(CrtFactory.Point(0, 0, 0), CrtFactory.Vector(0, 0, 1));
+            // And shape ← the second object in w
+            var shape = w.Objects[1];
+            // And shape.material.ambient ← 1
+            shape.Material.Ambient = 1;
+            // And i ← intersection(1, shape)
+            var i = CrtFactory.Intersection(1.0, shape);
+            // When comps ← prepare_computations(i, r)
+            var comps = CrtFactory.Engine().PrepareComputations(i, r);
+            // And color ← reflected_color(w, comps)
+            var color = w.ReflectedColor(comps);
+            // Then color = color(0, 0, 0)
+            Assert.IsTrue(color == CrtColor.COLOR_BLACK);
+        }
+
+        // Scenario: The reflected color for a reflective material
+        [Test]
+        public void TheReflectedColorForAReflectiveMaterial()
+        {
+            // Given w ← default_world()
+            var w = CrtFactory.DefaultWorld();
+            // And shape ← plane() with:
+            //      | material.reflective | 0.5 |
+            //      | transform | translation(0, -1, 0) |
+            var shape = CrtFactory.Plane();
+            shape.Material.Reflective = 0.5;
+            shape.TransformMatrix = CrtFactory.TranslationMatrix(0, -1, 0);
+            // And shape is added to w
+            w.Add(shape);
+            // And r ← ray(point(0, 0, -3), vector(0, -√2/2, √2/2))
+            var r = CrtFactory.Ray(CrtFactory.Point(0, 0, -3), CrtFactory.Vector(0, -Math.Sqrt(2.0)/2.0, Math.Sqrt(2.0) / 2.0));
+            // And i ← intersection(√2, shape)
+            var i = CrtFactory.Intersection(Math.Sqrt(2.0), shape);
+            // When comps ← prepare_computations(i, r)
+            var comps = CrtFactory.Engine().PrepareComputations(i, r);
+            // And color ← reflected_color(w, comps)
+            var color = w.ReflectedColor(comps);
+            // Then color = color(0.19032, 0.2379, 0.14274)
+            Assert.IsTrue(CrtReal.AreEquals(color.Red, 0.19032, 1e-4));
+            Assert.IsTrue(CrtReal.AreEquals(color.Green, 0.2379, 1e-4));
+            Assert.IsTrue(CrtReal.AreEquals(color.Blue, 0.14274, 1e-4));
+        }
+
+        // Scenario: shade_hit() with a reflective material
+        [Test]
+        public void ShadeHitWithAReflectiveMaterial()
+        {
+            // Given w ← default_world()
+            var w = CrtFactory.DefaultWorld();
+            // And shape ← plane() with:
+            //      | material.reflective | 0.5 |
+            //      | transform | translation(0, -1, 0) |
+            var shape = CrtFactory.Plane();
+            shape.Material.Reflective = 0.5;
+            shape.TransformMatrix = CrtFactory.TranslationMatrix(0, -1, 0);
+            // And shape is added to w
+            w.Add(shape);
+            // And r ← ray(point(0, 0, -3), vector(0, -√2/2, √2/2))
+            var r = CrtFactory.Ray(CrtFactory.Point(0, 0, -3), CrtFactory.Vector(0, -Math.Sqrt(2.0) / 2.0, Math.Sqrt(2.0) / 2.0));
+            // And i ← intersection(√2, shape)
+            var i = CrtFactory.Intersection(Math.Sqrt(2.0), shape);
+            // When comps ← prepare_computations(i, r)
+            var comps = CrtFactory.Engine().PrepareComputations(i, r);
+            // And color ← shade_hit(w, comps)
+            var color = CrtFactory.Engine().ShadeHit(w, comps);
+            // Then color = color(0.87677, 0.92436, 0.82918)
+            Assert.IsTrue(CrtReal.AreEquals(color.Red, 0.87677, 1e-4));
+            Assert.IsTrue(CrtReal.AreEquals(color.Green, 0.92436, 1e-4));
+            Assert.IsTrue(CrtReal.AreEquals(color.Blue, 0.82918, 1e-4));
+        }
+
+        // Scenario: color_at() with mutually reflective surfaces
+        [Test]
+        public void ColorAtWithMutuallyReflectiveSurfaces()
+        {
+            // Given w ← world()
+            var w = CrtFactory.World();
+            // And w.light ← point_light(point(0, 0, 0), color(1, 1, 1))
+            w.Add(CrtFactory.PointLight(CrtFactory.Point(0, 0, 0), CrtColor.COLOR_WHITE));
+            // And lower ← plane() with:
+            //      | material.reflective | 1 |
+            //      | transform | translation(0, -1, 0) |
+            var lower = CrtFactory.Plane();
+            lower.Material.Reflective = 1;
+            lower.TransformMatrix = CrtFactory.TranslationMatrix(0, -1, 0);
+            // And lower is added to w
+            w.Add(lower);
+            // And upper ← plane() with:
+            //      | material.reflective | 1 |
+            //      | transform | translation(0, 1, 0) |
+            var upper = CrtFactory.Plane();
+            upper.Material.Reflective = 1;
+            upper.TransformMatrix = CrtFactory.TranslationMatrix(0, 1, 0);
+            // And upper is added to w
+            w.Add(upper);
+            // And r ← ray(point(0, 0, 0), vector(0, 1, 0))
+            var r = CrtFactory.Ray(CrtFactory.Point(0, 0, 0), CrtFactory.Vector(0, 1, 0));
+            // Then color_at(w, r) should terminate successfully
+            var c = w.ColorAt(r);
+            Assert.IsNotNull(c);
+        }
+
+        // Scenario: The reflected color at the maximum recursive depth
+        [Test]
+        public void TheReflectedColorAtTheMaximumRecursiveDepth()
+        {
+            // Given w ← default_world()
+            var w = CrtFactory.DefaultWorld();
+            // And shape ← plane() with:
+            //       | material.reflective | 0.5 |
+            //       | transform | translation(0, -1, 0) |
+            var shape = CrtFactory.Plane();
+            shape.Material.Reflective = 1;
+            shape.TransformMatrix = CrtFactory.TranslationMatrix(0, -1, 0);
+            // And shape is added to w
+            w.Add(shape);
+            // And r ← ray(point(0, 0, -3), vector(0, -√2/2, √2/2))
+            var r = CrtFactory.Ray(CrtFactory.Point(0, 0, -3), CrtFactory.Vector(0, -Math.Sqrt(2.0) / 2.0, Math.Sqrt(2.0) / 2.0));
+            // And i ← intersection(√2, shape)
+            var i = CrtFactory.Intersection(Math.Sqrt(2.0), shape);
+            // When comps ← prepare_computations(i, r)
+            var comps = CrtFactory.Engine().PrepareComputations(i, r);
+            // And color ← reflected_color(w, comps, 0)
+            var color = w.ReflectedColor(comps, 0);
+            // Then color = color(0, 0, 0)
+            Assert.IsTrue(color == CrtColor.COLOR_BLACK);
         }
 
         #endregion

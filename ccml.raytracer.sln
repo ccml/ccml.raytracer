@@ -29,7 +29,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "chapter08.exercise.monogame
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "chapter09.exercise.monogame", "chapter09.exercise.monogame\chapter09.exercise.monogame.csproj", "{D35BACC2-02DD-472F-9D00-3A64F749486B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "chapter10.exercise.monogame", "chapter10.exercise.monogame\chapter10.exercise.monogame.csproj", "{FE884820-6E79-4BAD-A770-25178CD50606}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "chapter10.exercise.monogame", "chapter10.exercise.monogame\chapter10.exercise.monogame.csproj", "{FE884820-6E79-4BAD-A770-25178CD50606}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "chapter11.exercise.monogame", "chapter11.exercise.monogame\chapter11.exercise.monogame.csproj", "{ED57375F-A4B9-4DA9-9433-20648163CEC3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -93,6 +95,10 @@ Global
 		{FE884820-6E79-4BAD-A770-25178CD50606}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FE884820-6E79-4BAD-A770-25178CD50606}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FE884820-6E79-4BAD-A770-25178CD50606}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ED57375F-A4B9-4DA9-9433-20648163CEC3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ED57375F-A4B9-4DA9-9433-20648163CEC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ED57375F-A4B9-4DA9-9433-20648163CEC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ED57375F-A4B9-4DA9-9433-20648163CEC3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

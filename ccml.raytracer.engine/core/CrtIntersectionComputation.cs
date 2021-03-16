@@ -15,6 +15,7 @@ namespace ccml.raytracer.tests.math.core
         public CrtPoint HitPoint { get; internal set; }
         public CrtVector EyeVector { get; internal set; }
         public CrtVector NormalVector { get; internal set; }
+        public CrtVector ReflectVector { get; internal set; }
         public bool IsInside { get; internal set; }
         public CrtPoint OverPoint { get; set; }
     }

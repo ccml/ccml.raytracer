@@ -46,18 +46,18 @@ namespace ccml.raytracer.engine.core
             return intersections.FirstOrDefault(i => CrtReal.CompareTo(i.T, 0.0) > 0);
         }
 
-        public CrtColor ColorAt(CrtRay r)
+        public CrtColor ColorAt(CrtRay r, int remaining = 4)
         {
             var intersections = Intersect(r);
             var hit = Hit(intersections);
             if (hit == null)
             {
-                return CrtFactory.Color(0, 0, 0);
+                return CrtColor.COLOR_BLACK;
             }
             else
             {
                 var comps = CrtFactory.Engine().PrepareComputations(hit, r);
-                var c = CrtFactory.Engine().ShadeHit(this, comps);
+                var c = CrtFactory.Engine().ShadeHit(this, comps, remaining);
                 return c;
             }
         }
@@ -78,6 +78,22 @@ namespace ccml.raytracer.engine.core
             {
                 return false;
             }
+        }
+
+        /// <summary>
+        /// Compute the reflected color at an intersection point
+        /// </summary>
+        /// <param name="comps">the intersection parameter</param>
+        /// <returns>the reflected color</returns>
+        public CrtColor ReflectedColor(tests.math.core.CrtIntersectionComputation comps, int remaining = 4)
+        {
+            if ((remaining <= 0) || comps.TheObject.Material.IsReflective)
+            {
+                return CrtColor.COLOR_BLACK;
+            }
+            var reflectRay = CrtFactory.Ray(comps.OverPoint, comps.ReflectVector);
+            var color = ColorAt(reflectRay, remaining -1);
+            return color * comps.TheObject.Material.Reflective;
         }
     }
 }

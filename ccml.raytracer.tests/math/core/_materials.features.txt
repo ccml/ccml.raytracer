@@ -65,3 +65,14 @@ Scenario: Lighting with the surface in shadow
      And in_shadow ← true
     When result ← lighting(m, light, position, eyev, normalv, in_shadow)
     Then result = color(0.1, 0.1, 0.1)
+
+Scenario: Reflectivity for the default material
+   Given m ← material()
+    Then m.reflective = 0.0
+
+Scenario: Precomputing the reflection vector
+   Given shape ← plane()
+     And r ← ray(point(0, 1, -1), vector(0, -√2/2, √2/2))
+     And i ← intersection(√2, shape)
+    When comps ← prepare_computations(i, r)
+    Then comps.reflectv = vector(0, √2/2, √2/2)

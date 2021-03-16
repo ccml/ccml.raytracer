@@ -51,6 +51,7 @@ namespace ccml.raytracer.engine.core.Materials
         }
 
         private double _shininess;
+
         public double Shininess
         {
             get => _shininess;
@@ -61,6 +62,21 @@ namespace ccml.raytracer.engine.core.Materials
             }
         }
 
+        private double _reflective;
+        public double Reflective
+        {
+            get => _reflective;
+            set
+            {
+                if (CrtReal.CompareTo(value, 0.0) < 0) throw new ArgumentException();
+                _reflective = value;
+                _isReflective = CrtReal.AreEquals(_reflective, 0.0);
+            }
+        }
+
+        private bool _isReflective = false;
+        public bool IsReflective => _isReflective;
+
         /// <summary>
         /// Create a color material
         /// </summary>
@@ -69,7 +85,7 @@ namespace ccml.raytracer.engine.core.Materials
         /// <param name="diffuse">the % part of the reflected diffuse light</param>
         /// <param name="specular">the % part of the reflected specular light</param>
         /// <param name="shininess">+/- 10 very large highlight ==> +/- 200 very small highlight</param>
-        internal CrtMaterial(CrtColor color, double ambient, double diffuse, double specular, double shininess)
+        internal CrtMaterial(CrtColor color, double ambient, double diffuse, double specular, double shininess, double reflective)
         {
             Color = color;
             Ambient = ambient;

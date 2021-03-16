@@ -263,8 +263,8 @@ namespace ccml.raytracer.engine.core
         /// <param name="shininess">+/- 10 very large highlight ==> +/- 200 very small highlight</param>
         /// <returns>the material</returns>
         public static CrtMaterial Material(CrtColor color, double ambient = 0.1, double diffuse = 0.9, double specular = 0.9,
-            double shininess = 200)
-            => new CrtMaterial(color, ambient, diffuse, specular, shininess);
+            double shininess = 200, double reflective = 0.0)
+            => new CrtMaterial(color, ambient, diffuse, specular, shininess, reflective);
 
         /// <summary>
         /// Create an uniform color material with the following parameters
@@ -276,7 +276,7 @@ namespace ccml.raytracer.engine.core
         /// </summary>
         /// <returns>the material</returns>
         public static CrtMaterial Material()
-            => Material(Color(1,1,1));
+            => Material(CrtColor.COLOR_WHITE);
 
         /// <summary>
         /// Create an empty world
@@ -294,7 +294,7 @@ namespace ccml.raytracer.engine.core
         public static CrtWorld DefaultWorld()
         {
             var w = World();
-            w.Add(PointLight(Point(-10, 10, -10), Color(1, 1, 1)));
+            w.Add(PointLight(Point(-10, 10, -10), CrtColor.COLOR_WHITE));
             var s1 = CrtFactory.Sphere();
             s1.Material = CrtFactory.Material(CrtFactory.Color(0.8, 1.0, 0.6), diffuse:0.7, specular:0.2);
             var s2 = CrtFactory.Sphere();

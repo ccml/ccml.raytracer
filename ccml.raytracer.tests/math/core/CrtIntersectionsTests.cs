@@ -171,7 +171,7 @@ namespace ccml.raytracer.tests.math.core
             // And shape ← sphere()
             var shape = CrtFactory.Sphere();
             // And i ← intersection(4, shape)
-            var i = shape.Intersect(r).Single(ie => CrtReal.AreEquals(ie.T, 4));
+            var i = CrtFactory.Intersection(4.0, shape);
             // When comps ← prepare_computations(i, r)
             var comps = CrtFactory.Engine().PrepareComputations(i, r);
             // Then comps.t = i.t
@@ -195,7 +195,7 @@ namespace ccml.raytracer.tests.math.core
             // And shape ← sphere()
             var shape = CrtFactory.Sphere();
             // And i ← intersection(4, shape)
-            var i = shape.Intersect(r).Single(ie => CrtReal.AreEquals(ie.T, 4));
+            var i = CrtFactory.Intersection(4.0, shape);
             // When comps ← prepare_computations(i, r)
             var comps = CrtFactory.Engine().PrepareComputations(i, r);
             // Then comps.inside = false
@@ -211,7 +211,7 @@ namespace ccml.raytracer.tests.math.core
             // And shape ← sphere()
             var shape = CrtFactory.Sphere();
             // And i ← intersection(1, shape)
-            var i = shape.Intersect(r).Single(ie => CrtReal.AreEquals(ie.T, 1));
+            var i = CrtFactory.Intersection(1.0, shape);
             // When comps ← prepare_computations(i, r)
             var comps = CrtFactory.Engine().PrepareComputations(i, r);
             // Then comps.point = point(0, 0, 1)
