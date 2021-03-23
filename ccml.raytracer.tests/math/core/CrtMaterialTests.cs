@@ -20,7 +20,7 @@ namespace ccml.raytracer.tests.math.core
             // Background:
             //    Given m ← material()
             //    And position ← point(0, 0, 0)
-            _sharedMaterial = CrtFactory.Material();
+            _sharedMaterial = CrtFactory.MaterialFactory.DefaultMaterial;
             _sharedHitPoint = CrtFactory.Point(0, 0, 0);
         }
 
@@ -29,7 +29,7 @@ namespace ccml.raytracer.tests.math.core
         public void TheDefaultMaterial()
         {
             // Given m ← material()
-            var m = CrtFactory.Material();
+            var m = CrtFactory.MaterialFactory.DefaultMaterial;
             // Then m.color = color(1, 1, 1)
             Assert.IsTrue(m.Color == CrtFactory.Color(1,1,1));
             // And m.ambient = 0.1
@@ -51,7 +51,7 @@ namespace ccml.raytracer.tests.math.core
             // Given s ← sphere()
             var s = CrtFactory.Sphere();
             // When m ← s.material
-            var m = CrtFactory.Material();
+            var m = CrtFactory.MaterialFactory.DefaultMaterial;
             // Then m = material()
             Assert.IsTrue(s.Material == m);
         }
@@ -63,7 +63,7 @@ namespace ccml.raytracer.tests.math.core
             // Given s ← sphere()
             var s = CrtFactory.Sphere();
             // And m ← material()
-            var m = CrtFactory.Material();
+            var m = CrtFactory.MaterialFactory.DefaultMaterial;
             // And m.ambient ← 1
             m.Ambient = 1;
             // When s.material ← m
@@ -187,7 +187,7 @@ namespace ccml.raytracer.tests.math.core
         public void ReflectivityForTheDefaultMaterial()
         {
             // Given m ← material()
-            var m = CrtFactory.Material();
+            var m = CrtFactory.MaterialFactory.DefaultMaterial;
             // Then m.reflective = 0.0
             Assert.IsTrue(CrtReal.AreEquals(m.Reflective, 0.0));
         }
@@ -209,6 +209,36 @@ namespace ccml.raytracer.tests.math.core
             var comps = CrtFactory.Engine().PrepareComputations(i, r);
             // Then comps.reflectv = vector(0, √2/2, √2/2)
             Assert.IsTrue(comps.ReflectVector == CrtFactory.Vector(0, Math.Sqrt(2.0) / 2.0, Math.Sqrt(2.0) / 2.0));
+        }
+
+        #endregion
+
+        #region Transparency and refraction
+
+        // Scenario: Transparency and Refractive Index for the default material
+        [Test]
+        public void TransparencyAndRefractiveIndexForTheDefaultMaterial()
+        {
+            // Given m ← material()
+            var m = CrtFactory.MaterialFactory.DefaultMaterial;
+            // Then m.transparency = 0.0
+            Assert.IsTrue(CrtReal.AreEquals(m.Transparency, 0.0));
+            // And m.refractive_index = 1.0
+            Assert.IsTrue(CrtReal.AreEquals(m.RefractiveIndex, 1.0));
+        }
+
+        // Scenario: A helper for producing a sphere with a glassy material
+        [Test]
+        public void AHelperForProducingASphereWithAGlassyMaterial()
+        {
+            // Given s ← glass_sphere()
+            var s = CrtFactory.Sphere().WithMaterial(CrtFactory.MaterialFactory.Glass);
+            // Then s.transform = identity_matrix
+            Assert.IsTrue(s.TransformMatrix == CrtFactory.IdentityMatrix(4, 4));
+            // And s.material.transparency = 1.0
+            Assert.IsTrue(CrtReal.AreEquals(s.Material.Transparency, 1.0));
+            // And s.material.refractive_index = 1.5
+            Assert.IsTrue(CrtReal.AreEquals(s.Material.RefractiveIndex, 1.5));
         }
 
         #endregion

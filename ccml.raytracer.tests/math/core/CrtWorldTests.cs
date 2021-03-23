@@ -40,7 +40,7 @@ namespace ccml.raytracer.tests.math.core
             //      | material.diffuse | 0.7 |
             //      | material.specular | 0.2 |
             var s1 = CrtFactory.Sphere();
-            s1.Material = CrtFactory.Material(CrtFactory.Color(0.8, 1.0, 0.6), diffuse:0.7, specular:0.2);
+            s1.Material = CrtFactory.MaterialFactory.SpecificMaterial(CrtFactory.Color(0.8, 1.0, 0.6), diffuse:0.7, specular:0.2);
             // And s2 ← sphere() with:
             //      | transform | scaling(0.5, 0.5, 0.5) |
             var s2 = CrtFactory.Sphere();
@@ -411,6 +411,207 @@ namespace ccml.raytracer.tests.math.core
             var color = w.ReflectedColor(comps, 0);
             // Then color = color(0, 0, 0)
             Assert.IsTrue(color == CrtColor.COLOR_BLACK);
+        }
+
+        #endregion
+
+        #region Transparency and Refraction
+
+        // Scenario: The refracted color with an opaque surface
+        [Test]
+        public void TheRefractedColorWithAnOpaqueSurface()
+        {
+            // Given w ← default_world()
+            var w = CrtFactory.DefaultWorld();
+            // And shape ← the first object in w
+            var shape = w.Objects[0];
+            // And r ← ray(point(0, 0, -5), vector(0, 0, 1))
+            var r = CrtFactory.Ray(CrtFactory.Point(0, 0, -5), CrtFactory.Vector(0, 0, 1));
+            // And xs ← intersections(4:shape, 6:shape)
+            var xs = CrtFactory.Intersections(
+                CrtFactory.Intersection(4, shape),
+                CrtFactory.Intersection(6, shape)
+            );
+            // When comps ← prepare_computations(xs[0], r, xs)
+            var comps = CrtFactory.Engine().PrepareComputations(xs[0], r, xs);
+            // And c ← refracted_color(w, comps, 5)
+            var c = w.RefractedColor(comps, 5);
+            // Then c = color(0, 0, 0)
+            Assert.IsTrue(c == CrtColor.COLOR_BLACK);
+        }
+
+        // Scenario: The refracted color at the maximum recursive depth
+        [Test]
+        public void TheRefractedColorAtTheMaximumRecursiveDepth()
+        {
+            // Given w ← default_world()
+            var w = CrtFactory.DefaultWorld();
+            // And shape ← the first object in w
+            var shape = w.Objects[0];
+            // And shape has:
+            //      | material.transparency | 1.0 |
+            //      | material.refractive_index | 1.5 |
+            shape.Material.WithTransparency(1.0).WithRefractiveIndex(1.5);
+            // And r ← ray(point(0, 0, -5), vector(0, 0, 1))
+            var r = CrtFactory.Ray(CrtFactory.Point(0, 0, -5), CrtFactory.Vector(0, 0, 1));
+            // And xs ← intersections(4:shape, 6:shape)
+            var xs = CrtFactory.Intersections(
+                CrtFactory.Intersection(4, shape),
+                CrtFactory.Intersection(6, shape)
+            );
+            // When comps ← prepare_computations(xs[0], r, xs)
+            var comps = CrtFactory.Engine().PrepareComputations(xs[0], r, xs);
+            // And c ← refracted_color(w, comps, 0)
+            var c = w.RefractedColor(comps, 0);
+            // Then c = color(0, 0, 0)
+            Assert.IsTrue(c == CrtColor.COLOR_BLACK);
+        }
+
+        // Scenario: The refracted color under total internal reflection
+        [Test]
+        public void TheRefractedColorUnderTotalInternalReflection()
+        {
+            // Given w ← default_world()
+            var w = CrtFactory.DefaultWorld();
+            // And shape ← the first object in w
+            var shape = w.Objects[0];
+            // And shape has:
+            //      | material.transparency | 1.0 |
+            //      | material.refractive_index | 1.5 |
+            shape.Material.WithTransparency(1.0).WithRefractiveIndex(1.5);
+            // And r ← ray(point(0, 0, √2/2), vector(0, 1, 0))
+            var r = CrtFactory.Ray(CrtFactory.Point(0, 0, Math.Sqrt(2.0)/2.0), CrtFactory.Vector(0, 1, 0));
+            // And xs ← intersections(-√2/2:shape, √2/2:shape)
+            var xs = CrtFactory.Intersections(
+                CrtFactory.Intersection(-Math.Sqrt(2.0) / 2.0, shape),
+                CrtFactory.Intersection(Math.Sqrt(2.0) / 2.0, shape)
+            );
+            //    # NOTE: this time you're inside the sphere, so you need
+            //    # to look at the second intersection, xs[1], not xs[0]
+            // When comps ← prepare_computations(xs[1], r, xs)
+            var comps = CrtFactory.Engine().PrepareComputations(xs[1], r, xs);
+            // And c ← refracted_color(w, comps, 5)
+            var c = w.RefractedColor(comps, 5);
+            // Then c = color(0, 0, 0)
+            Assert.IsTrue(c == CrtColor.COLOR_BLACK);
+        }
+
+        // Scenario: The refracted color with a refracted ray
+        [Test]
+        public void TheRefractedColorWithARefractedRay()
+        {
+            // Given w ← default_world()
+            var w = CrtFactory.DefaultWorld();
+            // And A ← the first object in w
+            var a = w.Objects[0];
+            // And A has:
+            //       | material.ambient | 1.0 |
+            //       | material.pattern | test_pattern() |
+            a.Material.WithAmbient(1.0).WithPattern(CrtFactory.TestPattern());
+            // And B ← the second object in w
+            var b = w.Objects[1];
+            // And B has:
+            //       | material.transparency | 1.0 |
+            //       | material.refractive_index | 1.5 |
+            b.Material.WithTransparency(1.0).WithRefractiveIndex(1.5);
+            // And r ← ray(point(0, 0, 0.1), vector(0, 1, 0))
+            var r = CrtFactory.Ray(CrtFactory.Point(0, 0, 0.1), CrtFactory.Vector(0, 1, 0));
+            // And xs ← intersections(-0.9899:A, -0.4899:B, 0.4899:B, 0.9899:A)
+            var xs = CrtFactory.Intersections(
+                CrtFactory.Intersection(-0.9899, a),
+                CrtFactory.Intersection(-0.4899, b),
+                CrtFactory.Intersection(0.4899, b),
+                CrtFactory.Intersection(0.9899, a)
+            );
+            // When comps ← prepare_computations(xs[2], r, xs)
+            var comps = CrtFactory.Engine().PrepareComputations(xs[2], r, xs);
+            // And c ← refracted_color(w, comps, 5)
+            var c = w.RefractedColor(comps, 5);
+            // Then c = color(0, 0.99888, 0.04725)
+            Assert.IsTrue(CrtReal.AreEquals(c.Red, 0.0, 1e-4));
+            Assert.IsTrue(CrtReal.AreEquals(c.Green, 0.99888, 1e-4));
+            Assert.IsTrue(CrtReal.AreEquals(c.Blue, 0.04725, 1e-4));
+        }
+
+        // Scenario: shade_hit() with a transparent material
+        [Test]
+        public void ShadeHitWithATransparentMaterial()
+        {
+            // Given w ← default_world()
+            var w = CrtFactory.DefaultWorld();
+            // And floor ← plane() with:
+            //   | transform | translation(0, -1, 0) |
+            //   | material.transparency | 0.5 |
+            //   | material.refractive_index | 1.5 |
+            var floor = CrtFactory.Plane();
+            floor.WithTransformationMatrix(CrtFactory.TranslationMatrix(0, -1, 0))
+                 .Material.WithTransparency(0.5).WithRefractiveIndex(1.5);
+            // And floor is added to w
+            w.Add(floor);
+            // And ball ← sphere() with:
+            //   | material.color | (1, 0, 0) |
+            //   | material.ambient | 0.5 |
+            //   | transform | translation(0, -3.5, -0.5) |
+            var ball = CrtFactory.Sphere();
+            ball.WithTransformationMatrix(CrtFactory.TranslationMatrix(0, -3.5, -0.5))
+                .Material.WithColor(CrtColor.COLOR_RED).WithAmbient(0.5);
+            // And ball is added to w
+            w.Add(ball);
+            // And r ← ray(point(0, 0, -3), vector(0, -√2/2, √2/2))
+            var r = CrtFactory.Ray(CrtFactory.Point(0, 0, -3), CrtFactory.Vector(0, -Math.Sqrt(2.0)/2.0, Math.Sqrt(2.0) / 2.0));
+            // And xs ← intersections(√2:floor)
+            var xs = CrtFactory.Intersections(
+                CrtFactory.Intersection(Math.Sqrt(2.0), floor)
+            );
+            // When comps ← prepare_computations(xs[0], r, xs)
+            var comps = CrtFactory.Engine().PrepareComputations(xs[0], r, xs);
+            // And color ← shade_hit(w, comps, 5)
+            var c = CrtFactory.Engine().ShadeHit(w, comps, 5);
+            // Then color = color(0.93642, 0.68642, 0.68642)
+            Assert.IsTrue(CrtReal.AreEquals(c.Red, 0.93642, 1e-4));
+            Assert.IsTrue(CrtReal.AreEquals(c.Green, 0.68642, 1e-4));
+            Assert.IsTrue(CrtReal.AreEquals(c.Blue, 0.68642, 1e-4));
+        }
+
+        // Scenario: shade_hit() with a reflective, transparent material
+        [Test]
+        public void ShadeHitWithAReflectiveTransparentMaterial()
+        {
+            // Given w ← default_world()
+            var w = CrtFactory.DefaultWorld();
+            // And r ← ray(point(0, 0, -3), vector(0, -√2/2, √2/2))
+            var r = CrtFactory.Ray(CrtFactory.Point(0, 0, -3), CrtFactory.Vector(0, -Math.Sqrt(2.0) / 2.0, Math.Sqrt(2.0) / 2.0));
+            // And floor ← plane() with:
+            //       | transform | translation(0, -1, 0) |
+            //       | material.reflective | 0.5 |
+            //       | material.transparency | 0.5 |
+            //       | material.refractive_index | 1.5 |
+            var floor = CrtFactory.Plane();
+            floor.WithTransformationMatrix(CrtFactory.TranslationMatrix(0, -1, 0))
+                .Material.WithReflective(0.5).WithTransparency(0.5).WithRefractiveIndex(1.5);
+            // And floor is added to w
+            w.Add(floor);
+            // And ball ← sphere() with:
+            //       | material.color | (1, 0, 0) |
+            //       | material.ambient | 0.5 |
+            //       | transform | translation(0, -3.5, -0.5) |
+            var ball = CrtFactory.Sphere();
+            ball.WithTransformationMatrix(CrtFactory.TranslationMatrix(0, -3.5, -0.5))
+                .Material.WithColor(CrtColor.COLOR_RED).WithAmbient(0.5);
+            // And ball is added to w
+            w.Add(ball);
+            // And xs ← intersections(√2:floor)
+            var xs = CrtFactory.Intersections(
+                CrtFactory.Intersection(Math.Sqrt(2.0), floor)
+            );
+            // When comps ← prepare_computations(xs[0], r, xs)
+            var comps = CrtFactory.Engine().PrepareComputations(xs[0], r, xs);
+            // And color ← shade_hit(w, comps, 5)
+            var c = CrtFactory.Engine().ShadeHit(w, comps, 5);
+            // Then color = color(0.93391, 0.69643, 0.69243)
+            Assert.IsTrue(CrtReal.AreEquals(c.Red, 0.93391, 1e-4));
+            Assert.IsTrue(CrtReal.AreEquals(c.Green, 0.69643, 1e-4));
+            Assert.IsTrue(CrtReal.AreEquals(c.Blue, 0.69243, 1e-4));
         }
 
         #endregion

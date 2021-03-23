@@ -27,7 +27,7 @@ namespace chapter08.exercise.monogame
                 CrtFactory.XRotationMatrix(Math.PI / 2.0)
                 *
                 CrtFactory.ScalingMatrix(10, 0.01, 10);
-            rightWall.Material = CrtFactory.Material();
+            rightWall.Material = CrtFactory.MaterialFactory.DefaultMaterial;
             rightWall.Material.Color = CrtFactory.Color(1, 0.9, 0.9);
             rightWall.Material.Specular = 0;
             world.Objects.Add(rightWall);

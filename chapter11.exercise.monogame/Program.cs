@@ -116,7 +116,7 @@ namespace chapter11.exercise.monogame
             //
             // Add floor
             var floor = CrtFactory.Plane();
-            floor.Material = CrtFactory.Material();
+            floor.Material = CrtFactory.MaterialFactory.DefaultMaterial;
             floor.Material.Specular = 0;
             world.Objects.Add(floor);
             //
@@ -141,7 +141,7 @@ namespace chapter11.exercise.monogame
             //
             for (int j = 0; j < patterns.Length; j++)
             {
-                world.Objects[0].Material.Pattern = patterns[j]();
+                floor.Material.Pattern = patterns[j]();
                 var middlePattern =
                 middle.Material.Pattern = patterns[(j + 1) % patterns.Length]();
                 middle.Material.Pattern.TransformMatrix = CrtFactory.ScalingMatrix(0.25, 0.25, 1);

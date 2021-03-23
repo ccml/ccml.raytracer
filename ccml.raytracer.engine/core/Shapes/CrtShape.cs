@@ -37,7 +37,7 @@ namespace ccml.raytracer.engine.core.Shapes
 
         internal CrtShape()
         {
-            Material = CrtFactory.Material();
+            Material = CrtFactory.MaterialFactory.DefaultMaterial;
             TransformMatrix = CrtFactory.IdentityMatrix(4, 4);
         }
 
@@ -119,6 +119,20 @@ namespace ccml.raytracer.engine.core.Shapes
         public override int GetHashCode()
         {
             return HashCode.Combine(_transformMatrix, Material);
+        }
+
+        // Fluent mode
+
+        public CrtShape WithMaterial(CrtMaterial material)
+        {
+            this.Material = material;
+            return this;
+        }
+
+        public CrtShape WithTransformationMatrix(CrtMatrix transformMatrix)
+        {
+            this.TransformMatrix = transformMatrix;
+            return this;
         }
     }
 }

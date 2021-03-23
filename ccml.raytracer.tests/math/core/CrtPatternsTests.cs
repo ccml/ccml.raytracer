@@ -88,7 +88,7 @@ namespace ccml.raytracer.tests.math.core
         public void LightingWithAPatternApplied()
         {
             var shape = CrtFactory.Sphere();
-            var m = CrtFactory.Material();
+            var m = CrtFactory.MaterialFactory.DefaultMaterial;
             shape.Material = m;
             // Given m.pattern ← stripe_pattern(color(1, 1, 1), color(0, 0, 0))
             m.Pattern = CrtFactory.StripePattern(_white, _black);

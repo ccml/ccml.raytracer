@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml;
 using System.Xml.Linq;
 using ccml.raytracer.engine.core.Engine;
 using ccml.raytracer.engine.core.Lights;
@@ -253,30 +254,7 @@ namespace ccml.raytracer.engine.core
         public static CrtPointLight PointLight(CrtPoint position, CrtColor intensity) =>
             new CrtPointLight(position, intensity);
 
-        /// <summary>
-        /// Create an uniform color material
-        /// </summary>
-        /// <param name="color">the color of the surface</param>
-        /// <param name="ambient">the % part of the reflected ambient light</param>
-        /// <param name="diffuse">the % part of the reflected diffuse light</param>
-        /// <param name="specular">the % part of the reflected specular light</param>
-        /// <param name="shininess">+/- 10 very large highlight ==> +/- 200 very small highlight</param>
-        /// <returns>the material</returns>
-        public static CrtMaterial Material(CrtColor color, double ambient = 0.1, double diffuse = 0.9, double specular = 0.9,
-            double shininess = 200, double reflective = 0.0)
-            => new CrtMaterial(color, ambient, diffuse, specular, shininess, reflective);
-
-        /// <summary>
-        /// Create an uniform color material with the following parameters
-        ///      color = white
-        ///    ambient = 0.1
-        ///    diffuse = 0.9
-        ///   specular = 0.9
-        ///  shininess = 200.0
-        /// </summary>
-        /// <returns>the material</returns>
-        public static CrtMaterial Material()
-            => Material(CrtColor.COLOR_WHITE);
+        public static readonly CrtMaterialFactory MaterialFactory = new CrtMaterialFactory();
 
         /// <summary>
         /// Create an empty world
@@ -296,7 +274,7 @@ namespace ccml.raytracer.engine.core
             var w = World();
             w.Add(PointLight(Point(-10, 10, -10), CrtColor.COLOR_WHITE));
             var s1 = CrtFactory.Sphere();
-            s1.Material = CrtFactory.Material(CrtFactory.Color(0.8, 1.0, 0.6), diffuse:0.7, specular:0.2);
+            s1.Material = CrtFactory.MaterialFactory.SpecificMaterial(CrtFactory.Color(0.8, 1.0, 0.6), diffuse:0.7, specular:0.2);
             var s2 = CrtFactory.Sphere();
             s2.TransformMatrix = CrtFactory.ScalingMatrix(0.5, 0.5, 0.5);
             w.Add(s1, s2);

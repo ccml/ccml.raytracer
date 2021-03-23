@@ -8,6 +8,20 @@ using Microsoft.VisualBasic.CompilerServices;
 
 namespace ccml.raytracer.engine.core.Materials
 {
+    /// <summary>
+    /// Tips :
+    /// 
+    ///     - When rendering glass or any similar material, set both transparency and reflectivity to high values, 0.9 or even 1.
+    ///       This allows the Fresnel effect to kick in, and gives your material an added touch of realism!
+    ///
+    ///     - The more transparent or reflective the surface, the smaller the diffuse property should be.
+    ///
+    ///     - If you’d like a subtly colored mirror, or slightly tinted glass, use a very dark color, instead of a very light one.
+    ///
+    ///     - Reflective and transparent surfaces pair nicely with tight specular highlights. Set specular to 1 and bump shininess
+    ///       to 300 or more to get a highlight that really shines.
+    /// 
+    /// </summary>
     public class CrtMaterial
     {
         public CrtColor Color { get; set; }
@@ -70,12 +84,38 @@ namespace ccml.raytracer.engine.core.Materials
             {
                 if (CrtReal.CompareTo(value, 0.0) < 0) throw new ArgumentException();
                 _reflective = value;
-                _isReflective = CrtReal.AreEquals(_reflective, 0.0);
+                _isReflective = !CrtReal.AreEquals(_reflective, 0.0);
+            }
+        }
+
+        private double _transparency;
+        public double Transparency
+        {
+            get => _transparency;
+            set
+            {
+                if (CrtReal.CompareTo(value, 0.0) < 0) throw new ArgumentException();
+                _transparency = value;
+                _isTransparent = !CrtReal.AreEquals(_transparency, 0.0);
+            }
+        }
+
+        private double _refractiveIndex;
+        public double RefractiveIndex
+        {
+            get => _refractiveIndex;
+            set
+            {
+                if (CrtReal.CompareTo(value, 0.0) < 0) throw new ArgumentException();
+                _refractiveIndex = value;
             }
         }
 
         private bool _isReflective = false;
         public bool IsReflective => _isReflective;
+
+        private bool _isTransparent = false;
+        public bool IsTransparent => _isTransparent;
 
         /// <summary>
         /// Create a color material
@@ -85,30 +125,16 @@ namespace ccml.raytracer.engine.core.Materials
         /// <param name="diffuse">the % part of the reflected diffuse light</param>
         /// <param name="specular">the % part of the reflected specular light</param>
         /// <param name="shininess">+/- 10 very large highlight ==> +/- 200 very small highlight</param>
-        internal CrtMaterial(CrtColor color, double ambient, double diffuse, double specular, double shininess, double reflective)
+        internal CrtMaterial(CrtColor color, double ambient, double diffuse, double specular, double shininess, double reflective, double transparency, double refractiveIndex)
         {
             Color = color;
             Ambient = ambient;
             Diffuse = diffuse;
             Specular = specular;
             Shininess = shininess;
-        }
-
-        /// <summary>
-        /// Create a pattern material
-        /// </summary>
-        /// <param name="pattern">Pattern of the material</param>
-        /// <param name="ambient">the % part of the reflected ambient light</param>
-        /// <param name="diffuse">the % part of the reflected diffuse light</param>
-        /// <param name="specular">the % part of the reflected specular light</param>
-        /// <param name="shininess">+/- 10 very large highlight ==> +/- 200 very small highlight</param>
-        internal CrtMaterial(CrtPattern pattern, double ambient, double diffuse, double specular, double shininess)
-        {
-            Pattern = pattern;
-            Ambient = ambient;
-            Diffuse = diffuse;
-            Specular = specular;
-            Shininess = shininess;
+            Reflective = reflective;
+            Transparency = transparency;
+            RefractiveIndex = refractiveIndex;
         }
 
         public bool HasPattern => Pattern != null;
@@ -169,6 +195,62 @@ namespace ccml.raytracer.engine.core.Materials
         public override int GetHashCode()
         {
             return HashCode.Combine(_ambient, _diffuse, _specular, _shininess, Color, Pattern);
+        }
+
+        // Fluent Mode
+        
+        public CrtMaterial WithColor(CrtColor color)
+        {
+            Color = color;
+            return this;
+        }
+
+        public CrtMaterial WithPattern(CrtPattern pattern)
+        {
+            Pattern = pattern;
+            return this;
+        }
+
+        public CrtMaterial WithAmbient(double ambient)
+        {
+            Ambient = ambient;
+            return this;
+        }
+
+        public CrtMaterial WithDiffuse(double diffuse)
+        {
+            Diffuse = diffuse;
+            return this;
+        }
+
+        public CrtMaterial WithSpecular(double specular)
+        {
+            Specular = specular;
+            return this;
+        }
+
+        public CrtMaterial WithShininess(double shininess)
+        {
+            Shininess = shininess;
+            return this;
+        }
+
+        public CrtMaterial WithReflective(double reflective)
+        {
+            Reflective = reflective;
+            return this;
+        }
+
+        public CrtMaterial WithTransparency(double transparency)
+        {
+            Transparency = transparency;
+            return this;
+        }
+
+        public CrtMaterial WithRefractiveIndex(double refractiveIndex)
+        {
+            RefractiveIndex = refractiveIndex;
+            return this;
         }
     }
 }

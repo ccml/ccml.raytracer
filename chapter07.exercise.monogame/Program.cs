@@ -20,7 +20,7 @@ namespace chapter07.exercise.monogame
             // Add floor
             var floor = CrtFactory.Sphere();
             floor.TransformMatrix = CrtFactory.ScalingMatrix(10, 0.01, 10);
-            floor.Material = CrtFactory.Material();
+            floor.Material = CrtFactory.MaterialFactory.DefaultMaterial;
             floor.Material.Color = CrtFactory.Color(1, 0.9, 0.9);
             floor.Material.Specular = 0;
             world.Objects.Add(floor);

@@ -39,5 +39,11 @@ namespace ccml.raytracer.engine.core.Materials.Patterns
         }
 
         public abstract CrtColor PatternAt(CrtPoint point);
+
+        public CrtPattern WithTransformMatrix(CrtMatrix transformMatrix)
+        {
+            TransformMatrix = transformMatrix;
+            return this;
+        }
     }
 }

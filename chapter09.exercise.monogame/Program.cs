@@ -18,7 +18,7 @@ namespace chapter09.exercise.monogame
             //
             // Add floor
             var floor = CrtFactory.Plane();
-            floor.Material = CrtFactory.Material();
+            floor.Material = CrtFactory.MaterialFactory.DefaultMaterial;
             floor.Material.Color = CrtFactory.Color(1, 0.9, 0.9);
             floor.Material.Specular = 0;
             world.Objects.Add(floor);
