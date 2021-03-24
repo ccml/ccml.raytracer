@@ -28,7 +28,7 @@ namespace ccml.raytracer.tests.math.core
         public void CreatingAStripePattern()
         {
             // Given pattern ← stripe_pattern(white, black)
-            var pattern = CrtFactory.StripePattern(_white, _black);
+            var pattern = CrtFactory.PatternFactory.StripePattern(_white, _black);
             // Then pattern.a = white
             Assert.IsTrue(((CrtStripedPattern)pattern).ColorA == _white);
             // And pattern.b = black
@@ -40,7 +40,7 @@ namespace ccml.raytracer.tests.math.core
         public void AStripePatternIsConstantInY()
         {
             // Given pattern ← stripe_pattern(white, black)
-            var pattern = CrtFactory.StripePattern(_white, _black);
+            var pattern = CrtFactory.PatternFactory.StripePattern(_white, _black);
             // Then stripe_at(pattern, point(0, 0, 0)) = white
             Assert.IsTrue(pattern.PatternAt(CrtFactory.Point(0, 0, 0)) == _white);
             // And stripe_at(pattern, point(0, 1, 0)) = white
@@ -54,7 +54,7 @@ namespace ccml.raytracer.tests.math.core
         public void AStripePatternIsConstantInZ()
         {
             // Given pattern ← stripe_pattern(white, black)
-            var pattern = CrtFactory.StripePattern(_white, _black);
+            var pattern = CrtFactory.PatternFactory.StripePattern(_white, _black);
             // Then stripe_at(pattern, point(0, 0, 0)) = white
             Assert.IsTrue(pattern.PatternAt(CrtFactory.Point(0, 0, 0)) == _white);
             // And stripe_at(pattern, point(0, 0, 1)) = white
@@ -68,7 +68,7 @@ namespace ccml.raytracer.tests.math.core
         public void AStripePatternAlternatesInX()
         {
             // Given pattern ← stripe_pattern(white, black)
-            var pattern = CrtFactory.StripePattern(_white, _black);
+            var pattern = CrtFactory.PatternFactory.StripePattern(_white, _black);
             // Then stripe_at(pattern, point(0, 0, 0)) = white
             Assert.IsTrue(pattern.PatternAt(CrtFactory.Point(0, 0, 0)) == _white);
             // And stripe_at(pattern, point(0.9, 0, 0)) = white
@@ -91,7 +91,7 @@ namespace ccml.raytracer.tests.math.core
             var m = CrtFactory.MaterialFactory.DefaultMaterial;
             shape.Material = m;
             // Given m.pattern ← stripe_pattern(color(1, 1, 1), color(0, 0, 0))
-            m.Pattern = CrtFactory.StripePattern(_white, _black);
+            m.Pattern = CrtFactory.PatternFactory.StripePattern(_white, _black);
             // And m.ambient ← 1
             m.Ambient = 1;
             // And m.diffuse ← 0
@@ -125,7 +125,7 @@ namespace ccml.raytracer.tests.math.core
             // And set_transform(object, scaling(2, 2, 2))
             s.TransformMatrix = CrtFactory.ScalingMatrix(2, 2, 2);
             // And pattern ← stripe_pattern(white, black)
-            var pattern = CrtFactory.StripePattern(_white, _black);
+            var pattern = CrtFactory.PatternFactory.StripePattern(_white, _black);
             // When c ← stripe_at_object(pattern, object, point(1.5, 0, 0))
             var c = pattern.PatternAt(s, CrtFactory.Point(1.5, 0, 0));
             // Then c = white
@@ -139,7 +139,7 @@ namespace ccml.raytracer.tests.math.core
             // Given object ← sphere()
             var s = CrtFactory.Sphere();
             // And pattern ← stripe_pattern(white, black)
-            var pattern = CrtFactory.StripePattern(_white, _black);
+            var pattern = CrtFactory.PatternFactory.StripePattern(_white, _black);
             // And set_pattern_transform(pattern, scaling(2, 2, 2))
             pattern.TransformMatrix = CrtFactory.ScalingMatrix(2, 2, 2);
             // When c ← stripe_at_object(pattern, object, point(1.5, 0, 0))
@@ -157,7 +157,7 @@ namespace ccml.raytracer.tests.math.core
             // And set_transform(object, scaling(2, 2, 2))
             s.TransformMatrix = CrtFactory.ScalingMatrix(2, 2, 2);
             // And pattern ← stripe_pattern(white, black)
-            var pattern = CrtFactory.StripePattern(_white, _black);
+            var pattern = CrtFactory.PatternFactory.StripePattern(_white, _black);
             // And set_pattern_transform(pattern, translation(0.5, 0, 0))
             pattern.TransformMatrix = CrtFactory.TranslationMatrix(0.5, 0, 0);
             // When c ← stripe_at_object(pattern, object, point(2.5, 0, 0))
@@ -251,7 +251,7 @@ namespace ccml.raytracer.tests.math.core
         public void AGradientLinearlyInterpolatesBetweenColors()
         {
             // Given pattern ← gradient_pattern(white, black)
-            var pattern = CrtFactory.GradientPattern(_white, _black);
+            var pattern = CrtFactory.PatternFactory.GradientPattern(_white, _black);
             // Then pattern_at(pattern, point(0, 0, 0)) = white
             Assert.IsTrue(pattern.PatternAt(CrtFactory.Point(0,0,0)) == _white);
             // And pattern_at(pattern, point(0.25, 0, 0)) = color(0.75, 0.75, 0.75)
@@ -271,7 +271,7 @@ namespace ccml.raytracer.tests.math.core
         public void ARingShouldExtendInBothXAndZ()
         {
             // Given pattern ← ring_pattern(white, black)
-            var pattern = CrtFactory.RingPattern(_white, _black);
+            var pattern = CrtFactory.PatternFactory.RingPattern(_white, _black);
             // Then pattern_at(pattern, point(0, 0, 0)) = white
             Assert.IsTrue(pattern.PatternAt(CrtFactory.Point(0, 0, 0)) == _white);
             // And pattern_at(pattern, point(1, 0, 0)) = black
@@ -292,7 +292,7 @@ namespace ccml.raytracer.tests.math.core
         public void CheckersShouldRepeatInX()
         {
             // Given pattern ← checkers_pattern(white, black)
-            var pattern = CrtFactory.Checker3DPattern(_white, _black);
+            var pattern = CrtFactory.PatternFactory.Checker3DPattern(_white, _black);
             // Then pattern_at(pattern, point(0, 0, 0)) = white
             Assert.IsTrue(pattern.PatternAt(CrtFactory.Point(0, 0, 0)) == _white);
             // And pattern_at(pattern, point(0.99, 0, 0)) = white
@@ -306,7 +306,7 @@ namespace ccml.raytracer.tests.math.core
         public void CheckersShouldRepeatInY()
         {
             // Given pattern ← checkers_pattern(white, black)
-            var pattern = CrtFactory.Checker3DPattern(_white, _black);
+            var pattern = CrtFactory.PatternFactory.Checker3DPattern(_white, _black);
             // Then pattern_at(pattern, point(0, 0, 0)) = white
             Assert.IsTrue(pattern.PatternAt(CrtFactory.Point(0, 0, 0)) == _white);
             // And pattern_at(pattern, point(0, 0.99, 0)) = white
@@ -320,7 +320,7 @@ namespace ccml.raytracer.tests.math.core
         public void CheckersShouldRepeatInZ()
         {
             // Given pattern ← checkers_pattern(white, black)
-            var pattern = CrtFactory.Checker3DPattern(_white, _black);
+            var pattern = CrtFactory.PatternFactory.Checker3DPattern(_white, _black);
             // Then pattern_at(pattern, point(0, 0, 0)) = white
             Assert.IsTrue(pattern.PatternAt(CrtFactory.Point(0, 0, 0)) == _white);
             // And pattern_at(pattern, point(0, 0, 0.99)) = white

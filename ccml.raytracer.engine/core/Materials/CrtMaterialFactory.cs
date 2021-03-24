@@ -45,7 +45,7 @@ namespace ccml.raytracer.engine.core.Materials
 
         /// <summary>
         /// Create a default air
-        ///     : color = white (no patterns)
+        ///     : color = (r=0.1, g=0.1, b=0.1) (no patterns)
         ///     : ambient = 0.1
         ///     : diffuse = 0.9
         ///     : specular = 0.9
@@ -55,11 +55,11 @@ namespace ccml.raytracer.engine.core.Materials
         ///     : refractiveIndex = 1.00029
         /// </summary>
         /// <returns>the material</returns>
-        public CrtMaterial Air => SpecificMaterial(CrtColor.COLOR_WHITE, transparency: 1.0, refractiveIndex: 1.00029);
+        public CrtMaterial Air => SpecificMaterial(CrtFactory.Color(0.1, 0.1, 0.1), transparency: 1.0, refractiveIndex: 1.00029);
 
         /// <summary>
         /// Create a default water
-        ///     : color = white (no patterns)
+        ///     : color = (r=0.1, g=0.1, b=0.1) (no patterns)
         ///     : ambient = 0.1
         ///     : diffuse = 0.9
         ///     : specular = 0.9
@@ -69,11 +69,11 @@ namespace ccml.raytracer.engine.core.Materials
         ///     : refractiveIndex = 1.333
         /// </summary>
         /// <returns>the material</returns>
-        public CrtMaterial Water => SpecificMaterial(CrtColor.COLOR_WHITE, transparency: 1.0, refractiveIndex: 1.333);
+        public CrtMaterial Water => SpecificMaterial(CrtFactory.Color(0.1, 0.1, 0.1), transparency: 1.0, refractiveIndex: 1.333);
 
         /// <summary>
         /// Create a default glass
-        ///     : color = white (no patterns)
+        ///     : color = (r=0.1, g=0.1, b=0.1) (no patterns)
         ///     : ambient = 0.1
         ///     : diffuse = 0.9
         ///     : specular = 0.9
@@ -83,6 +83,6 @@ namespace ccml.raytracer.engine.core.Materials
         ///     : refractiveIndex = 1.5
         /// </summary>
         /// <returns>the material</returns>
-        public CrtMaterial Glass => SpecificMaterial(CrtColor.COLOR_WHITE, transparency: 1.0, refractiveIndex: 1.5);
+        public CrtMaterial Glass => SpecificMaterial(CrtFactory.Color(0.1, 0.1, 0.1), transparency: 1.0, refractiveIndex: 1.5);
     }
 }

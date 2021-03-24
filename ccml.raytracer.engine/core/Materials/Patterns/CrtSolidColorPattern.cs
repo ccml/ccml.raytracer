@@ -10,7 +10,7 @@ namespace ccml.raytracer.engine.core.Materials.Patterns
     {
         public CrtColor Color { get; private set; }
 
-        public CrtSolidColorPattern(CrtColor color)
+        internal CrtSolidColorPattern(CrtColor color)
         {
             Color = color;
         }

@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace ccml.raytracer.engine.core.Materials.Patterns
 {
-    public class CrtPerturbedColorPattern : CrtPattern
+    public class CrtColorPerturbedPattern : CrtPattern
     {
         public Func<CrtPoint, CrtColor, CrtColor> PerturbationFunction { get; private set; }
         public CrtPattern Pattern { get; private set; }
 
-        public CrtPerturbedColorPattern(CrtPattern pattern, Func<CrtPoint, CrtColor, CrtColor> perturbationFunction)
+        internal CrtColorPerturbedPattern(CrtPattern pattern, Func<CrtPoint, CrtColor, CrtColor> perturbationFunction)
         {
             Pattern = pattern;
             PerturbationFunction = perturbationFunction;

@@ -18,95 +18,102 @@ namespace chapter11.exercise.monogame
             var random = new Random();
             var patterns = new Func<CrtPattern>[]
             {
-                () => CrtFactory.Checker3DPattern(
+                () => CrtFactory.PatternFactory.Checker3DPattern(
                     CrtFactory.Color(1, 0, 1),
                     CrtFactory.Color(0, 1, 0)
                 ),
-                () => CrtFactory.PerturbedColorPattern(
-                    CrtFactory.SolidColor(CrtFactory.Color(0,0,0.8)),
+                () => CrtFactory.PatternFactory.ColorPerturbedPattern(
+                    CrtFactory.PatternFactory.SolidColor(CrtFactory.Color(0,0,0.8)),
                     (p,c) =>
                     {
+                        var n = PerlinNoise.Noise(p.X, p.Y, p.Z);
                         return CrtFactory.Color(
-                            c.Red * (1 + PerlinNoise.Noise(p.X, p.Y, p.Z)),
-                            c.Green * (1 + PerlinNoise.Noise(p.X, p.Y, p.Z)),
-                            c.Blue * (1 + PerlinNoise.Noise(p.X, p.Y, p.Z))
+                            c.Red * (1 + n),
+                            c.Green * (1 + n),
+                            c.Blue * (1 + n)
                         );
                     }),
-                () => CrtFactory.PerturbedPattern(
-                    CrtFactory.StripePattern(
+                () => CrtFactory.PatternFactory.PointPerturbedPattern(
+                    CrtFactory.PatternFactory.StripePattern(
                         CrtFactory.Color(1, 1, 1),
                         CrtFactory.Color(0, 1, 0)
                     ),
-                    p => CrtFactory.Point(
-                        p.X * PerlinNoise.Noise(p.X, p.Y, p.Z),
-                        p.Y * PerlinNoise.Noise(p.X, p.Y, p.Z),
-                        p.Z * PerlinNoise.Noise(p.X, p.Y, p.Z)
-                    )
-                ),
-                () => CrtFactory.PerturbedPattern(
-                    CrtFactory.BlendedPattern(
-                        CrtFactory.StripePattern(
+                    p =>
+                    {
+                        var n = PerlinNoise.Noise(p.X, p.Y, p.Z);
+                        return CrtFactory.Point(
+                            p.X * n,
+                            p.Y * n,
+                            p.Z * n
+                        );
+                    }),
+                () => CrtFactory.PatternFactory.PointPerturbedPattern(
+                    CrtFactory.PatternFactory.BlendedPattern(
+                        CrtFactory.PatternFactory.StripePattern(
                             CrtFactory.Color(1, 1, 1),
                             CrtFactory.Color(0, 1, 0)
                         ),
-                        CrtFactory.StripePattern(
+                        CrtFactory.PatternFactory.StripePattern(
                             CrtFactory.Color(1, 1, 1),
                             CrtFactory.Color(0, 1, 0)
                         ),
                         CrtBlendedPattern.BLENDING_METHOD_INVERT_XZ_AVERAGE
                     ),
-                    p => CrtFactory.Point(
-                        p.X * PerlinNoise.Noise(p.X, p.Y, p.Z),
-                        p.Y * PerlinNoise.Noise(p.X, p.Y, p.Z),
-                        p.Z * PerlinNoise.Noise(p.X, p.Y, p.Z)
-                    )
-                ),
-                () => CrtFactory.BlendedPattern(
-                    CrtFactory.StripePattern(
+                    p =>
+                    {
+                        var n = PerlinNoise.Noise(p.X, p.Y, p.Z);
+                        return CrtFactory.Point(
+                            p.X * n,
+                            p.Y * n,
+                            p.Z * n
+                        );
+                    }),
+                () => CrtFactory.PatternFactory.BlendedPattern(
+                    CrtFactory.PatternFactory.StripePattern(
                         CrtFactory.Color(1, 1, 1),
                         CrtFactory.Color(0, 1, 0)
                     ),
-                    CrtFactory.StripePattern(
+                    CrtFactory.PatternFactory.StripePattern(
                         CrtFactory.Color(1, 1, 1),
                         CrtFactory.Color(0, 1, 0)
                     ),
                     CrtBlendedPattern.BLENDING_METHOD_INVERT_XY_AVERAGE
                 ),
-                () => CrtFactory.BlendedPattern(
-                    CrtFactory.StripePattern(
+                () => CrtFactory.PatternFactory.BlendedPattern(
+                    CrtFactory.PatternFactory.StripePattern(
                         CrtFactory.Color(1, 1, 1),
                         CrtFactory.Color(0, 1, 0)
                     ),
-                    CrtFactory.StripePattern(
+                    CrtFactory.PatternFactory.StripePattern(
                         CrtFactory.Color(1, 1, 1),
                         CrtFactory.Color(0, 1, 0)
                     ),
                     CrtBlendedPattern.BLENDING_METHOD_INVERT_XZ_AVERAGE
                 ),
-                () => CrtFactory.BlendedPattern(
-                    CrtFactory.StripePattern(
+                () => CrtFactory.PatternFactory.BlendedPattern(
+                    CrtFactory.PatternFactory.StripePattern(
                         CrtFactory.Color(1, 1, 1),
                         CrtFactory.Color(0, 1, 0)
                     ),
-                    CrtFactory.StripePattern(
+                    CrtFactory.PatternFactory.StripePattern(
                         CrtFactory.Color(1, 1, 1),
                         CrtFactory.Color(0, 1, 0)
                     ),
                     CrtBlendedPattern.BLENDING_METHOD_INVERT_YZ_AVERAGE
                 ),
-                () => CrtFactory.StripePattern(
+                () => CrtFactory.PatternFactory.StripePattern(
                     CrtFactory.Color(0, 0, 1),
                     CrtFactory.Color(1, 0, 0)
                 ),
-                () => CrtFactory.RingPattern(
+                () => CrtFactory.PatternFactory.RingPattern(
                     CrtFactory.Color(0, 0, 1),
                     CrtFactory.Color(1, 0, 0)
                 ),
-                () => CrtFactory.GradientPattern(
+                () => CrtFactory.PatternFactory.GradientPattern(
                     CrtFactory.Color(0, 0, 1),
                     CrtFactory.Color(1, 0, 0)
                 ),
-                () => CrtFactory.RadialGradientPattern(
+                () => CrtFactory.PatternFactory.RadialGradientPattern(
                     CrtFactory.Color(0, 0, 1),
                     CrtFactory.Color(1, 0, 0)
                 )
