@@ -6,9 +6,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ccml.raytracer.engine\ccml.raytracer.engine.csproj" />
+    <ProjectReference Include="..\ccml.raytracer\ccml.raytracer.csproj" />
     <ProjectReference Include="..\ccml.raytracer.ui.monogame\ccml.raytracer.ui.monogame.csproj" />
     <ProjectReference Include="..\ccml.raytracer.ui\ccml.raytracer.ui.csproj" />
   </ItemGroup>
+
 
 </Project>

@@ -1,5 +1,5 @@
 ﻿using System;
-using ccml.raytracer.engine.core;
+using ccml.raytracer;
 using chapter01.exercise.Models;
 using Environment = chapter01.exercise.Models.Environment;
 
@@ -20,14 +20,14 @@ namespace chapter01.exercise
             // velocity is normalized to 1 unit/tick.
             var p = new Projectile
             {
-                Position = CrtFactory.Point(0, 1, 0), 
-                Velocity = ~CrtFactory.Vector(1, 1, 0)
+                Position = CrtFactory.CoreFactory.Point(0, 1, 0), 
+                Velocity = ~CrtFactory.CoreFactory.Vector(1, 1, 0)
             };
             // gravity -0.1 unit/tick, and wind is -0.01 unit/tick.
             var e = new Environment
             {
-                Gravity = CrtFactory.Vector(0, -0.1, 0),
-                Wind = CrtFactory.Vector(-0.01, 0, 0)
+                Gravity = CrtFactory.CoreFactory.Vector(0, -0.1, 0),
+                Wind = CrtFactory.CoreFactory.Vector(-0.01, 0, 0)
             };
 
             while (p.Position.Y > 0)

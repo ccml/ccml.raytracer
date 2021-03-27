@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ccml.raytracer.engine.core;
+using ccml.raytracer.Engine;
 using ccml.raytracer.ui.screen;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;

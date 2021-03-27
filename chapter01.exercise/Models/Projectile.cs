@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ccml.raytracer.engine.core;
+using ccml.raytracer.Core;
 
 namespace chapter01.exercise.Models
 {

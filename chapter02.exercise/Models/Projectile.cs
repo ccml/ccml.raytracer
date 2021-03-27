@@ -1,4 +1,4 @@
-﻿using ccml.raytracer.engine.core;
+﻿using ccml.raytracer.Core;
 
 namespace chapter02.exercise.Models
 {

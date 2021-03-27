@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
-using ccml.raytracer.engine.core;
-using ccml.raytracer.engine.core.Materials;
-using ccml.raytracer.engine.core.Shapes;
+using ccml.raytracer;
+using ccml.raytracer.Core;
+using ccml.raytracer.Engine;
+using ccml.raytracer.Shapes;
 using ccml.raytracer.ui.monogame.screen;
 using ccml.raytracer.ui.screen;
 
@@ -22,11 +23,11 @@ namespace chapter06.exercise.monogame
             CrtSphere sphere
         )
         {
-            var lightPosition = CrtFactory.Point(-10, 10, -10);
-            var lightColor = CrtFactory.Color(1, 1, 1);
-            var light = CrtFactory.PointLight(lightPosition, lightColor);
+            var lightPosition = CrtFactory.CoreFactory.Point(-10, 10, -10);
+            var lightColor = CrtFactory.CoreFactory.Color(1, 1, 1);
+            var light = CrtFactory.LightFactory.PointLight(lightPosition, lightColor);
             //
-            _canvas = CrtFactory.Canvas(canvasSize, canvasSize);
+            _canvas = CrtFactory.EngineFactory.Canvas(canvasSize, canvasSize);
             var canvasToWallFactor = wallSize / canvasSize;
             //
             var canvasHalfSize = canvasSize / 2;
@@ -38,15 +39,15 @@ namespace chapter06.exercise.monogame
                     {
                         var cx = (w - canvasHalfSize) * canvasToWallFactor;
                         var cy = -(h - canvasHalfSize) * canvasToWallFactor;
-                        var r = CrtFactory.Ray(origin, ~(CrtFactory.Point(cx, cy, wallZ) - origin));
+                        var r = CrtFactory.EngineFactory.Ray(origin, ~(CrtFactory.CoreFactory.Point(cx, cy, wallZ) - origin));
                         var xs = sphere.Intersect(r);
-                        var intersection = CrtFactory.Engine().Hit(xs);
+                        var intersection = CrtFactory.EngineFactory.Engine().Hit(xs);
                         if (intersection != null)
                         {
                             var hitPoint = r.PositionAtTime(intersection.T);
                             var normalVector = intersection.TheObject.NormalAt(hitPoint);
                             var eyeVector = -r.Direction;
-                            var color = CrtFactory.Engine().Lighting(
+                            var color = CrtFactory.EngineFactory.Engine().Lighting(
                                 sphere.Material,
                                 sphere,
                                 light,
@@ -58,7 +59,7 @@ namespace chapter06.exercise.monogame
                         }
                         else
                         {
-                            _canvas[w, h] = CrtFactory.Color(0, 0, 0);
+                            _canvas[w, h] = CrtFactory.CoreFactory.Color(0, 0, 0);
                         }
                     }
                 }
@@ -72,7 +73,7 @@ namespace chapter06.exercise.monogame
             var wallSize = 7.0;
             //
             // start the ray at z = -5
-            var origin = CrtFactory.Point(0, 0, -5);
+            var origin = CrtFactory.CoreFactory.Point(0, 0, -5);
             //
             // trying to cast the shadow of a unit sphere onto some wall behind it
             for (int i = 10; i < 200; i++)
@@ -81,13 +82,13 @@ namespace chapter06.exercise.monogame
                 {
                     await Task.Delay(5);
                 }
-                var s = CrtFactory.Sphere();
-                s.Material.Color = CrtFactory.Color(1, 0.2, 1);
+                var s = CrtFactory.ShapeFactory.Sphere();
+                s.Material.Color = CrtFactory.CoreFactory.Color(1, 0.2, 1);
                 s.Material.Ambient = 0.2;
                 s.Material.Diffuse = 0.9;
                 s.Material.Specular = 0.9;
                 s.Material.Shininess = i;
-                // s.SetTransformMatrix(CrtFactory.ZRotationMatrix(i * 2 * Math.PI / 360) * CrtFactory.ScalingMatrix(0.5, 1, 1));
+                // s.SetTransformMatrix(CrtFactory.TransformationFactory.ZRotationMatrix(i * 2 * Math.PI / 360) * CrtFactory.TransformationFactory.ScalingMatrix(0.5, 1, 1));
                 //
                 RenderSphere(canvasSize, origin, wallSize, wallZ, s);
                 _isDirty = true;
