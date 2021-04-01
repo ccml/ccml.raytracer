@@ -246,8 +246,8 @@ namespace chapter12.exercise.monogame
 
         static void Main(string[] args)
         {
-            int hSize = 800;
-            int vSize = 600;
+            int hSize = 640;
+            int vSize = 480;
             //
             _window = new MonoGameRaytracerWindow(
                 hSize,

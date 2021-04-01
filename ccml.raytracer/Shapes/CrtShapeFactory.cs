@@ -1,4 +1,6 @@
-﻿namespace ccml.raytracer.Shapes
+﻿using System;
+
+namespace ccml.raytracer.Shapes
 {
     public class CrtShapeFactory
     {
@@ -19,5 +21,12 @@
         /// </summary>
         /// <returns></returns>
         public CrtCube Cube() => new CrtCube();
+
+        /// <summary>
+        /// Create a cylinder
+        /// </summary>
+        /// <returns></returns>
+        public CrtCylinder Cylinder() => new CrtCylinder();
+
     }
 }
