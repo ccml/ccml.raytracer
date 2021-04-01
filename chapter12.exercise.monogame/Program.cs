@@ -136,12 +136,7 @@ namespace chapter12.exercise.monogame
             {
                 var mirror = CrtFactory.ShapeFactory.Cube()
                     .WithMaterial(
-                        CrtFactory.MaterialFactory.DefaultMaterial
-                            .WithDiffuse(0.2)
-                            .WithSpecular(1)
-                            .WithShininess(300)
-                            .WithTransparency(0)
-                            .WithReflective(1)
+                        CrtFactory.MaterialFactory.PerfectMirror
                     )
                     .WithTransformationMatrix(
                         CrtFactory.TransformationFactory.TranslationMatrix(0, 1 + tableHeight, 6)
@@ -153,12 +148,7 @@ namespace chapter12.exercise.monogame
             {
                 var mirror = CrtFactory.ShapeFactory.Cube()
                     .WithMaterial(
-                        CrtFactory.MaterialFactory.DefaultMaterial
-                            .WithDiffuse(0.2)
-                            .WithSpecular(1)
-                            .WithShininess(300)
-                            .WithTransparency(0)
-                            .WithReflective(1)
+                        CrtFactory.MaterialFactory.PerfectMirror
                     )
                     .WithTransformationMatrix(
                         CrtFactory.TransformationFactory.TranslationMatrix(0, 1 + tableHeight, -6)
@@ -211,14 +201,14 @@ namespace chapter12.exercise.monogame
                     }));
                 rock.Material.Diffuse = 0.3;
                 rock.Material.Specular = 0.8;
-                rock.Material.WithReflective(1);
+                rock.Material.WithReflective(0.5);
                 world.Objects.Add(rock);
             }
             //
             // add a light
             world.Add(
                 CrtFactory.LightFactory.PointLight(
-                    CrtFactory.CoreFactory.Point(-2, 5.5, -2),
+                    CrtFactory.CoreFactory.Point(-3, 5.5, -3),
                     CrtFactory.CoreFactory.Color(1, 1, 1)
                 )
             );
@@ -256,8 +246,8 @@ namespace chapter12.exercise.monogame
 
         static void Main(string[] args)
         {
-            int hSize = 640;
-            int vSize = 480;
+            int hSize = 800;
+            int vSize = 600;
             //
             _window = new MonoGameRaytracerWindow(
                 hSize,

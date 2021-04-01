@@ -7,6 +7,13 @@ namespace ccml.raytracer.Shapes
 {
     public class CrtCube : CrtShape
     {
+        private static readonly CrtVector NormX = CrtFactory.CoreFactory.Vector(1, 0, 0);
+        private static readonly CrtVector NegNormX = CrtFactory.CoreFactory.Vector(-1, 0, 0);
+        private static readonly CrtVector NormY = CrtFactory.CoreFactory.Vector(0, 1, 0);
+        private static readonly CrtVector NegNormY = CrtFactory.CoreFactory.Vector(0, -1, 0);
+        private static readonly CrtVector NormZ = CrtFactory.CoreFactory.Vector(0, 0, 1);
+        private static readonly CrtVector NegNormZ = CrtFactory.CoreFactory.Vector(0, 0, -1);
+
         private (double min, double max) CheckAxis(double origin, double direction)
         {
             var tminNumerator = (-1 - origin);
@@ -59,13 +66,13 @@ namespace ccml.raytracer.Shapes
             var maxc = Math.Max(Math.Max(Math.Abs(point.X), Math.Abs(point.Y)), Math.Abs(point.Z));
             if (CrtReal.AreEquals(maxc, Math.Abs(point.X)))
             {
-                return CrtFactory.CoreFactory.Vector(point.X, 0, 0);
+                return point.X > 0 ? NormX : NegNormX;
             }
             else if (CrtReal.AreEquals(maxc, Math.Abs(point.Y)))
             {
-                return CrtFactory.CoreFactory.Vector(0, point.Y, 0);
+                return point.Y > 0 ? NormY : NegNormY;
             }
-            return CrtFactory.CoreFactory.Vector(0, 0, point.Z);
+            return point.Z > 0 ? NormZ : NegNormZ;
         }
     }
 }

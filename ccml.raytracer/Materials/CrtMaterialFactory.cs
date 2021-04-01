@@ -80,5 +80,29 @@ namespace ccml.raytracer.Materials
         /// </summary>
         /// <returns>the material</returns>
         public CrtMaterial Glass => SpecificMaterial(CrtFactory.CoreFactory.Color(0.1, 0.1, 0.1), transparency: 1.0, refractiveIndex: 1.5);
+
+        /// <summary>
+        /// Create a default glass
+        ///     : color = (r=1.0, g=1.0, b=1.0) (no patterns)
+        ///     : ambient = 0.1
+        ///     : diffuse = 0.1
+        ///     : specular = 0.1
+        ///     : shininess = 10
+        ///     : reflective = 1.0
+        ///     : transparency = 0.0
+        ///     : refractiveIndex = 1.0
+        /// </summary>
+        /// <returns>the material</returns>
+        public CrtMaterial PerfectMirror => 
+            SpecificMaterial(
+                CrtFactory.CoreFactory.Color(1, 1, 1),
+                ambient:0.1,
+                diffuse:0.1,
+                specular:0.1,
+                shininess:300,
+                reflective:1.0,
+                transparency:0.0,
+                refractiveIndex:1.0
+            );
     }
 }

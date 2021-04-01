@@ -50,6 +50,9 @@ namespace ccml.raytracer.ui.monogame.screen
             _context.SpriteBatch = new SpriteBatch(GraphicsDevice);
             _context.Width = _width;
             _context.Height = _height;
+            _context.Graphics.PreferredBackBufferWidth = _width;
+            _context.Graphics.PreferredBackBufferHeight = _height;
+            _context.Graphics.ApplyChanges();
             _image = new MonoGameRaytracerImage(_context);
             Task.Run(() => _renderImage());
         }
