@@ -37,9 +37,22 @@ namespace chapter13a.exercise.monogame
             //
             var world = CrtFactory.EngineFactory.World();
             //
-            // add floor
+            // add sea
             world.Add(
                 CrtFactory.ShapeFactory.Plane()
+                    .WithMaterial(CrtFactory.MaterialFactory.Water.WithPattern(
+                            CrtFactory.PatternFactory.PerlinNoisePattern(
+                                new Dictionary<double, CrtColor>()
+                                {
+                                    { 0, CrtColor.COLOR_BLUE },
+                                    { 1, CrtColor.COLOR_WHITE },
+                                }
+                            )
+                                .WithTransformMatrix(
+                                    CrtFactory.TransformationFactory.ScalingMatrix(0.1,0.1,0.1)
+                                )
+                        )
+                    )
                     .WithTransformationMatrix(
                         CrtFactory.TransformationFactory.TranslationMatrix(0,-2, 0)
                     )

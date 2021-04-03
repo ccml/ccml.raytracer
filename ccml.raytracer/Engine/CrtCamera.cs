@@ -28,6 +28,8 @@ namespace ccml.raytracer.Engine
         }
         public CrtMatrix InverseViewTransformMatrix { get; private set; }
 
+        public int RenderingDepth { get; set; } = 4;
+
         internal CrtCamera(int hSize, int vSize, double fieldOfView)
         {
             HSize = hSize;
@@ -83,7 +85,7 @@ namespace ccml.raytracer.Engine
                     for (int x = 0; x < HSize; x++)
                     {
                         var ray = RayForPixel(x, y);
-                        var color = world.ColorAt(ray);
+                        var color = world.ColorAt(ray, RenderingDepth);
                         image[x, y] = color;
                     }
                 }

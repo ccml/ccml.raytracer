@@ -28,5 +28,11 @@ namespace ccml.raytracer.Shapes
         /// <returns></returns>
         public CrtCylinder Cylinder() => new CrtCylinder();
 
+
+        /// <summary>
+        /// Create a cone
+        /// </summary>
+        /// <returns></returns>
+        public CrtCone Cone() => new CrtCone();
     }
 }

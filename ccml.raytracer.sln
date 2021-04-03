@@ -37,7 +37,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "chapter11b.exercise.monogam
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "chapter12.exercise.monogame", "chapter12.exercise.monogame\chapter12.exercise.monogame.csproj", "{959F376B-E254-42DE-8D84-73E85011B8B9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "chapter13a.exercise.monogame", "chapter13a.exercise.monogame\chapter13a.exercise.monogame.csproj", "{0769A5F5-5104-42F0-AC80-94BF4F2BF75E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "chapter13a.exercise.monogame", "chapter13a.exercise.monogame\chapter13a.exercise.monogame.csproj", "{0769A5F5-5104-42F0-AC80-94BF4F2BF75E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "chapter13b.exercise.monogame", "chapter13b.exercise.monogame\chapter13b.exercise.monogame.csproj", "{62201C86-32CC-496E-A64D-414DF062FEC2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -117,6 +119,10 @@ Global
 		{0769A5F5-5104-42F0-AC80-94BF4F2BF75E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0769A5F5-5104-42F0-AC80-94BF4F2BF75E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0769A5F5-5104-42F0-AC80-94BF4F2BF75E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{62201C86-32CC-496E-A64D-414DF062FEC2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{62201C86-32CC-496E-A64D-414DF062FEC2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{62201C86-32CC-496E-A64D-414DF062FEC2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{62201C86-32CC-496E-A64D-414DF062FEC2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
