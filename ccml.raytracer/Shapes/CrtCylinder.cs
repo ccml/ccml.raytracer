@@ -131,6 +131,16 @@ namespace ccml.raytracer.Shapes
 
         #endregion
 
+        public override CrtBoundingBox ObjectBounds()
+        {
+            if (!(MinimumClosed && MaximumClosed)) return null;
+            return new CrtBoundingBox()
+            {
+                Minimum = CrtFactory.CoreFactory.Point(-1, Minimum, -1),
+                Maximum = CrtFactory.CoreFactory.Point(1, Maximum, 1)
+            };
+        }
+
         #region fluent mode
 
         public CrtCylinder WithMinimum(double m)

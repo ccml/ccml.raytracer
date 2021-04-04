@@ -1,19 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using ccml.raytracer;
 using ccml.raytracer.Core;
 using ccml.raytracer.Engine;
 using ccml.raytracer.Materials.Patterns.Noises;
 using ccml.raytracer.Shapes;
-using ccml.raytracer.Transformation;
 using ccml.raytracer.ui.monogame.screen;
 using Microsoft.Xna.Framework.Input;
 
-namespace chapter13b.exercise.monogame
+namespace chapter14b.exercise.monogame
 {
-
     class Program
     {
         private bool _isRendering = false;
@@ -74,6 +71,7 @@ namespace chapter13b.exercise.monogame
             var tableWidth = 1.0;
             var tableLength = 2.0;
             {
+                var table = CrtFactory.ShapeFactory.Group();
                 var tableSurface = CrtFactory.ShapeFactory.Cube()
                     .WithTransformationMatrix(
                         CrtFactory.TransformationFactory.TranslationMatrix(0, 1 + tableThickness / 2, 0)
@@ -86,7 +84,7 @@ namespace chapter13b.exercise.monogame
                                 CrtFactory.PatternFactory.SolidColor(CrtColor.COLOR_RED)
                             )
                     );
-                _world.Add(tableSurface);
+                table.Add(tableSurface);
                 //
                 var xoffset = tableLength / 2 - tableThickness / 2;
                 var yoffset = tableWidth / 2 - tableThickness / 2;
@@ -98,7 +96,7 @@ namespace chapter13b.exercise.monogame
                             *
                             tableLeg.TransformMatrix
                         );
-                    _world.Add(tableLeg);
+                    table.Add(tableLeg);
                 }
                 {
                     var tableLeg = GetTableLeg(tableHeight, tableThickness);
@@ -108,7 +106,7 @@ namespace chapter13b.exercise.monogame
                             *
                             tableLeg.TransformMatrix
                         );
-                    _world.Add(tableLeg);
+                    table.Add(tableLeg);
                 }
                 {
                     var tableLeg = GetTableLeg(tableHeight, tableThickness);
@@ -118,7 +116,7 @@ namespace chapter13b.exercise.monogame
                             *
                             tableLeg.TransformMatrix
                         );
-                    _world.Add(tableLeg);
+                    table.Add(tableLeg);
                 }
                 {
                     var tableLeg = GetTableLeg(tableHeight, tableThickness);
@@ -128,8 +126,9 @@ namespace chapter13b.exercise.monogame
                             *
                             tableLeg.TransformMatrix
                         );
-                    _world.Add(tableLeg);
+                    table.Add(tableLeg);
                 }
+                _world.Add(table);
             }
             //
             // Add mirrors
@@ -208,13 +207,14 @@ namespace chapter13b.exercise.monogame
             // A cup
             var aCup = new List<CrtShape>();
             {
+                var cup = CrtFactory.ShapeFactory.Group();
                 aCup.Add(
                     CrtFactory.ShapeFactory.Cone()
                         .WithMinimum(0.2).WithMaximum(1)
                         .WithMinimumClosed()
                         .WithMaterial(CrtFactory.MaterialFactory.DefaultMaterial)
                         .WithTransformationMatrix(
-                            CrtFactory.TransformationFactory.TranslationMatrix(tableLength / 3, 0.05 + tableHeight + tableThickness, tableWidth / 3)
+                            CrtFactory.TransformationFactory.TranslationMatrix(0, 0.050, 0)
                             *
                             CrtFactory.TransformationFactory.ScalingMatrix(0.2, 0.3, 0.2)
                         )
@@ -227,7 +227,7 @@ namespace chapter13b.exercise.monogame
                         .WithMinimumClosed()
                         .WithMaterial(CrtFactory.MaterialFactory.DefaultMaterial)
                         .WithTransformationMatrix(
-                            CrtFactory.TransformationFactory.TranslationMatrix(tableLength / 3, 0.05 + tableHeight + tableThickness, tableWidth / 3)
+                            CrtFactory.TransformationFactory.TranslationMatrix(0, 0.05, 0)
                             *
                             CrtFactory.TransformationFactory.ScalingMatrix(0.04, 0.1, 0.04)
                         )
@@ -238,7 +238,7 @@ namespace chapter13b.exercise.monogame
                         .WithMinimumClosed()
                         .WithMaterial(CrtFactory.MaterialFactory.DefaultMaterial)
                         .WithTransformationMatrix(
-                            CrtFactory.TransformationFactory.TranslationMatrix(tableLength / 3, 0.07 + tableHeight + tableThickness, tableWidth / 3)
+                            CrtFactory.TransformationFactory.TranslationMatrix(0, 0.07, 0)
                             *
                             CrtFactory.TransformationFactory.ScalingMatrix(0.2, 0.1, 0.2)
                         )
@@ -255,14 +255,18 @@ namespace chapter13b.exercise.monogame
                                 .WithReflective(0.75)
                         )
                         .WithTransformationMatrix(
-                            CrtFactory.TransformationFactory.TranslationMatrix(tableLength / 3, 0.05 + tableHeight + tableThickness, tableWidth / 3)
+                            CrtFactory.TransformationFactory.TranslationMatrix(0, 0.05, 0)
                             *
                             CrtFactory.TransformationFactory.ScalingMatrix(0.19, 0.3, 0.19)
                         )
                 );
-
+                cup.WithTransformationMatrix(
+                    // put the cup on the table
+                    CrtFactory.TransformationFactory.TranslationMatrix(tableLength / 3, tableHeight + tableThickness, tableWidth / 3)
+                );
+                cup.Add(aCup.ToArray());
+                _world.Add(cup);
             }
-            _world.Add(aCup.ToArray());
             //
             // add a light
             _world.Add(

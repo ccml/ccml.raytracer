@@ -22,5 +22,10 @@ namespace ccml.raytracer.Tests
         {
             return point - CrtFactory.CoreFactory.Point(0, 0, 0);
         }
+
+        public override CrtBoundingBox ObjectBounds()
+        {
+            return null;
+        }
     }
 }

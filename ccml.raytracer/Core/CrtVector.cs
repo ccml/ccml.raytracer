@@ -15,33 +15,39 @@ namespace ccml.raytracer.Core
 
         public static CrtPoint operator +(CrtVector v, CrtPoint p)
         {
-            return (((CrtTuple)v) + ((CrtTuple)p)) as CrtPoint;
+            var result = (((CrtTuple) v) + ((CrtTuple) p));
+            return CrtFactory.CoreFactory.Point(result.X, result.Y, result.Z);
         }
 
         public static CrtVector operator +(CrtVector v1, CrtVector v2)
         {
-            return (((CrtTuple)v1) + ((CrtTuple)v2)) as CrtVector;
+            var result = (((CrtTuple) v1) + ((CrtTuple) v2));
+            return CrtFactory.CoreFactory.Vector(result.X, result.Y, result.Z);
         }
 
         public static CrtVector operator -(CrtVector v1, CrtVector v2)
         {
-            return (((CrtTuple)v1) - ((CrtTuple)v2)) as CrtVector;
+            var result = (((CrtTuple) v1) - ((CrtTuple) v2));
+            return CrtFactory.CoreFactory.Vector(result.X, result.Y, result.Z);
         }
 
         public static CrtVector operator *(CrtVector v, double scalar)
         {
-            return (((CrtTuple)v) * scalar) as CrtVector;
+            var result = (((CrtTuple) v) * scalar);
+            return CrtFactory.CoreFactory.Vector(result.X, result.Y, result.Z);
         }
 
         public static CrtVector operator *(double scalar, CrtVector v)
         {
-            return (scalar * ((CrtTuple)v)) as CrtVector;
+            var result = (scalar * ((CrtTuple) v));
+            return CrtFactory.CoreFactory.Vector(result.X, result.Y, result.Z);
         }
 
         public static CrtVector operator -(CrtVector v)
         {
             if (v is null) throw new ArgumentException();
-            return -((CrtTuple)v) as CrtVector;
+            var result = -((CrtTuple) v);
+            return CrtFactory.CoreFactory.Vector(result.X, result.Y, result.Z);
         }
 
         /// <summary>

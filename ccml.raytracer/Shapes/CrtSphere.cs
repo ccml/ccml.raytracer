@@ -56,6 +56,17 @@ namespace ccml.raytracer.Shapes
             return point - Center;
         }
 
+        private CrtBoundingBox _objectBounds = new CrtBoundingBox()
+        {
+            Minimum = CrtFactory.CoreFactory.Point(-1, -1, -1),
+            Maximum = CrtFactory.CoreFactory.Point(1, 1, 1)
+        };
+
+        public override CrtBoundingBox ObjectBounds()
+        {
+            return _objectBounds;
+        }
+
         public static bool operator ==(CrtSphere s1, CrtSphere s2)
         {
             return (((CrtShape) s1) == ((CrtShape) s2));

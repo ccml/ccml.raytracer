@@ -28,5 +28,11 @@ namespace ccml.raytracer.Shapes
         {
             return _planeNormal;
         }
+
+        public override CrtBoundingBox ObjectBounds()
+        {
+            return null;
+        }
+
     }
 }

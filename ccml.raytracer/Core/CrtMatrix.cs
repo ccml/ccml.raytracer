@@ -98,12 +98,14 @@ namespace ccml.raytracer.Core
 
         public static CrtPoint operator *(CrtMatrix m, CrtPoint p)
         {
-            return (m * ((CrtTuple)p)) as CrtPoint;
+            var result = (m * ((CrtTuple) p));
+            return CrtFactory.CoreFactory.Point(result.X, result.Y, result.Z);
         }
 
         public static CrtVector operator *(CrtMatrix m, CrtVector v)
         {
-            return (m * ((CrtTuple)v)) as CrtVector;
+            var result = (m * ((CrtTuple) v));
+            return CrtFactory.CoreFactory.Vector(result.X, result.Y, result.Z);
         }
 
         public CrtMatrix Transpose()

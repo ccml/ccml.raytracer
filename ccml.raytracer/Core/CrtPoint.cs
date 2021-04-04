@@ -13,17 +13,20 @@
 
         public static CrtPoint operator +(CrtPoint p, CrtVector v)
         {
-            return (((CrtTuple)p) + ((CrtTuple)v)) as CrtPoint;
+            var result = (((CrtTuple) p) + ((CrtTuple) v));
+            return CrtFactory.CoreFactory.Point(result.X, result.Y, result.Z);
         }
         
         public static CrtVector operator -(CrtPoint p1, CrtPoint p2)
         {
-            return (((CrtTuple)p1) - ((CrtTuple)p2)) as CrtVector;
+            var result = (((CrtTuple) p1) - ((CrtTuple) p2));
+            return CrtFactory.CoreFactory.Vector(result.X, result.Y, result.Z);
         }
 
         public static CrtPoint operator -(CrtPoint p, CrtVector v)
         {
-            return (((CrtTuple)p) - ((CrtTuple)v)) as CrtPoint;
+            var result = (((CrtTuple) p) - ((CrtTuple) v));
+            return CrtFactory.CoreFactory.Point(result.X, result.Y, result.Z);
         }
 
     }

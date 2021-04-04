@@ -5,6 +5,12 @@ namespace ccml.raytracer.Shapes
     public class CrtShapeFactory
     {
         /// <summary>
+        /// Create a group
+        /// </summary>
+        /// <returns>The group</returns>
+        public CrtGroup Group() => new CrtGroup();
+
+        /// <summary>
         /// Create a unit sphere
         /// </summary>
         /// <returns>The sphere</returns>
