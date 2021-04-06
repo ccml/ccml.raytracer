@@ -39,7 +39,7 @@ namespace ccml.raytracer.Shapes
             return CrtFactory.EngineFactory.Intersections(xs.ToArray());
         }
 
-        public override CrtVector LocalNormalAt(CrtPoint point)
+        public override CrtVector LocalNormalAt(CrtPoint point, CrtIntersection intersection = null)
         {
             throw new NotImplementedException();
         }

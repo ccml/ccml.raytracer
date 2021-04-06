@@ -51,7 +51,7 @@ namespace ccml.raytracer.Shapes
             }
         }
 
-        public override CrtVector LocalNormalAt(CrtPoint point)
+        public override CrtVector LocalNormalAt(CrtPoint point, CrtIntersection intersection = null)
         {
             return point - Center;
         }

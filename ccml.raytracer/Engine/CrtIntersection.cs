@@ -9,10 +9,15 @@ namespace ccml.raytracer.Engine
         public double T { get; private set; }
         public CrtShape TheObject { get; private set; }
 
-        internal CrtIntersection(double t, CrtShape theObject)
+        public double U { get; private set; }
+        public double V { get; private set; }
+
+        internal CrtIntersection(double t, CrtShape theObject, double u = 0.0, double v = 0.0)
         {
             T = t;
             TheObject = theObject;
+            U = u;
+            V = v;
         }
 
         public static bool operator ==(CrtIntersection c1, CrtIntersection c2) =>

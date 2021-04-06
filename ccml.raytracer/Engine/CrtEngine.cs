@@ -85,7 +85,7 @@ namespace ccml.raytracer.Engine
             comps.TheObject = intersection.TheObject;
             comps.HitPoint = r.PositionAtTime(intersection.T);
             comps.EyeVector = -r.Direction;
-            comps.NormalVector = intersection.TheObject.NormalAt(comps.HitPoint);
+            comps.NormalVector = intersection.TheObject.NormalAt(comps.HitPoint, intersection);
             if (CrtReal.CompareTo(comps.NormalVector * comps.EyeVector, 0) < 0)
             {
                 comps.IsInside = true;

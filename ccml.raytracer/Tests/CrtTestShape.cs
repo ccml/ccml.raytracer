@@ -18,7 +18,7 @@ namespace ccml.raytracer.Tests
             };
         }
 
-        public override CrtVector LocalNormalAt(CrtPoint point)
+        public override CrtVector LocalNormalAt(CrtPoint point, CrtIntersection intersection = null)
         {
             return point - CrtFactory.CoreFactory.Point(0, 0, 0);
         }

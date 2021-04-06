@@ -76,7 +76,7 @@ namespace ccml.raytracer.Shapes
             );
         }
 
-        public override CrtVector LocalNormalAt(CrtPoint point)
+        public override CrtVector LocalNormalAt(CrtPoint point, CrtIntersection intersection = null)
         {
             var maxc = Math.Max(Math.Max(Math.Abs(point.X), Math.Abs(point.Y)), Math.Abs(point.Z));
             if (CrtReal.AreEquals(maxc, Math.Abs(point.X)))

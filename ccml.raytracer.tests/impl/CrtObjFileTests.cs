@@ -17,6 +17,8 @@ namespace ccml.raytracer.tests.impl
 
         }
 
+        #region Triangles
+
         // Scenario: Ignoring unrecognized lines
         [Test]
         public void IgnoringUnrecognizedLines()
@@ -250,5 +252,98 @@ f 1 3 4
             // And g includes "SecondGroup" from parser
             Assert.IsTrue(g.Childs.OfType<CrtGroup>().Any(child => child.Name == "SecondGroup"));
         }
+
+        #endregion
+
+        #region Smooth triangles
+
+        // Scenario: Vertex normal records
+        [Test]
+        public void VertexNormalRecords()
+        {
+            // Given file ← a file containing:
+            // """
+            // vn 0 0 1
+            // vn 0.707 0 -0.707
+            // vn 1 2 3
+            // """
+            var file =
+@"
+vn 0 0 1
+vn 0.707 0 -0.707
+vn 1 2 3
+";
+            // When parser ← parse_obj_file(file)
+            var parser = CrtFactory.FileFormatFactory.ObjParser;
+            parser.Parse(new MemoryStream(Encoding.UTF8.GetBytes(file)));
+            // Then parser.normals[1] = vector(0, 0, 1)
+            Assert.IsTrue(parser.Normals[1] == CrtFactory.CoreFactory.Vector(0, 0, 1));
+            // And parser.normals[2] = vector(0.707, 0, -0.707)
+            Assert.IsTrue(parser.Normals[2] == CrtFactory.CoreFactory.Vector(0.707, 0, -0.707));
+            // And parser.normals[3] = vector(1, 2, 3)
+            Assert.IsTrue(parser.Normals[3] == CrtFactory.CoreFactory.Vector(1, 2, 3));
+        }
+
+        // Scenario: Faces with normals
+        [Test]
+        public void FacesWithNormals()
+        {
+            // Given file ← a file containing:
+            // """
+            // v 0 1 0
+            // v -1 0 0
+            // v 1 0 0
+            // vn -1 0 0
+            // vn 1 0 0
+            // vn 0 1 0
+            // f 1//3 2//1 3//2
+            // f 1/0/3 2/102/1 3/14/2
+            // """
+            var file =
+@"
+v 0 1 0
+v -1 0 0
+v 1 0 0
+vn -1 0 0
+vn 1 0 0
+vn 0 1 0
+f 1//3 2//1 3//2
+f 1/0/3 2/102/1 3/14/2
+";
+            // When parser ← parse_obj_file(file)
+            var parser = CrtFactory.FileFormatFactory.ObjParser;
+            parser.Parse(new MemoryStream(Encoding.UTF8.GetBytes(file)));
+            // And g ← parser.default_group
+            var g = parser.DefaultGroup;
+            // And t1 ← first child of g
+            var t1 = g.Childs[0] as CrtSmoothTriangle;
+            // And t2 ← second child of g
+            var t2 = g.Childs[1] as CrtSmoothTriangle;
+            //
+            Assert.IsNotNull(t1);
+            Assert.IsNotNull(t2);
+            //
+            // Then t1.p1 = parser.vertices[1]
+            Assert.IsTrue(t1.P1 == parser.Vertices[1]);
+            // And t1.p2 = parser.vertices[2]
+            Assert.IsTrue(t1.P2 == parser.Vertices[2]);
+            // And t1.p3 = parser.vertices[3]
+            Assert.IsTrue(t1.P3 == parser.Vertices[3]);
+            // And t1.n1 = parser.normals[3]
+            Assert.IsTrue(t1.N1 == parser.Normals[3]);
+            // And t1.n2 = parser.normals[1]
+            Assert.IsTrue(t1.N2 == parser.Normals[1]);
+            // And t1.n3 = parser.normals[2]
+            Assert.IsTrue(t1.N3 == parser.Normals[2]);
+            // And t2 = t1
+            Assert.IsTrue(t2.P1 == parser.Vertices[1]);
+            Assert.IsTrue(t2.P2 == parser.Vertices[2]);
+            Assert.IsTrue(t2.P3 == parser.Vertices[3]);
+            Assert.IsTrue(t2.N1 == parser.Normals[3]);
+            Assert.IsTrue(t2.N2 == parser.Normals[1]);
+            Assert.IsTrue(t2.N3 == parser.Normals[2]);
+        }
+
+        #endregion
     }
 }

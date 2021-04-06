@@ -66,10 +66,10 @@ namespace ccml.raytracer.Shapes
             if ((CrtReal.CompareTo(v, 0) < 0) || (CrtReal.CompareTo(u+v, 1) > 0)) return new List<CrtIntersection>();
             //
             var t = f * (E2 * originCrossE1);
-            return CrtFactory.EngineFactory.Intersections(CrtFactory.EngineFactory.Intersection(t, this));
+            return CrtFactory.EngineFactory.Intersections(CrtFactory.EngineFactory.Intersection(t, this, u, v));
         }
 
-        public override CrtVector LocalNormalAt(CrtPoint point)
+        public override CrtVector LocalNormalAt(CrtPoint point, CrtIntersection intersection = null)
         {
             return Normal;
         }

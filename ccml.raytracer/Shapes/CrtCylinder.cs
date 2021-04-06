@@ -68,7 +68,7 @@ namespace ccml.raytracer.Shapes
             return xs;
         }
 
-        public override CrtVector LocalNormalAt(CrtPoint point)
+        public override CrtVector LocalNormalAt(CrtPoint point, CrtIntersection intersection = null)
         {
             var dist = point.X * point.X + point.Z * point.Z;
 

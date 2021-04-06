@@ -31,8 +31,10 @@ namespace ccml.raytracer.Engine
         /// </summary>
         /// <param name="t">the number of unit of time needed by the ray to hit the object</param>
         /// <param name="theObject">the object that has been hit</param>
+        /// <param name="u">triangle intersection parameter</param>
+        /// <param name="v">triangle intersection parameter</param>
         /// <returns>the intersection</returns>
-        public CrtIntersection Intersection(double t, CrtShape theObject) => new CrtIntersection(t, theObject);
+        public CrtIntersection Intersection(double t, CrtShape theObject, double u = 0.0, double v = 0.0) => new CrtIntersection(t, theObject, u, v);
 
         /// <summary>
         /// Create a list of hit

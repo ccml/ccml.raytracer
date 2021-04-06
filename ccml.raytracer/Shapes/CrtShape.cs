@@ -73,10 +73,10 @@ namespace ccml.raytracer.Shapes
         /// </summary>
         /// <param name="point">A point on the shape in shape world coordinates</param>
         /// <returns>the normal</returns>
-        public CrtVector NormalAt(CrtPoint point)
+        public CrtVector NormalAt(CrtPoint point, CrtIntersection intersection = null)
         {
             var shapePoint = WorldToObject(point);
-            var shapeNormal = LocalNormalAt(shapePoint);
+            var shapeNormal = LocalNormalAt(shapePoint, intersection);
             return NormalToWorld(shapeNormal);
         }
 
@@ -85,7 +85,7 @@ namespace ccml.raytracer.Shapes
         /// </summary>
         /// <param name="point">A point on the shape</param>
         /// <returns>the normal</returns>
-        public abstract CrtVector LocalNormalAt(CrtPoint point);
+        public abstract CrtVector LocalNormalAt(CrtPoint point, CrtIntersection intersection = null);
 
         public CrtPoint WorldToObject(CrtPoint point)
         {
