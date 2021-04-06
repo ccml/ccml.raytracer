@@ -1,5 +1,6 @@
 ﻿using ccml.raytracer.Core;
 using ccml.raytracer.Engine;
+using ccml.raytracer.Engine.FileFormats;
 using ccml.raytracer.Lights;
 using ccml.raytracer.Materials;
 using ccml.raytracer.Materials.Patterns;
@@ -28,6 +29,8 @@ namespace ccml.raytracer
         public static CrtPatternFactory PatternFactory = new CrtPatternFactory();
 
         public static CrtPerturbationFactory PerturbationFactory = new CrtPerturbationFactory();
+
+        public static CrtFileFormatFactory FileFormatFactory = new CrtFileFormatFactory();
 
         public static CrtTestsFactory TestsFactory = new CrtTestsFactory();
 

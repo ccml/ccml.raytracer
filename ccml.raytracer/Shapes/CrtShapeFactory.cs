@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ccml.raytracer.Core;
+using System;
 
 namespace ccml.raytracer.Shapes
 {
@@ -40,5 +41,15 @@ namespace ccml.raytracer.Shapes
         /// </summary>
         /// <returns></returns>
         public CrtCone Cone() => new CrtCone();
+
+        /// <summary>
+        /// Create a triangle from 3 points
+        /// </summary>
+        /// <param name="p1">point 1</param>
+        /// <param name="p2">point 2</param>
+        /// <param name="p3">point 3</param>
+        /// <returns>The triangle</returns>
+        public CrtTriangle Triangle(CrtPoint p1, CrtPoint p2, CrtPoint p3) => new CrtTriangle(p1, p2, p3);
+
     }
 }

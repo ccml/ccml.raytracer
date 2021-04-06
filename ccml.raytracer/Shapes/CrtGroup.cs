@@ -47,6 +47,9 @@ namespace ccml.raytracer.Shapes
         public IList<CrtShape> Childs { get; } = new List<CrtShape>();
 
         public bool IsEmpty => !Childs.Any();
+
+        public string Name { get; internal set; }
+
         public bool Contains(CrtShape shape) => Childs.Contains(shape);
 
         public CrtGroup Add(params CrtShape[] shapes)
