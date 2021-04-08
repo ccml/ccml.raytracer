@@ -14,7 +14,7 @@ namespace ccml.raytracer.Shapes
 
         private bool IntersectBoundingBox(CrtRay r)
         {
-            // No bounding box == infinit bounding box ==> intersection
+            // No bounding box == infinite bounding box ==> intersection
             if (ObjectBoundingBox == null) return true;
 
             // check if intersection with bounding box
@@ -91,6 +91,11 @@ namespace ccml.raytracer.Shapes
                 }
             }
             return bbox;
+        }
+
+        public override bool Includes(CrtShape s)
+        {
+            return Childs.Any(child => child.Includes(s));
         }
     }
 }

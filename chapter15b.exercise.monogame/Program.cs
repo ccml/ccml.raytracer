@@ -137,7 +137,7 @@ namespace chapter15b.exercise.monogame
             {
                 var lookVector = _lookAtPosition - _eyePosition;
                 var dist = !lookVector;
-                if (dist > 1.5)
+                if (dist > (_distanceStep * 1.5))
                 {
                     _eyePosition = _eyePosition + ~lookVector * _distanceStep;
                     SetupCamera(_window.Image.Width, _window.Image.Heigth);

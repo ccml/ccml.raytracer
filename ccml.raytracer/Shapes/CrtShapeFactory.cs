@@ -65,5 +65,21 @@ namespace ccml.raytracer.Shapes
             CrtPoint p1, CrtPoint p2, CrtPoint p3, 
             CrtVector n1, CrtVector n2, CrtVector n3
         ) => new CrtSmoothTriangle(p1, p2, p3, n1, n2, n3);
+
+        /// <summary>
+        /// Create a Constructive Solid Geometry shape
+        ///
+        /// The binary operations between left and right operands:
+        /// 
+        ///         (left shape) union (right shape)
+        ///         (left shape) intersection (right shape)
+        ///         (left shape) difference (right shape)
+        /// 
+        /// </summary>
+        /// <param name="operation">union, intersection or difference</param>
+        /// <param name="left">the left shape</param>
+        /// <param name="right">the right shape</param>
+        /// <returns></returns>
+        public CrtCSG Csg(string operation, CrtShape left, CrtShape right) => new CrtCSG(operation, left, right);
     }
 }

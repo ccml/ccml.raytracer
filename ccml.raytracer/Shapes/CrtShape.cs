@@ -221,5 +221,9 @@ namespace ccml.raytracer.Shapes
             return this;
         }
 
+        public virtual bool Includes(CrtShape s)
+        {
+            return Object.ReferenceEquals(this, s);
+        }
     }
 }
