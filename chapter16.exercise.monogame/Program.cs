@@ -23,251 +23,165 @@ namespace chapter16.exercise.monogame
         private int _nbrSteps = 5;
         private CrtCamera _camera;
 
+        private CrtShape DieVertice(CrtColor color, double x, double y, double z)
+        {
+            return CrtFactory.ShapeFactory.Csg(
+                CrtCSG.DIFFERENCE,
+                CrtFactory.ShapeFactory.Cube()
+                .WithMaterial(
+                    CrtFactory.MaterialFactory.DefaultMaterial.WithColor(color)
+                ),
+                CrtFactory.ShapeFactory.Sphere().WithTransformationMatrix(
+                    CrtFactory.TransformationFactory.TranslationMatrix(-x, -y, -z)
+                )
+                .WithMaterial(
+                    CrtFactory.MaterialFactory.DefaultMaterial.WithColor(color)
+                )
+            )
+            .WithTransformationMatrix(
+                CrtFactory.TransformationFactory.TranslationMatrix(x, y, z)
+                *
+                CrtFactory.TransformationFactory.ScalingMatrix(0.1, 0.1, 0.1)
+            );
+        }
+
+        private CrtShape DieEdge(CrtColor color, char rotationAxe, double x, double y, double z)
+        {
+            CrtMatrix cylTransform = null;
+            switch (rotationAxe)
+            {
+                case 'x':
+                    cylTransform = CrtFactory.TransformationFactory.XRotationMatrix(Math.PI / 2);
+                    break;
+                case 'y':
+                    cylTransform = CrtFactory.TransformationFactory.IdentityMatrix(4,4);
+                    break;
+                case 'z':
+                    cylTransform = CrtFactory.TransformationFactory.ZRotationMatrix(Math.PI / 2);
+                    break;
+            }
+            return CrtFactory.ShapeFactory.Csg(
+                CrtCSG.DIFFERENCE,
+                CrtFactory.ShapeFactory.Cube()
+                .WithMaterial(
+                    CrtFactory.MaterialFactory.DefaultMaterial.WithColor(color)
+                ),
+                CrtFactory.ShapeFactory.Cylinder()
+                .WithMaximum(1).WithMinimum(-1)
+                .WithMaximumClosed().WithMinimumClosed()
+                .WithTransformationMatrix(
+                    CrtFactory.TransformationFactory.TranslationMatrix(-x, -y, -z)
+                    *
+                    cylTransform
+                )
+                .WithMaterial(
+                    CrtFactory.MaterialFactory.DefaultMaterial.WithColor(color)
+                )
+            )
+            .WithTransformationMatrix(
+                CrtFactory.TransformationFactory.TranslationMatrix(x, y, z)
+                *
+                CrtFactory.TransformationFactory.ScalingMatrix(
+                    CrtReal.AreEquals(x, 0) ? 0.91 : 0.1,
+                    CrtReal.AreEquals(y, 0) ? 0.91 : 0.1,
+                    CrtReal.AreEquals(z, 0) ? 0.91 : 0.1
+                )
+            );
+        }
+
+        private CrtShape DiePoint(CrtColor color, double tx, double ty, double tz, double size)
+        {
+            return CrtFactory.ShapeFactory.Sphere()
+                .WithTransformationMatrix(
+                    CrtFactory.TransformationFactory.TranslationMatrix(tx, ty, tz)
+                    *
+                    CrtFactory.TransformationFactory.ScalingMatrix(size, size, size)
+                )
+                .WithMaterial(
+                    CrtFactory.MaterialFactory.DefaultMaterial.WithColor(color)
+                );
+        }
+
         private CrtShape SixSidedDie(CrtColor cubeColor, CrtColor pointColor)
         {
+            // the cube
             CrtShape result = CrtFactory.ShapeFactory.Cube()
                 .WithMaterial(
                     CrtFactory.MaterialFactory.DefaultMaterial.WithColor(cubeColor)
                 );
-            //{
-            //    var sphereBorder = CrtFactory.ShapeFactory.Sphere()
-            //        .WithTransformationMatrix(CrtFactory.TransformationFactory.ScalingMatrix(1.45, 1.45, 1.45));
-            //    result = CrtFactory.ShapeFactory.Csg(CrtCSG.INTERSECTION, cube, sphereBorder);
-            //}
 
-            // 3 points on 1, 0, 0
+            double pointSize = 0.1;
+            // 1 points on 1, 0, 0
             {
-                var point = CrtFactory.ShapeFactory.Sphere()
-                    .WithTransformationMatrix(
-                        CrtFactory.TransformationFactory.TranslationMatrix(1, 0, 0)
-                        *
-                        CrtFactory.TransformationFactory.ScalingMatrix(0.1, 0.1, 0.1)
-                    )
-                    .WithMaterial(
-                        CrtFactory.MaterialFactory.DefaultMaterial.WithColor(pointColor)
-                    ); ;
-                result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, point);
+                result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, DiePoint(pointColor, 1, 0, 0, pointSize));
             }
+            // 6 point on -1, 0, 0
             {
-                var point = CrtFactory.ShapeFactory.Sphere()
-                    .WithTransformationMatrix(
-                        CrtFactory.TransformationFactory.TranslationMatrix(1, 0.4, 0.4)
-                        *
-                        CrtFactory.TransformationFactory.ScalingMatrix(0.1, 0.1, 0.1)
-                    )
-                    .WithMaterial(
-                        CrtFactory.MaterialFactory.DefaultMaterial.WithColor(pointColor)
-                    ); ;
-                result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, point);
+                result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, DiePoint(pointColor, -1, -0.4, -0.4, pointSize));
+                result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, DiePoint(pointColor, -1, -0.4, 0, pointSize));
+                result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, DiePoint(pointColor, -1, -0.4, 0.4, pointSize));
+                result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, DiePoint(pointColor, -1, 0.4, -0.4, pointSize));
+                result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, DiePoint(pointColor, -1, 0.4, 0, pointSize));
+                result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, DiePoint(pointColor, -1, 0.4, 0.4, pointSize));
             }
+            // 5 points on 0, 1, 0
             {
-                var point = CrtFactory.ShapeFactory.Sphere()
-                    .WithTransformationMatrix(
-                        CrtFactory.TransformationFactory.TranslationMatrix(1, -0.4, -0.4)
-                        *
-                        CrtFactory.TransformationFactory.ScalingMatrix(0.1, 0.1, 0.1)
-                    )
-                    .WithMaterial(
-                        CrtFactory.MaterialFactory.DefaultMaterial.WithColor(pointColor)
-                    ); ;
-                result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, point);
+                result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, DiePoint(pointColor, 0, 1, 0, pointSize));
+                result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, DiePoint(pointColor, -0.4, 1, -0.4, pointSize));
+                result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, DiePoint(pointColor, 0.4, 1, -0.4, pointSize));
+                result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, DiePoint(pointColor, -0.4, 1, 0.4, pointSize));
+                result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, DiePoint(pointColor, 0.4, 1, 0.4, pointSize));
             }
-            // 5 points on 0, 0, -1
+            // 2 points on 0, -1, 0
             {
-                var point = CrtFactory.ShapeFactory.Sphere()
-                    .WithTransformationMatrix(
-                        CrtFactory.TransformationFactory.TranslationMatrix(0, 0, -1)
-                        *
-                        CrtFactory.TransformationFactory.ScalingMatrix(0.1, 0.1, 0.1)
-                    )
-                    .WithMaterial(
-                        CrtFactory.MaterialFactory.DefaultMaterial.WithColor(pointColor)
-                    ); ;
-                result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, point);
+                result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, DiePoint(pointColor, -0.4, -1, -0.4, pointSize));
+                result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, DiePoint(pointColor, 0.4, -1, 0.4, pointSize));
             }
+            // 4 points on 0, 0, 1
             {
-                var point = CrtFactory.ShapeFactory.Sphere()
-                    .WithTransformationMatrix(
-                        CrtFactory.TransformationFactory.TranslationMatrix(0.4, 0.4, -1)
-                        *
-                        CrtFactory.TransformationFactory.ScalingMatrix(0.1, 0.1, 0.1)
-                    )
-                    .WithMaterial(
-                        CrtFactory.MaterialFactory.DefaultMaterial.WithColor(pointColor)
-                    ); ;
-                result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, point);
+                result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, DiePoint(pointColor, -0.4, -0.4, 1, pointSize));
+                result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, DiePoint(pointColor, 0.4, 0.4, 1, pointSize));
+                result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, DiePoint(pointColor, -0.4, 0.4, 1, pointSize));
+                result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, DiePoint(pointColor, 0.4, -0.4, 1, pointSize));
             }
+            // 3 points on 0, 0, -1
             {
-                var point = CrtFactory.ShapeFactory.Sphere()
-                    .WithTransformationMatrix(
-                        CrtFactory.TransformationFactory.TranslationMatrix(-0.4, -0.4, -1)
-                        *
-                        CrtFactory.TransformationFactory.ScalingMatrix(0.1, 0.1, 0.1)
-                    )
-                    .WithMaterial(
-                        CrtFactory.MaterialFactory.DefaultMaterial.WithColor(pointColor)
-                    ); ;
-                result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, point);
+                result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, DiePoint(pointColor, -0.4, -0.4, -1, pointSize));
+                result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, DiePoint(pointColor, 0, 0, -1, pointSize));
+                result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, DiePoint(pointColor, 0.4, 0.4, -1, pointSize));
             }
+
+            // rounding the vertices
             {
-                var point = CrtFactory.ShapeFactory.Sphere()
-                    .WithTransformationMatrix(
-                        CrtFactory.TransformationFactory.TranslationMatrix(0.4, -0.4, -1)
-                        *
-                        CrtFactory.TransformationFactory.ScalingMatrix(0.1, 0.1, 0.1)
-                    )
-                    .WithMaterial(
-                        CrtFactory.MaterialFactory.DefaultMaterial.WithColor(pointColor)
-                    ); ;
-                result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, point);
+                result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, DieVertice(cubeColor, 1, 1, 1));
+                result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, DieVertice(cubeColor, 1, 1, -1));
+                result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, DieVertice(cubeColor, 1, -1, 1));
+                result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, DieVertice(cubeColor, 1, -1, -1));
+
+                result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, DieVertice(cubeColor, -1, 1, 1));
+                result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, DieVertice(cubeColor, -1, 1, -1));
+                result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, DieVertice(cubeColor, -1, -1, 1));
+                result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, DieVertice(cubeColor, -1, -1, -1));
             }
+
+            // rounding the edges
             {
-                var point = CrtFactory.ShapeFactory.Sphere()
-                    .WithTransformationMatrix(
-                        CrtFactory.TransformationFactory.TranslationMatrix(-0.4, 0.4, -1)
-                        *
-                        CrtFactory.TransformationFactory.ScalingMatrix(0.1, 0.1, 0.1)
-                    )
-                    .WithMaterial(
-                        CrtFactory.MaterialFactory.DefaultMaterial.WithColor(pointColor)
-                    ); ;
-                result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, point);
+                result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, DieEdge(cubeColor, 'z', 0, 1, 1));
+                result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, DieEdge(cubeColor, 'z', 0, 1, -1));
+                result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, DieEdge(cubeColor, 'z', 0, -1, 1));
+                result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, DieEdge(cubeColor, 'z', 0, -1, -1));
+
+                result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, DieEdge(cubeColor, 'x', 1, 1, 0));
+                result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, DieEdge(cubeColor, 'x', -1, 1, 0));
+                result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, DieEdge(cubeColor, 'x', 1, -1, 0));
+                result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, DieEdge(cubeColor, 'x', -1, -1, 0));
+
+                result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, DieEdge(cubeColor, 'y', 1, 0, 1));
+                result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, DieEdge(cubeColor, 'y', 1, 0, -1));
+                result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, DieEdge(cubeColor, 'y', -1, 0, 1));
+                result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, DieEdge(cubeColor, 'y', -1, 0, -1));
             }
-            // 4 points on 0, 1, 0
-            {
-                var point = CrtFactory.ShapeFactory.Sphere()
-                    .WithTransformationMatrix(
-                        CrtFactory.TransformationFactory.TranslationMatrix(0.4, 1, 0.4)
-                        *
-                        CrtFactory.TransformationFactory.ScalingMatrix(0.1, 0.1, 0.1)
-                    )
-                    .WithMaterial(
-                        CrtFactory.MaterialFactory.DefaultMaterial.WithColor(pointColor)
-                    ); ;
-                result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, point);
-            }
-            {
-                var point = CrtFactory.ShapeFactory.Sphere()
-                    .WithTransformationMatrix(
-                        CrtFactory.TransformationFactory.TranslationMatrix(-0.4, 1, -0.4)
-                        *
-                        CrtFactory.TransformationFactory.ScalingMatrix(0.1, 0.1, 0.1)
-                    )
-                    .WithMaterial(
-                        CrtFactory.MaterialFactory.DefaultMaterial.WithColor(pointColor)
-                    ); ;
-                result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, point);
-            }
-            {
-                var point = CrtFactory.ShapeFactory.Sphere()
-                    .WithTransformationMatrix(
-                        CrtFactory.TransformationFactory.TranslationMatrix(0.4, 1, -0.4)
-                        *
-                        CrtFactory.TransformationFactory.ScalingMatrix(0.1, 0.1, 0.1)
-                    )
-                    .WithMaterial(
-                        CrtFactory.MaterialFactory.DefaultMaterial.WithColor(pointColor)
-                    ); ;
-                result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, point);
-            }
-            {
-                var point = CrtFactory.ShapeFactory.Sphere()
-                    .WithTransformationMatrix(
-                        CrtFactory.TransformationFactory.TranslationMatrix(-0.4, 1, 0.4)
-                        *
-                        CrtFactory.TransformationFactory.ScalingMatrix(0.1, 0.1, 0.1)
-                    )
-                    .WithMaterial(
-                        CrtFactory.MaterialFactory.DefaultMaterial.WithColor(pointColor)
-                    );
-                result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, point);
-            }
-            {
-                var cubeCorner = CrtFactory.ShapeFactory.Cube()
-                .WithMaterial(
-                    CrtFactory.MaterialFactory.DefaultMaterial.WithColor(cubeColor)
-                );
-                var sphereCorner = CrtFactory.ShapeFactory.Sphere().WithTransformationMatrix(
-                    CrtFactory.TransformationFactory.TranslationMatrix(-1,-1,1)
-                )
-                .WithMaterial(
-                    CrtFactory.MaterialFactory.DefaultMaterial.WithColor(cubeColor)
-                );
-                var corner = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, cubeCorner, sphereCorner)
-                    .WithTransformationMatrix(
-                        CrtFactory.TransformationFactory.TranslationMatrix(1, 1, -1)
-                        *
-                        CrtFactory.TransformationFactory.ScalingMatrix(0.1, 0.1, 0.1)
-                    );
-                result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, corner);
-            }
-            {
-                var cubeCorner = CrtFactory.ShapeFactory.Cube()
-                    .WithMaterial(
-                        CrtFactory.MaterialFactory.DefaultMaterial.WithColor(cubeColor)
-                    );
-                var cylinderCorner = CrtFactory.ShapeFactory.Cylinder()
-                    .WithMaximum(1).WithMinimum(-1).WithMaximumClosed().WithMinimumClosed()
-                    .WithTransformationMatrix(
-                        CrtFactory.TransformationFactory.TranslationMatrix(0, -1, 1)
-                        *
-                        CrtFactory.TransformationFactory.ZRotationMatrix(Math.PI/2)
-                    )
-                    .WithMaterial(
-                        CrtFactory.MaterialFactory.DefaultMaterial.WithColor(cubeColor)
-                    );
-                var corner = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, cubeCorner, cylinderCorner)
-                    .WithTransformationMatrix(
-                        CrtFactory.TransformationFactory.TranslationMatrix(0, 1, -1)
-                        *
-                        CrtFactory.TransformationFactory.ScalingMatrix(0.91, 0.1, 0.1)
-                    );
-                result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, corner);
-            }
-            {
-                var cubeCorner = CrtFactory.ShapeFactory.Cube()
-                    .WithMaterial(
-                        CrtFactory.MaterialFactory.DefaultMaterial.WithColor(cubeColor)
-                    );
-                var cylinderCorner = CrtFactory.ShapeFactory.Cylinder()
-                    .WithMaximum(1).WithMinimum(-1).WithMaximumClosed().WithMinimumClosed()
-                    .WithTransformationMatrix(
-                        CrtFactory.TransformationFactory.TranslationMatrix(-1, -1, 0)
-                        *
-                        CrtFactory.TransformationFactory.XRotationMatrix(Math.PI / 2)
-                    )
-                    .WithMaterial(
-                        CrtFactory.MaterialFactory.DefaultMaterial.WithColor(cubeColor)
-                    );
-                var corner = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, cubeCorner, cylinderCorner)
-                    .WithTransformationMatrix(
-                        CrtFactory.TransformationFactory.TranslationMatrix(1, 1, 0)
-                        *
-                        CrtFactory.TransformationFactory.ScalingMatrix(0.1, 0.1, 0.91)
-                    );
-                result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, corner);
-            }
-            {
-                var cubeCorner = CrtFactory.ShapeFactory.Cube()
-                    .WithMaterial(
-                        CrtFactory.MaterialFactory.DefaultMaterial.WithColor(cubeColor)
-                    );
-                var cylinderCorner = CrtFactory.ShapeFactory.Cylinder()
-                    .WithMaximum(1).WithMinimum(-1).WithMaximumClosed().WithMinimumClosed()
-                    .WithTransformationMatrix(
-                        CrtFactory.TransformationFactory.TranslationMatrix(-1, 0, 1)
-                    )
-                    .WithMaterial(
-                        CrtFactory.MaterialFactory.DefaultMaterial.WithColor(cubeColor)
-                    );
-                var corner = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, cubeCorner, cylinderCorner)
-                    .WithTransformationMatrix(
-                        CrtFactory.TransformationFactory.TranslationMatrix(1, 0, -1)
-                        *
-                        CrtFactory.TransformationFactory.ScalingMatrix(0.1, 0.91, 0.1)
-                    );
-                result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, corner);
-            }
+
             return result;
         }
 
@@ -296,7 +210,7 @@ namespace chapter16.exercise.monogame
             //
             // Add a six-sided die
             var d1 = SixSidedDie(CrtColor.COLOR_GREEN, CrtColor.COLOR_WHITE)
-                .WithTransformationMatrix(CrtFactory.TransformationFactory.ScalingMatrix(10, 10, 10));
+                .WithTransformationMatrix(CrtFactory.TransformationFactory.ScalingMatrix(7, 7, 7));
             _world.Add(d1);
             //
             // add a light
@@ -360,46 +274,42 @@ namespace chapter16.exercise.monogame
             // Move the camera around the table
             if (state.IsKeyDown(Keys.Right))
             {
-                _eyePosition =
-                    CrtFactory.TransformationFactory.YRotationMatrix(-Math.PI / 6)
+                _world.Objects[1].WithTransformationMatrix(
+                    CrtFactory.TransformationFactory.YRotationMatrix(Math.PI / 6)
                     *
-                    _eyePosition;
-                SetupCamera(_window.Image.Width, _window.Image.Heigth);
+                    _world.Objects[1].TransformMatrix
+                );
                 mustRender = true;
             }
 
             if (state.IsKeyDown(Keys.Left))
             {
-                _eyePosition =
-                    CrtFactory.TransformationFactory.YRotationMatrix(Math.PI / 6)
+                _world.Objects[1].WithTransformationMatrix(
+                    CrtFactory.TransformationFactory.YRotationMatrix(-Math.PI / 6)
                     *
-                    _eyePosition;
-                SetupCamera(_window.Image.Width, _window.Image.Heigth);
+                    _world.Objects[1].TransformMatrix
+                );
                 mustRender = true;
             }
 
             if (state.IsKeyDown(Keys.Up))
             {
-                var lookVector = _lookAtPosition - _eyePosition;
-                var dist = !lookVector;
-                if (dist > (_distanceStep * 1.5))
-                {
-                    _eyePosition = _eyePosition + ~lookVector * _distanceStep;
-                    SetupCamera(_window.Image.Width, _window.Image.Heigth);
-                    mustRender = true;
-                }
+                _world.Objects[1].WithTransformationMatrix(
+                    CrtFactory.TransformationFactory.XRotationMatrix(Math.PI / 6)
+                    *
+                    _world.Objects[1].TransformMatrix
+                );
+                mustRender = true;
             }
 
             if (state.IsKeyDown(Keys.Down))
             {
-                var lookVector = _lookAtPosition - _eyePosition;
-                var dist = !lookVector;
-                if (dist < (_distanceStep * (_nbrSteps - 1)))
-                {
-                    _eyePosition = _eyePosition - ~lookVector * _distanceStep;
-                    SetupCamera(_window.Image.Width, _window.Image.Heigth);
-                    mustRender = true;
-                }
+                _world.Objects[1].WithTransformationMatrix(
+                    CrtFactory.TransformationFactory.XRotationMatrix(-Math.PI / 6)
+                    *
+                    _world.Objects[1].TransformMatrix
+                );
+                mustRender = true;
             }
 
             if (mustRender)
@@ -410,8 +320,8 @@ namespace chapter16.exercise.monogame
 
         private void Run()
         {
-            int hSize = 640;
-            int vSize = 480;
+            int hSize = 320;
+            int vSize = 200;
             //
             _window = new MonoGameRaytracerWindow(
                 hSize,
