@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.InteropServices.ComTypes;
 using System.Threading.Tasks;
 using ccml.raytracer;
 using ccml.raytracer.Core;
@@ -105,82 +106,89 @@ namespace chapter16.exercise.monogame
         private CrtShape SixSidedDie(CrtColor cubeColor, CrtColor pointColor)
         {
             // the cube
-            CrtShape result = CrtFactory.ShapeFactory.Cube()
+            CrtShape cube = CrtFactory.ShapeFactory.Cube()
                 .WithMaterial(
                     CrtFactory.MaterialFactory.DefaultMaterial.WithColor(cubeColor)
                 );
 
+            var pointsEdges = CrtFactory.ShapeFactory.Group();
             double pointSize = 0.1;
             // 1 points on 1, 0, 0
             {
-                result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, DiePoint(pointColor, 1, 0, 0, pointSize));
+                pointsEdges.Add(DiePoint(pointColor, 1, 0, 0, pointSize));
             }
             // 6 point on -1, 0, 0
             {
-                result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, DiePoint(pointColor, -1, -0.4, -0.4, pointSize));
-                result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, DiePoint(pointColor, -1, -0.4, 0, pointSize));
-                result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, DiePoint(pointColor, -1, -0.4, 0.4, pointSize));
-                result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, DiePoint(pointColor, -1, 0.4, -0.4, pointSize));
-                result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, DiePoint(pointColor, -1, 0.4, 0, pointSize));
-                result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, DiePoint(pointColor, -1, 0.4, 0.4, pointSize));
+                pointsEdges.Add(DiePoint(pointColor, -1, -0.4, -0.4, pointSize));
+                pointsEdges.Add(DiePoint(pointColor, -1, -0.4, 0, pointSize));
+                pointsEdges.Add(DiePoint(pointColor, -1, -0.4, 0.4, pointSize));
+                pointsEdges.Add(DiePoint(pointColor, -1, 0.4, -0.4, pointSize));
+                pointsEdges.Add(DiePoint(pointColor, -1, 0.4, 0, pointSize));
+                pointsEdges.Add(DiePoint(pointColor, -1, 0.4, 0.4, pointSize));
             }
             // 5 points on 0, 1, 0
             {
-                result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, DiePoint(pointColor, 0, 1, 0, pointSize));
-                result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, DiePoint(pointColor, -0.4, 1, -0.4, pointSize));
-                result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, DiePoint(pointColor, 0.4, 1, -0.4, pointSize));
-                result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, DiePoint(pointColor, -0.4, 1, 0.4, pointSize));
-                result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, DiePoint(pointColor, 0.4, 1, 0.4, pointSize));
+                pointsEdges.Add(DiePoint(pointColor, 0, 1, 0, pointSize));
+                pointsEdges.Add(DiePoint(pointColor, -0.4, 1, -0.4, pointSize));
+                pointsEdges.Add(DiePoint(pointColor, 0.4, 1, -0.4, pointSize));
+                pointsEdges.Add(DiePoint(pointColor, -0.4, 1, 0.4, pointSize));
+                pointsEdges.Add(DiePoint(pointColor, 0.4, 1, 0.4, pointSize));
             }
             // 2 points on 0, -1, 0
             {
-                result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, DiePoint(pointColor, -0.4, -1, -0.4, pointSize));
-                result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, DiePoint(pointColor, 0.4, -1, 0.4, pointSize));
+                pointsEdges.Add(DiePoint(pointColor, -0.4, -1, -0.4, pointSize));
+                pointsEdges.Add(DiePoint(pointColor, 0.4, -1, 0.4, pointSize));
             }
             // 4 points on 0, 0, 1
             {
-                result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, DiePoint(pointColor, -0.4, -0.4, 1, pointSize));
-                result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, DiePoint(pointColor, 0.4, 0.4, 1, pointSize));
-                result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, DiePoint(pointColor, -0.4, 0.4, 1, pointSize));
-                result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, DiePoint(pointColor, 0.4, -0.4, 1, pointSize));
+                pointsEdges.Add(DiePoint(pointColor, -0.4, -0.4, 1, pointSize));
+                pointsEdges.Add(DiePoint(pointColor, 0.4, 0.4, 1, pointSize));
+                pointsEdges.Add(DiePoint(pointColor, -0.4, 0.4, 1, pointSize));
+                pointsEdges.Add(DiePoint(pointColor, 0.4, -0.4, 1, pointSize));
             }
             // 3 points on 0, 0, -1
             {
-                result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, DiePoint(pointColor, -0.4, -0.4, -1, pointSize));
-                result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, DiePoint(pointColor, 0, 0, -1, pointSize));
-                result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, DiePoint(pointColor, 0.4, 0.4, -1, pointSize));
-            }
-
-            // rounding the vertices
-            {
-                result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, DieVertice(cubeColor, 1, 1, 1));
-                result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, DieVertice(cubeColor, 1, 1, -1));
-                result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, DieVertice(cubeColor, 1, -1, 1));
-                result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, DieVertice(cubeColor, 1, -1, -1));
-
-                result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, DieVertice(cubeColor, -1, 1, 1));
-                result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, DieVertice(cubeColor, -1, 1, -1));
-                result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, DieVertice(cubeColor, -1, -1, 1));
-                result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, DieVertice(cubeColor, -1, -1, -1));
+                pointsEdges.Add(DiePoint(pointColor, -0.4, -0.4, -1, pointSize));
+                pointsEdges.Add(DiePoint(pointColor, 0, 0, -1, pointSize));
+                pointsEdges.Add(DiePoint(pointColor, 0.4, 0.4, -1, pointSize));
             }
 
             // rounding the edges
             {
-                result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, DieEdge(cubeColor, 'z', 0, 1, 1));
-                result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, DieEdge(cubeColor, 'z', 0, 1, -1));
-                result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, DieEdge(cubeColor, 'z', 0, -1, 1));
-                result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, DieEdge(cubeColor, 'z', 0, -1, -1));
+                pointsEdges.Add(DieEdge(cubeColor, 'z', 0, 1, 1));
+                pointsEdges.Add(DieEdge(cubeColor, 'z', 0, 1, -1));
+                pointsEdges.Add(DieEdge(cubeColor, 'z', 0, -1, 1));
+                pointsEdges.Add(DieEdge(cubeColor, 'z', 0, -1, -1));
 
-                result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, DieEdge(cubeColor, 'x', 1, 1, 0));
-                result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, DieEdge(cubeColor, 'x', -1, 1, 0));
-                result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, DieEdge(cubeColor, 'x', 1, -1, 0));
-                result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, DieEdge(cubeColor, 'x', -1, -1, 0));
+                pointsEdges.Add(DieEdge(cubeColor, 'x', 1, 1, 0));
+                pointsEdges.Add(DieEdge(cubeColor, 'x', -1, 1, 0));
+                pointsEdges.Add(DieEdge(cubeColor, 'x', 1, -1, 0));
+                pointsEdges.Add(DieEdge(cubeColor, 'x', -1, -1, 0));
 
-                result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, DieEdge(cubeColor, 'y', 1, 0, 1));
-                result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, DieEdge(cubeColor, 'y', 1, 0, -1));
-                result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, DieEdge(cubeColor, 'y', -1, 0, 1));
-                result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, DieEdge(cubeColor, 'y', -1, 0, -1));
+                pointsEdges.Add(DieEdge(cubeColor, 'y', 1, 0, 1));
+                pointsEdges.Add(DieEdge(cubeColor, 'y', 1, 0, -1));
+                pointsEdges.Add(DieEdge(cubeColor, 'y', -1, 0, 1));
+                pointsEdges.Add(DieEdge(cubeColor, 'y', -1, 0, -1));
             }
+
+            var vertices = CrtFactory.ShapeFactory.Group();
+            // rounding the vertices
+            {
+                vertices.Add(DieVertice(cubeColor, 1, 1, 1));
+                vertices.Add(DieVertice(cubeColor, 1, 1, -1));
+                vertices.Add(DieVertice(cubeColor, 1, -1, 1));
+                vertices.Add(DieVertice(cubeColor, 1, -1, -1));
+
+                vertices.Add(DieVertice(cubeColor, -1, 1, 1));
+                vertices.Add(DieVertice(cubeColor, -1, 1, -1));
+                vertices.Add(DieVertice(cubeColor, -1, -1, 1));
+                vertices.Add(DieVertice(cubeColor, -1, -1, -1));
+            }
+
+
+
+            var result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, cube, vertices);
+            result = CrtFactory.ShapeFactory.Csg(CrtCSG.DIFFERENCE, result, pointsEdges);
 
             return result;
         }
@@ -320,8 +328,8 @@ namespace chapter16.exercise.monogame
 
         private void Run()
         {
-            int hSize = 320;
-            int vSize = 200;
+            int hSize = 640;
+            int vSize = 480;
             //
             _window = new MonoGameRaytracerWindow(
                 hSize,
