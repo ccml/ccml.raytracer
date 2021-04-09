@@ -5,6 +5,7 @@ using ccml.raytracer;
 using ccml.raytracer.Core;
 using ccml.raytracer.Engine;
 using ccml.raytracer.Shapes;
+using ccml.raytracer.Transformation;
 using ccml.raytracer.ui.monogame.screen;
 using Microsoft.Xna.Framework.Input;
 
@@ -204,22 +205,39 @@ namespace chapter16.exercise.monogame
                 )
                 .WithMaterial(
                     CrtFactory.MaterialFactory.DefaultMaterial
-                        .WithPattern(
-                            CrtFactory.PatternFactory.Checker3DPattern(
-                                    CrtColor.COLOR_GREEN,
-                                    CrtColor.COLOR_WHITE
-                                )
-                                .WithTransformMatrix(
-                                    CrtFactory.TransformationFactory.ScalingMatrix(0.1, 0.1, 0.1)
-                                )
-                        )
                 );
             _world.Add(room);
             //
-            // Add a six-sided die
+            // Add six-sided dies
+            var dies = CrtFactory.ShapeFactory.Group();
             var d1 = SixSidedDie(CrtColor.COLOR_GREEN, CrtColor.COLOR_WHITE)
-                .WithTransformationMatrix(CrtFactory.TransformationFactory.ScalingMatrix(7, 7, 7));
-            _world.Add(d1);
+                .WithTransformationMatrix(
+                    CrtFactory.TransformationFactory.TranslationMatrix(-4, 0, 1)
+                    *
+                    CrtFactory.TransformationFactory.ScalingMatrix(3.5, 3.5, 3.5)
+                );
+            dies.Add(d1);
+            var d2 = SixSidedDie(CrtColor.COLOR_RED, CrtColor.COLOR_WHITE)
+                .WithTransformationMatrix(
+                    CrtFactory.TransformationFactory.TranslationMatrix(4.5, 0, -4)
+                    *
+                    CrtFactory.TransformationFactory.YRotationMatrix(Math.PI/3)
+                    *
+                    CrtFactory.TransformationFactory.ZRotationMatrix(Math.PI / 2)
+                    *
+                    CrtFactory.TransformationFactory.ScalingMatrix(3.5, 3.5, 3.5)
+                );
+            dies.Add(d2);
+            var d3 = SixSidedDie(CrtColor.COLOR_BLUE, CrtColor.COLOR_WHITE)
+                .WithTransformationMatrix(
+                    CrtFactory.TransformationFactory.TranslationMatrix(0, 7, 0)
+                    *
+                    CrtFactory.TransformationFactory.YRotationMatrix(Math.PI/6)
+                    *
+                    CrtFactory.TransformationFactory.ScalingMatrix(3.5, 3.5, 3.5)
+                );
+            dies.Add(d3);
+            _world.Add(dies);
             //
             // add a light
             _world.Add(
