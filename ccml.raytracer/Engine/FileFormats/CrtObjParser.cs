@@ -242,7 +242,7 @@ namespace ccml.raytracer.Engine.FileFormats
             catch (Exception e)
             {
                 Console.WriteLine(e.StackTrace);
-                throw new Exception($"OBJ PARSER : Face line bad format : {line}");
+                // throw new Exception($"OBJ PARSER : Face line bad format : {line}");
             }
         }
 

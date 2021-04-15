@@ -31,19 +31,19 @@ namespace chapter16.exercise.monogame
                 CrtCSG.DIFFERENCE,
                 CrtFactory.ShapeFactory.Cube()
                 .WithMaterial(
-                    CrtFactory.MaterialFactory.DefaultMaterial.WithColor(color)
+                    CrtFactory.MaterialFactory.DefaultMaterial.WithColor(color).WithReflective(0.35)
                 ),
                 CrtFactory.ShapeFactory.Sphere().WithTransformationMatrix(
                     CrtFactory.TransformationFactory.TranslationMatrix(-x, -y, -z)
                 )
                 .WithMaterial(
-                    CrtFactory.MaterialFactory.DefaultMaterial.WithColor(color)
+                    CrtFactory.MaterialFactory.DefaultMaterial.WithColor(color).WithReflective(0.35)
                 )
             )
             .WithTransformationMatrix(
                 CrtFactory.TransformationFactory.TranslationMatrix(x, y, z)
                 *
-                CrtFactory.TransformationFactory.ScalingMatrix(0.1, 0.1, 0.1)
+                CrtFactory.TransformationFactory.ScalingMatrix(0.15, 0.15, 0.15)
             );
         }
 
@@ -66,7 +66,7 @@ namespace chapter16.exercise.monogame
                 CrtCSG.DIFFERENCE,
                 CrtFactory.ShapeFactory.Cube()
                 .WithMaterial(
-                    CrtFactory.MaterialFactory.DefaultMaterial.WithColor(color)
+                    CrtFactory.MaterialFactory.DefaultMaterial.WithColor(color).WithReflective(0.35)
                 ),
                 CrtFactory.ShapeFactory.Cylinder()
                 .WithMaximum(1).WithMinimum(-1)
@@ -77,16 +77,16 @@ namespace chapter16.exercise.monogame
                     cylTransform
                 )
                 .WithMaterial(
-                    CrtFactory.MaterialFactory.DefaultMaterial.WithColor(color)
+                    CrtFactory.MaterialFactory.DefaultMaterial.WithColor(color).WithReflective(0.35)
                 )
             )
             .WithTransformationMatrix(
                 CrtFactory.TransformationFactory.TranslationMatrix(x, y, z)
                 *
                 CrtFactory.TransformationFactory.ScalingMatrix(
-                    CrtReal.AreEquals(x, 0) ? 0.91 : 0.1,
-                    CrtReal.AreEquals(y, 0) ? 0.91 : 0.1,
-                    CrtReal.AreEquals(z, 0) ? 0.91 : 0.1
+                    CrtReal.AreEquals(x, 0) ? 0.91 : 0.15,
+                    CrtReal.AreEquals(y, 0) ? 0.91 : 0.15,
+                    CrtReal.AreEquals(z, 0) ? 0.91 : 0.15
                 )
             );
         }
@@ -109,11 +109,11 @@ namespace chapter16.exercise.monogame
             // the cube
             CrtShape cube = CrtFactory.ShapeFactory.Cube()
                 .WithMaterial(
-                    CrtFactory.MaterialFactory.DefaultMaterial.WithColor(cubeColor)
+                    CrtFactory.MaterialFactory.DefaultMaterial.WithColor(cubeColor).WithReflective(0.35)
                 );
 
             var pointsEdges = CrtFactory.ShapeFactory.Group();
-            double pointSize = 0.1;
+            double pointSize = 0.15;
             // 1 points on 1, 0, 0
             {
                 pointsEdges.Add(DiePoint(pointColor, 1, 0, 0, pointSize));
@@ -247,7 +247,7 @@ namespace chapter16.exercise.monogame
                 )
             );
             //
-            _eyePosition = CrtFactory.CoreFactory.Point(0, 30, -30);
+            _eyePosition = CrtFactory.CoreFactory.Point(-15, 30, -25);
             _lookAtPosition = CrtFactory.CoreFactory.Point(0.0, 0.0, 0.0);
             var distance = !(_lookAtPosition - _eyePosition);
             _distanceStep = distance / _nbrSteps;

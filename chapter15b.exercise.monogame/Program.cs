@@ -47,7 +47,7 @@ namespace chapter15b.exercise.monogame
             //
             // Add an object from a file
             var parser = CrtFactory.FileFormatFactory.ObjParser;
-            parser.LoadFile("teapot_low.obj");
+            parser.LoadFile("teapot_low.fobj");
             var teapot = parser.ObjToGroup();
             teapot.WithTransformationMatrix(
                 CrtFactory.TransformationFactory.XRotationMatrix(-Math.PI/2)
