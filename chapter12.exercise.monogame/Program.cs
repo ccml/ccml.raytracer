@@ -220,11 +220,11 @@ namespace chapter12.exercise.monogame
                     CrtFactory.CoreFactory.Point(0.0, 1.5, 0.0),
                     CrtFactory.CoreFactory.Vector(0.0, 1.0, 0.0)
                 );
-            for (int i = 0; i < 9; i++)
+            for (int i = 0; i < 24; i++)
             {
                 camera.ViewTransformMatrix =
                     CrtFactory.EngineFactory.ViewTransformation(
-                        CrtFactory.TransformationFactory.YRotationMatrix(i * Math.PI / 4) * CrtFactory.CoreFactory.Point(0, 2.5, -5),
+                        CrtFactory.TransformationFactory.YRotationMatrix(i * Math.PI / 12) * CrtFactory.CoreFactory.Point(0, 2.5, -5),
                         CrtFactory.CoreFactory.Point(0.0, 1.5, 0.0),
                         CrtFactory.CoreFactory.Vector(0.0, 1.0, 0.0)
                     );
